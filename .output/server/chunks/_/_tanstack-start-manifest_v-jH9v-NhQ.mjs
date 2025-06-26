@@ -1,0 +1,4 @@
+const tsrStartManifest = () => ({ "routes": { "__root__": { "filePath": "__root.tsx", "children": ["/", "/_layout"], "preloads": ["/assets/main-DYrGVUc3.js"], "assets": [{ "tag": "link", "attrs": { "rel": "stylesheet", "href": "/assets/main-D-_9s_Cc.css", "type": "text/css" } }, { "tag": "script", "attrs": { "src": "/assets/main-DYrGVUc3.js", "type": "module" } }] }, "/": { "filePath": "index.tsx" }, "/_layout": { "filePath": "_layout.tsx", "children": ["/_layout/devices", "/_layout/field", "/_layout/settings", "/_layout/teleop"] }, "/_layout/devices": { "filePath": "_layout/devices.tsx", "parent": "/_layout" }, "/_layout/field": { "filePath": "_layout/field.tsx", "parent": "/_layout" }, "/_layout/settings": { "filePath": "_layout/settings.tsx", "parent": "/_layout" }, "/_layout/teleop": { "filePath": "_layout/teleop.tsx", "parent": "/_layout" } } });
+
+export { tsrStartManifest };
+//# sourceMappingURL=_tanstack-start-manifest_v-jH9v-NhQ.mjs.map
