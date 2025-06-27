@@ -23,7 +23,15 @@ function App({ setField }: AppProps) {
 
 
   return (
-    <div>
+    <div className='flex'>
+      <DrawTools
+        setFormCoordinates={setFormCoordinates}
+        setFieldAccessPoint={setFieldAccessPoint}
+        setRobotHome={setRobotHome}
+        mode={mode}
+        setMode={setMode}
+        setLocationInfo={setLocationInfo}
+      />
       <SampleForm
         setField={setField}
         formCoordinates={formCoordinates}
@@ -31,14 +39,6 @@ function App({ setField }: AppProps) {
         robotHome={robotHome}
         setMode={setMode}
         locationInfo={locationInfo}
-      />
-       <DrawTools
-        setFormCoordinates={setFormCoordinates}
-        setFieldAccessPoint={setFieldAccessPoint}
-        setRobotHome={setRobotHome}
-        mode={mode}
-        setMode={setMode}
-        setLocationInfo={setLocationInfo}
       />
     </div>
   );
@@ -88,14 +88,14 @@ function SampleForm({
         robot_home: robotHome,
       };
 
-      // await fetch("https://demetercloud.onrender.com/v1.0/fieldmapping", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${localStorage.getItem("access_token")}`
-      //   },
-      //   body: JSON.stringify(fullData)
-      // });
+      await fetch("https://demetercloud.onrender.com/v1.0/fieldmapping", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        },
+        body: JSON.stringify(fullData)
+      });
       console.log(fullData)
 
     }
@@ -215,23 +215,14 @@ function SampleForm({
           </div>
 
 
-          {/* obstalces */}
-          <div>
-            <label className='text-[10px]'>obstacles</label><br />
-            <button type="button" style={{ cursor: 'pointer' }}
-              className='rounded px-2 pt-1 pb-1 text-xs bg-green-200'
-            >+ Add</button>
-          </div>
-
-
-          <div>
-            <div className='float-right mt-17 mr-3 rounded pl-3 pr-3 text-sm bg-green-400'>
-              <button type="submit" style={{ cursor: 'pointer' }}>Save</button>
-            </div>
-            <div className='float-right mt-17 mr-3 border-1 rounded pl-2 pr-2 text-sm  '>
+          <div className='flex '>
+            <div className='border-1 rounded pl-2 pr-2 text-sm  '>
               <button type="button" onClick={() => setField(false)} style={{ cursor: 'pointer' }}>
                 Cancel
               </button>
+            </div>
+            <div className='rounded pl-3 pr-3 text-sm bg-green-400'>
+              <button type="submit" style={{ cursor: 'pointer' }}>Save</button>
             </div>
           </div>
 
@@ -249,7 +240,7 @@ function Field() {
     <div>
       {
         !field ? (<>
-          <button className="bg-[#0ed78d] cursor-pointer px-2 py-0.5 rounded float-end mr-5 mb-1 text-xs" onClick={() => {
+          <button className='rounded px-2 mt-0.5 mb-1 py-1 text-[10px] bg-[#0ed78d] text-center text-white cursor-pointer float-right' onClick={() => {
             setField(true)
           }}>
             + Add Field

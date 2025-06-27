@@ -64,13 +64,13 @@ export default function AddRobot({ onBack }: AddRobotProps) {
         },
     })
 
-    const { data, isLoading } = useQuery<{ products: Product[] }>({
-        queryKey: ['robot_type'],
-        queryFn: async () => {
-            const res = await axios.get("https://dummyjson.com/products")
-            return res.data
-        }
-    })
+    // const { data, isLoading } = useQuery<{ products: Product[] }>({
+    //     queryKey: ['robot_type'],
+    //     queryFn: async () => {
+    //         const res = await axios.get("https://dummyjson.com/products")
+    //         return res.data
+    //     }
+    // })
 
 
     return (
@@ -154,10 +154,10 @@ export default function AddRobot({ onBack }: AddRobotProps) {
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             className="bg-gray-100 rounded w-52  p-1.5 text-xs"
-                                            required
+                                            
                                         >
                                             <option value="">Robot Type</option>
-                                            {
+                                            {/* {
 
                                                 isLoading ? (<option value="">Loading...</option>) :
                                                     (
@@ -166,7 +166,7 @@ export default function AddRobot({ onBack }: AddRobotProps) {
                                                         ))
                                                     )
 
-                                            }
+                                            } */}
                                         </select>
                                     )}
                                 />
@@ -193,10 +193,10 @@ export default function AddRobot({ onBack }: AddRobotProps) {
 
                     <div className='flex flex-col gap-2'>
 
-                        <div className='flex flex-col gap-2 p-2 border-1 rounded-xl w-130 h-31'>
+                        <div className='flex flex-col gap-4 p-2 border-1 rounded-xl w-130 h-31'>
 
                             <div className='text-xs'>Technical Configuration</div>
-                            <div className='flex gap-2'>
+                            <div className='flex gap-3'>
                                 <div>
                                     <label htmlFor="" className='text-xs  text-gray-400'>Hardware Version</label><br />
                                     <form.Field
@@ -264,7 +264,7 @@ export default function AddRobot({ onBack }: AddRobotProps) {
                                                 value={field.state.value}
                                                 onChange={(e) => field.handleChange(e.target.value)}
                                                 placeholder='e.g 198.123.19.1'
-                                                className="bg-gray-100 rounded w-60 p-1.5 text-[10px]"
+                                                className="bg-gray-100 rounded w-62 p-1.5 text-[10px]"
                                                 required
                                             />
                                         )}
@@ -281,7 +281,7 @@ export default function AddRobot({ onBack }: AddRobotProps) {
                                                 value={field.state.value}
                                                 onChange={(e) => field.handleChange(e.target.value)}
                                                 placeholder='D8:9E:F3:12:AB:CD'
-                                                className='bg-gray-100 rounded w-60 p-1.5 text-[10px]'
+                                                className='bg-gray-100 rounded w-62 p-1.5 text-[10px]'
                                                 required
                                             />
                                         )}

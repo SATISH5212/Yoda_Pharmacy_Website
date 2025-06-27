@@ -10,6 +10,9 @@ import { EditControl } from "react-leaflet-draw";
 import { CircleMarker } from "react-leaflet";
 import { DrawToolsProps } from "@/types/dataTypes";
 
+// npm install react-leaflet@4 leaflet@1.9.4 leaflet-draw@1.0.4
+
+
 const DrawTools = ({
   setFormCoordinates,
   setFieldAccessPoint,
@@ -90,11 +93,11 @@ const DrawTools = ({
 
 
   return (
-    <div className="w-full h-[1000px] max-w-full">
+    <div className="h-[600px] w-full">
       <MapContainer
         center={[17.385, 78.4867]}
         zoom={13}
-        className="w-full h-full"
+        style={{height:"100%",width:"100%"}}
       >
       
         <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Map from '../../components/map'
-import DrawTools from '@/components/DrawTools'
+import AllRobots from '@/components/RobotsData/all-robots'
+
 
 export const Route = createFileRoute('/_layout/teleop')({
   component: Teleop,
@@ -9,8 +9,8 @@ export const Route = createFileRoute('/_layout/teleop')({
 function Teleop() {
   return (
     <div>
-             <h1 className='text-white'>Teleop</h1>
-            <Map />
+             <h1>Teleop</h1>
+            {/* <AllRobots /> */}
     </div>
   )
 }

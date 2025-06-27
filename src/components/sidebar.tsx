@@ -8,7 +8,7 @@ import { Sprout } from 'lucide-react';
 
 export function Sidebar() {
     return (
-        <div className=" pl-5 pt-8  mr-2 w-15 flex flex-col border-r-1 ">
+        <div className=" pt-8  mr-2 w-15 flex flex-col items-center border-r-1 ">
             <Link to="/field" className="[&.active]:bg-[#0ed78d] mb-8 hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
                 <Sprout size={20} strokeWidth={2} />
             </Link>

@@ -8,7 +8,8 @@ const router = createRouter()
 
 hydrateRoot(
   document,
-  <StrictMode>
     <StartClient router={router} />
-  </StrictMode>,
+  // removed strict mode
+  
 )
+

@@ -7,7 +7,7 @@ import { Mail } from 'lucide-react';
 export const Navbar = () => {
     return (
 
-        <div style={{ padding: "10px"}} className="border-b-0">
+        <div style={{ padding: "10px"}} className="border-b-1">
             
             <Link to="/field" className="text-sm font-bold">Robot Fields</Link>
             <div style={{ float: "right", paddingRight: "10px", display: "flex", gap: "15px" }}>
