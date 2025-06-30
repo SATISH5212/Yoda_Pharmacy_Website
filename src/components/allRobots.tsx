@@ -11,7 +11,7 @@ async function getRobotsData(page: number, page_size: number) {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}` 
         }
     });
     const data = await response.json();
@@ -45,7 +45,7 @@ export default function AllRobots() {
     return showAddRobot ? (<AddRobot onBack={() => setShowAddRobot(false)} />) : (
         <>
             {/* head */}
-            <div className='relative'>
+            <div className='relative ml-1'>
                 <div className='bg-gray-200 rounded p-1 mb-2 w-full'>
                     <span className='text-gray-400 text-xs font-serif'>Total Robots : </span>
                     <span className='text-xs' >{data.pagination_info.total_records} </span>

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
@@ -16,6 +17,11 @@ import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutFieldRouteImport } from './routes/_layout/field'
 import { Route as LayoutDevicesRouteImport } from './routes/_layout/devices'
 
+const HomepageRoute = HomepageRouteImport.update({
+  id: '/homepage',
+  path: '/homepage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
@@ -48,6 +54,7 @@ const LayoutDevicesRoute = LayoutDevicesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
   '/field': typeof LayoutFieldRoute
   '/settings': typeof LayoutSettingsRoute
@@ -55,6 +62,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
   '/field': typeof LayoutFieldRoute
   '/settings': typeof LayoutSettingsRoute
@@ -64,6 +72,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
+  '/homepage': typeof HomepageRoute
   '/_layout/devices': typeof LayoutDevicesRoute
   '/_layout/field': typeof LayoutFieldRoute
   '/_layout/settings': typeof LayoutSettingsRoute
@@ -71,13 +80,14 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/devices' | '/field' | '/settings' | '/teleop'
+  fullPaths: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/devices' | '/field' | '/settings' | '/teleop'
+  to: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
   id:
     | '__root__'
     | '/'
     | '/_layout'
+    | '/homepage'
     | '/_layout/devices'
     | '/_layout/field'
     | '/_layout/settings'
@@ -87,10 +97,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
+  HomepageRoute: typeof HomepageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/homepage': {
+      id: '/homepage'
+      path: '/homepage'
+      fullPath: '/homepage'
+      preLoaderRoute: typeof HomepageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_layout': {
       id: '/_layout'
       path: ''
@@ -156,6 +174,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
+  HomepageRoute: HomepageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

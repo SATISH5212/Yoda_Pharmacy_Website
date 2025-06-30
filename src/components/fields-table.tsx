@@ -4,29 +4,39 @@ import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-tabl
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Eye } from "lucide-react";
+import { FieldResponse} from "@/types/dataTypes";
+
+
+async function getFieldsData(): Promise<FieldResponse> {
+    const response = await fetch(`${BASE_URL}/fieldmappings?`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+        }
+    });
+    const data = await response.json();
+    console.log(data);
+    return data.data;
+}
+
 
 
 export default function FieldsTable() {
-    const { data = [], isLoading } = useQuery({
+
+    
+
+
+    const { data} = useQuery<FieldResponse>({
         queryKey: ['users'],
-        queryFn: async () => {
-            const res = await fetch(`${BASE_URL}/fieldmappings`, {
-                headers: new Headers({
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("access_token")}`
-                })
-            });
-            const data = await res.json()
-            // console.log(data);
-            return data.data.records;
-        },
+        queryFn: () => getFieldsData(),
+        
     });
 
-    console.log(data);
-
+ 
     const columns = [
         {
-            header: "S NO",
+            header: "S No",
             accessorKey: "id",
             cell: (value: any) => {
                 return value.row.index + 1
@@ -64,11 +74,11 @@ export default function FieldsTable() {
         {
             header: "Action",
             accessorKey: "action",
-            cell: (info : any) => {
-                const row = info.row.original; 
+            cell: (info: any) => {
+                const row = info.row.original;
                 return (
                     <Link
-                        to={`/devices`} 
+                        to={`/devices`}
                         className=" flex justify-center hover:text-blue-700"
                         title="View Details"
                     >
@@ -76,14 +86,12 @@ export default function FieldsTable() {
                     </Link>
                 );
             },
-
         }
-
     ]
 
 
     const table = useReactTable({
-        data,
+        data: data?.records ?? [],
         columns,
         getCoreRowModel: getCoreRowModel()
     });
@@ -117,6 +125,7 @@ export default function FieldsTable() {
                 </tbody>
 
             </table>
+
         </div>
     )
 }

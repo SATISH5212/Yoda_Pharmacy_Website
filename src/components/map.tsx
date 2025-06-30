@@ -2,54 +2,29 @@ import * as turf from "@turf/turf";
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { useContext, useEffect, useState } from "react";
+import {useState } from "react";
 import { MapContainer, TileLayer, FeatureGroup, Polygon } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 
 
 const Map = () => {
  
+  
   const [polyCoordinates, setPolyCoordinates] = useState<{ lat: number; lng: number }[]>([]);
   const [farmLocation, setFarmLocation] = useState<any>(null);
-  const [fieldAccessPoint, setFieldAccessPoint] = useState<null | { lat: number; lng: number }>(null);
-  const [robotHome, setRobotHome] = useState<null | { lat: number; lng: number }>(null);
-  const [polygonDrawn, setPolygonDrawn] = useState(false);
-
-  const field_name = "field_1";
-  const token = localStorage.getItem("access_token");
 
 
-
-  const reverseGeocode = async (lat: number, lng: number) => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
-      );
-      return response.data.display_name;
-    } catch (error) {
-      console.error("Reverse geocode error:", error);
-      return null;
-    }
-  };
-
-
-  // const fetch_field_data = async (field_data) => {
+  // const reverseGeocode = async (lat: number, lng: number) => {
   //   try {
-  //     await fetch("https://demetercloud.onrender.com/v1.0/fieldmapping", {
-  //       method: "POST",
-  //       headers: new Headers({
-  //         "content-type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       }),
-  //       body: JSON.stringify(field_data),
-  //     });
-  //     console.log("Boundary coordinates sent to backend");
-  //   } catch (err) {
-  //     console.error("Failed to send data to backend:", err);
+  //     const response = await axios.get(
+  //       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+  //     );
+  //     return response.data.display_name;
+  //   } catch (error) {
+  //     console.error("Reverse geocode error:", error);
+  //     return null;
   //   }
   // };
-
-
 
 
 const handleCreated = async (e: any) => {
@@ -61,7 +36,6 @@ const handleCreated = async (e: any) => {
     const latlngs = layer.getLatLngs()[0];
     const coords = latlngs.map((latlng: any) => ({ lat: latlng.lat, lng: latlng.lng }));
     setPolyCoordinates(coords);
-    setPolygonDrawn(true);
 
     const boundary = [...coords, coords[0]];
     const polygon = turf.polygon([boundary.map((p) => [p.lat, p.lng])]);
@@ -70,74 +44,15 @@ const handleCreated = async (e: any) => {
 
     const centroid = turf.centroid(polygon);
     const [lat, lng] = centroid.geometry.coordinates;
-    const locationName = await reverseGeocode(lat, lng);
+    // const locationName = await reverseGeocode(lat, lng);
 
-    setFarmLocation({
-      locationName,
-      center: [lat, lng],
-      area: +areaAcres.toFixed(2),
-    });
-    return;
   }
-
-
-  // Marker
-  if (layerType === "marker") {
-    if (!polygonDrawn) {
-      alert("Please draw the field boundary first.");
-      return;
-    }
-
-    const { lat, lng } = layer.getLatLng();
-    const markerPoint = { lat, lng };
-
-    
-    if (!fieldAccessPoint) {
-      console.log("Setting Field Access Point:", markerPoint);
-      setFieldAccessPoint(markerPoint);
-      return;
-    }
-
-    if (!robotHome) {
-      console.log("Setting Robot Home:", markerPoint);
-
-      const updatedFieldAccess = fieldAccessPoint;
-      const updatedRobotHome = markerPoint;
-
-      setRobotHome(markerPoint);
-
-
-      if (updatedFieldAccess && updatedRobotHome && polyCoordinates.length > 0 && farmLocation) {
-          const field_data = {
-          field_name,
-          location: farmLocation.locationName,
-          robot_home: updatedRobotHome,
-          field_access_point: updatedFieldAccess,
-          field_boundary: polyCoordinates,
-        };
-
-       
-        console.log("Sending field data:", field_data);
-        // await fetch_field_data(field_data);
-
-        setFieldAccessPoint(null);
-        setRobotHome(null);
-        setPolygonDrawn(false);
-        setPolyCoordinates([]);
-        setFarmLocation(null);
-      }
-
-      return;
-    }
+ 
   }
-
-};
-
-
 
   return (
-    <div className="flex">
-      <MapContainer center={[17.385, 78.4867]} zoom={13} style={{ height: "550px", width: "100%" }}>
+    <div className="min-w-full h-screen">
+      <MapContainer center={[17.385, 78.4867]} zoom={13} className="w-full h-screen">
         <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
 
         <FeatureGroup>

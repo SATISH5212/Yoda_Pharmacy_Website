@@ -1246,7 +1246,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-B1dRUoai.mjs');
+      return await import('./_tanstack-start-manifest_v-DxrI6AFw.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1759,9 +1759,9 @@ const defaultStreamHandler = defineHandlerCallback(
     );
   }
 );
-const appCss = "/assets/app-BNxnDGvE.css";
+const appCss = "/assets/app-B6lh7TyO.css";
 const queryClient = new QueryClient();
-const Route$6 = createRootRoute({
+const Route$7 = createRootRoute({
   head: () => ({
     meta: [
       {
@@ -1796,7 +1796,11 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$5 = () => import('./_layout-qapfgxNz.mjs');
+const $$splitComponentImporter$6 = () => import('./homepage-wRlhhpA7.mjs');
+const Route$6 = createFileRoute("/homepage")({
+  component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
+});
+const $$splitComponentImporter$5 = () => import('./_layout-BhL_YcRj.mjs');
 const Route$5 = createFileRoute("/_layout")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
 });
@@ -1804,30 +1808,35 @@ const $$splitComponentImporter$4 = () => import('./index-C_GgxjIS.mjs');
 const Route$4 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
-const $$splitComponentImporter$3 = () => import('./teleop-C9MqGUHl.mjs');
+const $$splitComponentImporter$3 = () => import('./teleop-BAh_tiCq.mjs');
 const Route$3 = createFileRoute("/_layout/teleop")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
-const $$splitComponentImporter$2 = () => import('./settings-BFkpKJUZ.mjs');
+const $$splitComponentImporter$2 = () => import('./settings-DHFEwr_z.mjs');
 const Route$2 = createFileRoute("/_layout/settings")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-DSY92Jgq.mjs');
+const $$splitComponentImporter$1 = () => import('./field-_vvdDG9n.mjs');
 const Route$1 = createFileRoute("/_layout/field")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
-const $$splitComponentImporter = () => import('./devices-DjHA6ZL_.mjs');
+const $$splitComponentImporter = () => import('./devices-UZM50tZ1.mjs');
 const Route = createFileRoute("/_layout/devices")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });
+const HomepageRoute = Route$6.update({
+  id: "/homepage",
+  path: "/homepage",
+  getParentRoute: () => Route$7
+});
 const LayoutRoute = Route$5.update({
   id: "/_layout",
-  getParentRoute: () => Route$6
+  getParentRoute: () => Route$7
 });
 const IndexRoute = Route$4.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$6
+  getParentRoute: () => Route$7
 });
 const LayoutTeleopRoute = Route$3.update({
   id: "/teleop",
@@ -1858,9 +1867,10 @@ const LayoutRouteChildren = {
 const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren);
 const rootRouteChildren = {
   IndexRoute,
-  LayoutRoute: LayoutRouteWithChildren
+  LayoutRoute: LayoutRouteWithChildren,
+  HomepageRoute
 };
-const routeTree = Route$6._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$7._addFileChildren(rootRouteChildren)._addFileTypes();
 const routeTree_gen = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   routeTree

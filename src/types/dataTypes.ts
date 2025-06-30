@@ -1,5 +1,5 @@
 export interface RobotConfig {
-    id? : number,
+    id?: number,
     robot_uuid: string;
     robot_name: string;
     robot_type: string;
@@ -20,8 +20,8 @@ export interface LoginPayload {
 
 
 export type Coordinates = {
-    lat : number,
-    lng : number
+    lat: number,
+    lng: number
 } | null;
 
 
@@ -34,11 +34,11 @@ export interface AppProps {
     setField: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface SampleFormProps {
+export interface FieldFormProps {
     setField: React.Dispatch<React.SetStateAction<boolean>>;
-    formCoordinates: number[][];
+    formCoordinates: { lat: number; lng: number }[];
     fieldAccessPoint: Coordinates;
-    robotHome: Coordinates;
+    // robotHome: Coordinates;
     setMode: React.Dispatch<React.SetStateAction<string>>;
     locationInfo: LocationInfo;
 }
@@ -50,14 +50,36 @@ export interface AuthSwitchProps {
 }
 
 export interface DrawToolsProps {
-    setFormCoordinates: React.Dispatch<React.SetStateAction<number[][]>>;
+    setFormCoordinates: (coords: { lat: number; lng: number }[]) => void;
     setFieldAccessPoint: React.Dispatch<React.SetStateAction<Coordinates>>;
-    setRobotHome : React.Dispatch<React.SetStateAction<Coordinates>>;
-    mode: string,
+    // setRobotHome: React.Dispatch<React.SetStateAction<Coordinates>>;
+    mode: string;
     setMode: React.Dispatch<React.SetStateAction<string>>;
     setLocationInfo: React.Dispatch<React.SetStateAction<LocationInfo>>;
 }
 
-export interface AddRobotProps{
-     onBack:()=>void ;
+export interface AddRobotProps {
+    onBack: () => void;
+}
+
+
+export interface PaginationInfo {
+    total_records: number;
+    total_pages: number;
+    page: number;
+    page_size: number;
+}
+
+export interface FieldRecord {
+    id: number;
+    field_name: string;
+    field_area: string;
+    created_at: string;
+    field_status: string;
+
+}
+
+export interface FieldResponse {
+    records: FieldRecord[];
+    pagination_info: PaginationInfo;
 }

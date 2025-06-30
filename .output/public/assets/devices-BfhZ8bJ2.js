@@ -1,1 +1,0 @@
-import{j as o}from"./main-DW_dR780.js";import{A as t}from"./allRobots-TjFyjwoK.js";import"./appConfig-CqcLvptA.js";import"./index-nbuHeK6L.js";import"./useMutation-BJVJCaEf.js";import"./createLucideIcon-CidOmpgM.js";const c=function(){return o.jsx("div",{children:o.jsx(t,{})})};export{c as component};

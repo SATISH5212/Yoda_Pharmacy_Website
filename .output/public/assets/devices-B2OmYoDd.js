@@ -1,0 +1,1 @@
+import{j as o}from"./main-a__i0QSU.js";import{A as t}from"./allRobots-BZT6Gsdl.js";import"./appConfig-Bmk701zo.js";import"./index-F4ZMcLMJ.js";import"./useMutation-BZ9fjo3f.js";import"./createLucideIcon-CkD3SDnu.js";const c=function(){return o.jsx("div",{children:o.jsx(t,{})})};export{c as component};
