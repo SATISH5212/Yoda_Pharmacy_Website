@@ -14,8 +14,6 @@ import { useState } from 'react'
 
 const LoginPage = async (userlogin: LoginPayload) => {
 
-
-    console.log("user Login ", userlogin)
     const response = await fetch(`https://demetercloud.onrender.com/v1.0/login`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -39,7 +37,7 @@ export default function Login({ onSwitch }: AuthSwitchProps) {
         mutationFn: LoginPage,
         onSuccess: (res) => {
             // toast.success(res?.data?.message || "Login successful!");
-            console.log("onSuccess ", res.data);
+            // console.log("onSuccess ", res.data);
 
             localStorage.setItem("access_token", res.data.access_token);
             navigate({

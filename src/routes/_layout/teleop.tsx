@@ -1,6 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-// import LeafletGoogle from '@/components/leafllet-google'
-
 
 export const Route = createFileRoute('/_layout/teleop')({
   component: Teleop,
@@ -9,8 +7,7 @@ export const Route = createFileRoute('/_layout/teleop')({
 function Teleop() {
   return (
     <div>
-            
-             {/* <LeafletGoogle /> */}
+            <h1>Tele Operation</h1>
     </div>
   )
 }
