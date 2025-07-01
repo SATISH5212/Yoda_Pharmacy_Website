@@ -606,7 +606,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-BoaJHrJy.mjs');
+      return await import('./_tanstack-start-manifest_v-ClQWx9VR.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1079,9 +1079,9 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
-const appCss = "/assets/app-CEDf1dMY.css";
+const appCss = "/assets/app-uvVcKZW_.css";
 const queryClient = new QueryClient();
-const Route$9 = createRootRoute({
+const Route$7 = createRootRoute({
   head: () => ({
     meta: [
       {
@@ -1116,16 +1116,8 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$8 = () => import('./homepage-CkAx28ea.mjs');
-const Route$8 = createFileRoute("/homepage")({
-  component: lazyRouteComponent($$splitComponentImporter$8, "component", () => Route$8.ssr)
-});
-const $$splitComponentImporter$7 = () => import('./_layout-CMybIvEl.mjs');
-const Route$7 = createFileRoute("/_layout")({
-  component: lazyRouteComponent($$splitComponentImporter$7, "component", () => Route$7.ssr)
-});
-const $$splitComponentImporter$6 = () => import('./_auth-C_qqKh6-.mjs');
-const Route$6 = createFileRoute("/_auth")({
+const $$splitComponentImporter$6 = () => import('./_layout-D8nbzhfF.mjs');
+const Route$6 = createFileRoute("/_layout")({
   component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
 });
 const authMiddleware = async ({
@@ -1133,53 +1125,44 @@ const authMiddleware = async ({
 }) => {
   return;
 };
-const $$splitComponentImporter$5 = () => import('./index-eKEXrNxr.mjs');
+const $$splitComponentImporter$5 = () => import('./index-D_CNo3TT.mjs');
 const Route$5 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr),
   beforeLoad: authMiddleware
 });
-const $$splitComponentImporter$4 = () => import('./index-exqPzYoZ.mjs');
-const Route$4 = createFileRoute("/auth/")({
+const $$splitComponentImporter$4 = () => import('./index-DB0apuW-.mjs');
+const Route$4 = createFileRoute("/sign-up/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
 const $$splitComponentImporter$3 = () => import('./teleop-iqa7MZtg.mjs');
 const Route$3 = createFileRoute("/_layout/teleop")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
-const $$splitComponentImporter$2 = () => import('./settings-Cq-HcXJu.mjs');
+const $$splitComponentImporter$2 = () => import('./settings-CepKU6mK.mjs');
 const Route$2 = createFileRoute("/_layout/settings")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-B25Ewxrj.mjs');
-const Route$1 = createFileRoute("/_layout/field")({
+const $$splitComponentImporter$1 = () => import('./fields-Bkaizbcb.mjs');
+const Route$1 = createFileRoute("/_layout/fields")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
-const $$splitComponentImporter = () => import('./devices-Cq2dcoQv.mjs');
+const $$splitComponentImporter = () => import('./devices-DQFeztHO.mjs');
 const Route = createFileRoute("/_layout/devices")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });
-const HomepageRoute = Route$8.update({
-  id: "/homepage",
-  path: "/homepage",
-  getParentRoute: () => Route$9
-});
-const LayoutRoute = Route$7.update({
+const LayoutRoute = Route$6.update({
   id: "/_layout",
-  getParentRoute: () => Route$9
-});
-const AuthRoute = Route$6.update({
-  id: "/_auth",
-  getParentRoute: () => Route$9
+  getParentRoute: () => Route$7
 });
 const IndexRoute = Route$5.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$9
+  getParentRoute: () => Route$7
 });
-const AuthIndexRoute = Route$4.update({
-  id: "/auth/",
-  path: "/auth/",
-  getParentRoute: () => Route$9
+const SignUpIndexRoute = Route$4.update({
+  id: "/sign-up/",
+  path: "/sign-up/",
+  getParentRoute: () => Route$7
 });
 const LayoutTeleopRoute = Route$3.update({
   id: "/teleop",
@@ -1191,9 +1174,9 @@ const LayoutSettingsRoute = Route$2.update({
   path: "/settings",
   getParentRoute: () => LayoutRoute
 });
-const LayoutFieldRoute = Route$1.update({
-  id: "/field",
-  path: "/field",
+const LayoutFieldsRoute = Route$1.update({
+  id: "/fields",
+  path: "/fields",
   getParentRoute: () => LayoutRoute
 });
 const LayoutDevicesRoute = Route.update({
@@ -1203,19 +1186,17 @@ const LayoutDevicesRoute = Route.update({
 });
 const LayoutRouteChildren = {
   LayoutDevicesRoute,
-  LayoutFieldRoute,
+  LayoutFieldsRoute,
   LayoutSettingsRoute,
   LayoutTeleopRoute
 };
 const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren);
 const rootRouteChildren = {
   IndexRoute,
-  AuthRoute,
   LayoutRoute: LayoutRouteWithChildren,
-  HomepageRoute,
-  AuthIndexRoute
+  SignUpIndexRoute
 };
-const routeTree = Route$9._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$7._addFileChildren(rootRouteChildren)._addFileTypes();
 const routeTree_gen = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   routeTree
