@@ -1,18 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import AuthPage from '../components/authpage'
-import Map from '@/components/map'
+
+import { authMiddleware } from '@/lib/helpers/middleware'
+import { LoginPage } from '@/components/auth'
 
 export const Route = createFileRoute('/')({
-  component:Index,
+  component: LoginPage,
+  beforeLoad: authMiddleware
 })
 
-function Index() {
-  return (
-    
-      <div > 
-         <AuthPage />
-      </div>
-
-
-  )
-}

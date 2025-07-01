@@ -336,11 +336,7 @@ function AllRobots() {
   if (isLoading) return /* @__PURE__ */ jsx("p", { children: "Loading robots..." });
   if (isError) return /* @__PURE__ */ jsx("p", { children: "Error at Fetching Robots" });
   console.log(data);
-<<<<<<<< HEAD:.output/server/chunks/_/allRobots-Cjv_EXhn.mjs
   return showAddRobot ? /* @__PURE__ */ jsx(AddRobot, { onBack: () => setShowAddRobot(false) }) : /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs("div", { className: "relative ml-1", children: [
-========
-  return showAddRobot ? /* @__PURE__ */ jsx(AddRobot, { onBack: () => setShowAddRobot(false) }) : /* @__PURE__ */ jsxs(Fragment, { children: [
->>>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45:.output/server/chunks/_/allRobots-ozYBZwS3.mjs
     /* @__PURE__ */ jsxs("div", { className: "bg-gray-200 rounded p-1 mb-2 w-full", children: [
       /* @__PURE__ */ jsx("span", { className: "text-gray-400 text-xs font-serif", children: "Total Robots : " }),
       /* @__PURE__ */ jsxs("span", { className: "text-xs", children: [
@@ -357,7 +353,6 @@ function AllRobots() {
         }
       )
     ] }),
-<<<<<<<< HEAD:.output/server/chunks/_/allRobots-Cjv_EXhn.mjs
     /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-10", children: data == null ? void 0 : data.records.map((robot) => (
       // <div key={robot.id} className="p-4 border rounded-xl">
       //     <ul className="list-none text-sm space-y-3">
@@ -379,25 +374,6 @@ function AllRobots() {
       //         </li>
       //     </ul>
       // </div>
-========
-    /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4", children: data == null ? void 0 : data.records.map((robot) => /* @__PURE__ */ jsx("div", { className: "p-4 border rounded-xl", children: /* @__PURE__ */ jsxs("ul", { className: "list-none text-sm space-y-3", children: [
-      /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("span", { className: "font-bold", children: robot.robot_name }) }),
-      /* @__PURE__ */ jsxs("li", { className: "flex justify-between", children: [
-        /* @__PURE__ */ jsx("span", { className: "font-semibold text-[10px]", children: "IP Address" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs", children: robot.ip_address })
-      ] }),
-      /* @__PURE__ */ jsxs("li", { className: "flex justify-between", children: [
-        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: /* @__PURE__ */ jsx(MapPin, { size: 12 }) }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs", children: "Hyderabad" })
-      ] }),
-      /* @__PURE__ */ jsxs("li", { className: "flex justify-between", children: [
-        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: /* @__PURE__ */ jsx(BatteryFull, { size: 12 }) }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs", children: "75%" })
-      ] })
-    ] }) }, robot.id)) }),
-    /* @__PURE__ */ jsx("div", { className: "w-full fixed bottom-0 rounded bg-gray-100 border-t border-gray-300", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 p-0.5  text-xs ", children: [
-      /* @__PURE__ */ jsx("span", { children: "Result per page" }),
->>>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45:.output/server/chunks/_/allRobots-ozYBZwS3.mjs
       /* @__PURE__ */ jsxs(
         "div",
         {
@@ -490,8 +466,4 @@ function AllRobots() {
 }
 
 export { AllRobots as A };
-<<<<<<<< HEAD:.output/server/chunks/_/allRobots-Cjv_EXhn.mjs
 //# sourceMappingURL=allRobots-Cjv_EXhn.mjs.map
-========
-//# sourceMappingURL=allRobots-ozYBZwS3.mjs.map
->>>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45:.output/server/chunks/_/allRobots-ozYBZwS3.mjs

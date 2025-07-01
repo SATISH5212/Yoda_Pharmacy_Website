@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutFieldRouteImport } from './routes/_layout/field'
@@ -26,9 +28,18 @@ const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeleopRoute = LayoutTeleopRouteImport.update({
@@ -59,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/field': typeof LayoutFieldRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/auth': typeof AuthIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,37 +79,58 @@ export interface FileRoutesByTo {
   '/field': typeof LayoutFieldRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/auth': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/homepage': typeof HomepageRoute
   '/_layout/devices': typeof LayoutDevicesRoute
   '/_layout/field': typeof LayoutFieldRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
+  '/auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
+  fullPaths:
+    | '/'
+    | '/homepage'
+    | '/devices'
+    | '/field'
+    | '/settings'
+    | '/teleop'
+    | '/auth'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
+  to:
+    | '/'
+    | '/homepage'
+    | '/devices'
+    | '/field'
+    | '/settings'
+    | '/teleop'
+    | '/auth'
   id:
     | '__root__'
     | '/'
+    | '/_auth'
     | '/_layout'
     | '/homepage'
     | '/_layout/devices'
     | '/_layout/field'
     | '/_layout/settings'
     | '/_layout/teleop'
+    | '/auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   LayoutRoute: typeof LayoutRouteWithChildren
   HomepageRoute: typeof HomepageRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,11 +149,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/teleop': {
@@ -173,8 +220,10 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   LayoutRoute: LayoutRouteWithChildren,
   HomepageRoute: HomepageRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

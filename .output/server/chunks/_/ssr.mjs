@@ -606,11 +606,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-<<<<<<< HEAD
-      return await import('./_tanstack-start-manifest_v-yguUEViK.mjs');
-=======
-      return await import('./_tanstack-start-manifest_v-C-wIwO_z.mjs');
->>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45
+      return await import('./_tanstack-start-manifest_v-BoaJHrJy.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -938,7 +934,7 @@ function createStartHandler({
             ).filter((d) => typeof response.options[d] === "function").map((d) => `"${d}"`).join(", ")}`
           );
         }
-        const redirect = router.resolveRedirect(response);
+        const redirect2 = router.resolveRedirect(response);
         if (request.headers.get("x-tsr-redirect") === "manual") {
           return json(
             {
@@ -950,7 +946,7 @@ function createStartHandler({
             }
           );
         }
-        return redirect;
+        return redirect2;
       }
       return response;
     };
@@ -1083,76 +1079,9 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
-<<<<<<< HEAD
-function defineHandlerCallback(handler) {
-  return handler;
-}
-const defaultStreamHandler = defineHandlerCallback(
-  async ({ request, router, responseHeaders }) => {
-    if (typeof ReactDOMServer.renderToReadableStream === "function") {
-      const stream = await ReactDOMServer.renderToReadableStream(
-        /* @__PURE__ */ jsx(StartServer, { router }),
-        {
-          signal: request.signal
-        }
-      );
-      if (isbot(request.headers.get("User-Agent"))) {
-        await stream.allReady;
-      }
-      const responseStream = transformReadableStreamWithRouter(
-        router,
-        stream
-      );
-      return new Response(responseStream, {
-        status: router.state.statusCode,
-        headers: responseHeaders
-      });
-    }
-    if (typeof ReactDOMServer.renderToPipeableStream === "function") {
-      const reactAppPassthrough = new PassThrough();
-      try {
-        const pipeable = ReactDOMServer.renderToPipeableStream(
-          /* @__PURE__ */ jsx(StartServer, { router }),
-          {
-            ...isbot(request.headers.get("User-Agent")) ? {
-              onAllReady() {
-                pipeable.pipe(reactAppPassthrough);
-              }
-            } : {
-              onShellReady() {
-                pipeable.pipe(reactAppPassthrough);
-              }
-            },
-            onError: (error, info) => {
-              if (error instanceof Error && error.message === "ShellBoundaryError")
-                return;
-              console.error("Error in renderToPipeableStream:", error, info);
-            }
-          }
-        );
-      } catch (e) {
-        console.error("Error in renderToPipeableStream:", e);
-      }
-      const responseStream = transformPipeableStreamWithRouter(
-        router,
-        reactAppPassthrough
-      );
-      return new Response(responseStream, {
-        status: router.state.statusCode,
-        headers: responseHeaders
-      });
-    }
-    throw new Error(
-      "No renderToReadableStream or renderToPipeableStream found in react-dom/server. Ensure you are using a version of react-dom that supports streaming."
-    );
-  }
-);
-const appCss = "/assets/app-98BcDiJL.css";
-=======
-const appCss = "/assets/app-CylBKoNv.css";
->>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45
+const appCss = "/assets/app-CEDf1dMY.css";
 const queryClient = new QueryClient();
-const Route$7 = createRootRoute({
+const Route$9 = createRootRoute({
   head: () => ({
     meta: [
       {
@@ -1187,24 +1116,33 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-<<<<<<< HEAD
-const $$splitComponentImporter$6 = () => import('./homepage-CwuVEYzJ.mjs');
-const Route$6 = createFileRoute("/homepage")({
+const $$splitComponentImporter$8 = () => import('./homepage-CkAx28ea.mjs');
+const Route$8 = createFileRoute("/homepage")({
+  component: lazyRouteComponent($$splitComponentImporter$8, "component", () => Route$8.ssr)
+});
+const $$splitComponentImporter$7 = () => import('./_layout-CMybIvEl.mjs');
+const Route$7 = createFileRoute("/_layout")({
+  component: lazyRouteComponent($$splitComponentImporter$7, "component", () => Route$7.ssr)
+});
+const $$splitComponentImporter$6 = () => import('./_auth-C_qqKh6-.mjs');
+const Route$6 = createFileRoute("/_auth")({
   component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
 });
-const $$splitComponentImporter$5 = () => import('./_layout-CMybIvEl.mjs');
-=======
-const $$splitComponentImporter$5 = () => import('./_layout-eMnQzL2l.mjs');
->>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45
-const Route$5 = createFileRoute("/_layout")({
-  component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
+const authMiddleware = async ({
+  location
+}) => {
+  return;
+};
+const $$splitComponentImporter$5 = () => import('./index-eKEXrNxr.mjs');
+const Route$5 = createFileRoute("/")({
+  component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr),
+  beforeLoad: authMiddleware
 });
-const $$splitComponentImporter$4 = () => import('./index-BBKIpxQD.mjs');
-const Route$4 = createFileRoute("/")({
+const $$splitComponentImporter$4 = () => import('./index-exqPzYoZ.mjs');
+const Route$4 = createFileRoute("/auth/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
-<<<<<<< HEAD
-const $$splitComponentImporter$3 = () => import('./teleop-DOLmF6Wi.mjs');
+const $$splitComponentImporter$3 = () => import('./teleop-iqa7MZtg.mjs');
 const Route$3 = createFileRoute("/_layout/teleop")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
@@ -1212,42 +1150,36 @@ const $$splitComponentImporter$2 = () => import('./settings-Cq-HcXJu.mjs');
 const Route$2 = createFileRoute("/_layout/settings")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-DrT3hgcV.mjs');
+const $$splitComponentImporter$1 = () => import('./field-B25Ewxrj.mjs');
 const Route$1 = createFileRoute("/_layout/field")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
 const $$splitComponentImporter = () => import('./devices-Cq2dcoQv.mjs');
-=======
-const $$splitComponentImporter$3 = () => import('./teleop-CJtRcbbG.mjs');
-const Route$3 = createFileRoute("/_layout/teleop")({
-  component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
-});
-const $$splitComponentImporter$2 = () => import('./settings-DYpLmW7s.mjs');
-const Route$2 = createFileRoute("/_layout/settings")({
-  component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
-});
-const $$splitComponentImporter$1 = () => import('./field-BeKYLgcV.mjs');
-const Route$1 = createFileRoute("/_layout/field")({
-  component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
-});
-const $$splitComponentImporter = () => import('./devices-ybOZitsC.mjs');
->>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45
 const Route = createFileRoute("/_layout/devices")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });
-const HomepageRoute = Route$6.update({
+const HomepageRoute = Route$8.update({
   id: "/homepage",
   path: "/homepage",
-  getParentRoute: () => Route$7
+  getParentRoute: () => Route$9
 });
-const LayoutRoute = Route$5.update({
+const LayoutRoute = Route$7.update({
   id: "/_layout",
-  getParentRoute: () => Route$7
+  getParentRoute: () => Route$9
 });
-const IndexRoute = Route$4.update({
+const AuthRoute = Route$6.update({
+  id: "/_auth",
+  getParentRoute: () => Route$9
+});
+const IndexRoute = Route$5.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$7
+  getParentRoute: () => Route$9
+});
+const AuthIndexRoute = Route$4.update({
+  id: "/auth/",
+  path: "/auth/",
+  getParentRoute: () => Route$9
 });
 const LayoutTeleopRoute = Route$3.update({
   id: "/teleop",
@@ -1278,10 +1210,12 @@ const LayoutRouteChildren = {
 const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren);
 const rootRouteChildren = {
   IndexRoute,
+  AuthRoute,
   LayoutRoute: LayoutRouteWithChildren,
-  HomepageRoute
+  HomepageRoute,
+  AuthIndexRoute
 };
-const routeTree = Route$7._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$9._addFileChildren(rootRouteChildren)._addFileTypes();
 const routeTree_gen = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   routeTree
