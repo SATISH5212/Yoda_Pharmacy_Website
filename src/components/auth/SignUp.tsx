@@ -149,6 +149,7 @@ function SignIn({ onSwitch }: AuthSwitchProps) {
                         > Login
                         </button>
                     </div>
+                    
 
                     <button className='mt-2 mr-3 p-2 rounded-xl w-90 text-sm bg-green-300 text-center' type='submit' style={{ cursor: 'pointer' }}>Register</button>
                 </div>
