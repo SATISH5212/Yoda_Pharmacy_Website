@@ -11,11 +11,10 @@ async function getRobotsData(page: number, page_size: number) {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("access_token")}` 
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
         }
     });
     const data = await response.json();
-    console.log(data);
     return data.data;
 }
 
@@ -25,7 +24,7 @@ export default function AllRobots() {
     const [showAddRobot, setShowAddRobot] = useState(false);
     const [page, setPage] = useState(1);
     const [page_size, setPageSize] = useState(5)
-    const { data, isLoading, isError} = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ['robots', { page, page_size }],
         queryFn: () => getRobotsData(page, page_size),
     });
@@ -39,7 +38,6 @@ export default function AllRobots() {
 
     if (isLoading) return <p>Loading robots...</p>;
     if (isError) return <p>Error at Fetching Robots</p>;
-    console.log(data)
 
 
     return showAddRobot ? (<AddRobot onBack={() => setShowAddRobot(false)} />) : (
@@ -86,7 +84,7 @@ export default function AllRobots() {
                         <div
                             key={robot.id}
                             className="relative bg-white border shadow-xl rounded-2xl p-4 w-full max-w-xs backdrop-blur-sm transition-transform hover:scale-[1.02]"
-                        > 
+                        >
                             {/* Robot Name */}
                             <div className="mb-3 flex items-center justify-between">
                                 <h3 className="text-sm font-bold text-green-800">

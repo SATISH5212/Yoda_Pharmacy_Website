@@ -80,6 +80,8 @@ export interface FieldRecord {
 }
 
 export interface FieldResponse {
+    field_status: string;
+    field_area: string;
     records: FieldRecord[];
     pagination_info: PaginationInfo;
 }

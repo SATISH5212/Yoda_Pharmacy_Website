@@ -3,7 +3,7 @@ import { AppProps, Coordinates, LocationInfo, FieldFormProps } from "@/types/dat
 import DrawTools from "./google-map";
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 
 
@@ -30,14 +30,14 @@ function MapForm({ setField }: AppProps) {   // map rendering and tanstack form 
                 />
             </div>
 
-           
+
             <div className="absolute z-10 top-1 right-1 bg-white shadow-2xl rounded-2xl">
-                 
+
                 <FieldForm
                     setField={setField}
                     formCoordinates={formCoordinates}
                     fieldAccessPoint={fieldAccessPoint}
-                   
+
                     setMode={setMode}
                     locationInfo={locationInfo}
                 />
@@ -81,7 +81,6 @@ function FieldForm({
                 },
                 body: JSON.stringify(fullData)
             });
-            console.log(fullData)
 
         }
     })
@@ -148,7 +147,7 @@ function FieldForm({
                 </div>
 
 
-               
+
                 {/* <div className='mb-2'>
                     <label className='text-[10px]'>Robot Home</label><br />
                     <button type="button" style={{ cursor: 'pointer' }}
@@ -174,7 +173,7 @@ function FieldForm({
                 </button>
             </div>
         </form >
-    
+
     );
 }
 

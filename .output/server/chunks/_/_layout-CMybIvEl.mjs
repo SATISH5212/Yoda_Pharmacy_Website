@@ -45,8 +45,4 @@ const SplitComponent = function Body() {
 };
 
 export { SplitComponent as component };
-<<<<<<<< HEAD:.output/server/chunks/_/_layout-CMybIvEl.mjs
 //# sourceMappingURL=_layout-CMybIvEl.mjs.map
-========
-//# sourceMappingURL=_layout-eMnQzL2l.mjs.map
->>>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45:.output/server/chunks/_/_layout-eMnQzL2l.mjs

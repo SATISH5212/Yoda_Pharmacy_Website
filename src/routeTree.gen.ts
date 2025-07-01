@@ -9,19 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
-import { Route as LayoutFieldRouteImport } from './routes/_layout/field'
+import { Route as LayoutFieldsRouteImport } from './routes/_layout/fields'
 import { Route as LayoutDevicesRouteImport } from './routes/_layout/devices'
 
-const HomepageRoute = HomepageRouteImport.update({
-  id: '/homepage',
-  path: '/homepage',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
@@ -29,6 +24,11 @@ const LayoutRoute = LayoutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpIndexRoute = SignUpIndexRouteImport.update({
+  id: '/sign-up/',
+  path: '/sign-up/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeleopRoute = LayoutTeleopRouteImport.update({
@@ -41,9 +41,9 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutFieldRoute = LayoutFieldRouteImport.update({
-  id: '/field',
-  path: '/field',
+const LayoutFieldsRoute = LayoutFieldsRouteImport.update({
+  id: '/fields',
+  path: '/fields',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutDevicesRoute = LayoutDevicesRouteImport.update({
@@ -54,61 +54,54 @@ const LayoutDevicesRoute = LayoutDevicesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
-  '/field': typeof LayoutFieldRoute
+  '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
-  '/field': typeof LayoutFieldRoute
+  '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/homepage': typeof HomepageRoute
   '/_layout/devices': typeof LayoutDevicesRoute
-  '/_layout/field': typeof LayoutFieldRoute
+  '/_layout/fields': typeof LayoutFieldsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
+  '/sign-up/': typeof SignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
+  fullPaths: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/homepage' | '/devices' | '/field' | '/settings' | '/teleop'
+  to: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
   id:
     | '__root__'
     | '/'
     | '/_layout'
-    | '/homepage'
     | '/_layout/devices'
-    | '/_layout/field'
+    | '/_layout/fields'
     | '/_layout/settings'
     | '/_layout/teleop'
+    | '/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
-  HomepageRoute: typeof HomepageRoute
+  SignUpIndexRoute: typeof SignUpIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/homepage': {
-      id: '/homepage'
-      path: '/homepage'
-      fullPath: '/homepage'
-      preLoaderRoute: typeof HomepageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_layout': {
       id: '/_layout'
       path: ''
@@ -121,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up/': {
+      id: '/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/teleop': {
@@ -137,11 +137,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/field': {
-      id: '/_layout/field'
-      path: '/field'
-      fullPath: '/field'
-      preLoaderRoute: typeof LayoutFieldRouteImport
+    '/_layout/fields': {
+      id: '/_layout/fields'
+      path: '/fields'
+      fullPath: '/fields'
+      preLoaderRoute: typeof LayoutFieldsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/devices': {
@@ -156,14 +156,14 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutDevicesRoute: typeof LayoutDevicesRoute
-  LayoutFieldRoute: typeof LayoutFieldRoute
+  LayoutFieldsRoute: typeof LayoutFieldsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTeleopRoute: typeof LayoutTeleopRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutDevicesRoute: LayoutDevicesRoute,
-  LayoutFieldRoute: LayoutFieldRoute,
+  LayoutFieldsRoute: LayoutFieldsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTeleopRoute: LayoutTeleopRoute,
 }
@@ -174,7 +174,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
-  HomepageRoute: HomepageRoute,
+  SignUpIndexRoute: SignUpIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
