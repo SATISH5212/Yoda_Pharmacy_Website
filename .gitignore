@@ -1,3 +1,27 @@
-node_modules/
+# Local
+.DS_Store
+*.local
+*.log*
+
+# Dist
+node_modules
+.vinxi
+.output
+.vercel
+.netlify
+.wrangler
+.tanstack
 
 .env
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+package-lock.json
+
+.codegpt
+
+
+app.config.timestamp_*

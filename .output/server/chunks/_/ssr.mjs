@@ -2,71 +2,12 @@ import { createRootRoute, Outlet, HeadContent, Scripts, createFileRoute, lazyRou
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createMemoryHistory } from '@tanstack/history';
-import { joinPaths, trimPath, processRouteTree, isRedirect, isResolvedRedirect, isNotFound, rootRouteId, getMatchedRoutes, createControlledPromise, isPlainObject, pick, TSR_DEFERRED_PROMISE, isPlainArray, defer } from '@tanstack/router-core';
+import { json, tsrSerializer, mergeHeaders } from '@tanstack/router-core/ssr/client';
+import { joinPaths, trimPath, processRouteTree, isRedirect, isResolvedRedirect, isNotFound, rootRouteId, getMatchedRoutes } from '@tanstack/router-core';
+import { attachRouterServerSsrUtils, dehydrateRouter } from '@tanstack/router-core/ssr/server';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import warning from 'tiny-warning';
-import jsesc from 'jsesc';
 import invariant from 'tiny-invariant';
-import { PassThrough, Readable } from 'node:stream';
-import { isbot } from 'isbot';
-import ReactDOMServer from 'react-dom/server';
-import { ReadableStream as ReadableStream$1 } from 'node:stream/web';
-
-function splitSetCookieString(cookiesString) {
-  if (Array.isArray(cookiesString)) {
-    return cookiesString.flatMap((c) => splitSetCookieString(c));
-  }
-  if (typeof cookiesString !== "string") {
-    return [];
-  }
-  const cookiesStrings = [];
-  let pos = 0;
-  let start;
-  let ch;
-  let lastComma;
-  let nextStart;
-  let cookiesSeparatorFound;
-  const skipWhitespace = () => {
-    while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
-      pos += 1;
-    }
-    return pos < cookiesString.length;
-  };
-  const notSpecialChar = () => {
-    ch = cookiesString.charAt(pos);
-    return ch !== "=" && ch !== ";" && ch !== ",";
-  };
-  while (pos < cookiesString.length) {
-    start = pos;
-    cookiesSeparatorFound = false;
-    while (skipWhitespace()) {
-      ch = cookiesString.charAt(pos);
-      if (ch === ",") {
-        lastComma = pos;
-        pos += 1;
-        skipWhitespace();
-        nextStart = pos;
-        while (pos < cookiesString.length && notSpecialChar()) {
-          pos += 1;
-        }
-        if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
-          cookiesSeparatorFound = true;
-          pos = nextStart;
-          cookiesStrings.push(cookiesString.slice(start, lastComma));
-          start = pos;
-        } else {
-          pos = lastComma + 1;
-        }
-      } else {
-        pos += 1;
-      }
-    }
-    if (!cookiesSeparatorFound || pos >= cookiesString.length) {
-      cookiesStrings.push(cookiesString.slice(start, cookiesString.length));
-    }
-  }
-  return cookiesStrings;
-}
+import { defineHandlerCallback, renderRouterToStream } from '@tanstack/react-router/ssr/server';
 
 function hasProp(obj, prop) {
   try {
@@ -592,352 +533,14 @@ async function _callHandler(event, handler, hooks) {
 function StartServer(props) {
   return /* @__PURE__ */ jsx(RouterProvider, { router: props.router });
 }
-function transformReadableStreamWithRouter(router, routerStream) {
-  return transformStreamWithRouter(router, routerStream);
-}
-function transformPipeableStreamWithRouter(router, routerStream) {
-  return Readable.fromWeb(
-    transformStreamWithRouter(router, Readable.toWeb(routerStream))
-  );
-}
-const patternBodyStart = /(<body)/;
-const patternBodyEnd = /(<\/body>)/;
-const patternHtmlEnd = /(<\/html>)/;
-const patternHeadStart = /(<head.*?>)/;
-const patternClosingTag = /(<\/[a-zA-Z][\w:.-]*?>)/g;
-const textDecoder = new TextDecoder();
-function createPassthrough() {
-  let controller;
-  const encoder = new TextEncoder();
-  const stream = new ReadableStream$1({
-    start(c) {
-      controller = c;
-    }
-  });
-  const res = {
-    stream,
-    write: (chunk) => {
-      controller.enqueue(encoder.encode(chunk));
-    },
-    end: (chunk) => {
-      if (chunk) {
-        controller.enqueue(encoder.encode(chunk));
-      }
-      controller.close();
-      res.destroyed = true;
-    },
-    destroy: (error) => {
-      controller.error(error);
-    },
-    destroyed: false
-  };
-  return res;
-}
-async function readStream(stream, opts) {
-  var _a, _b, _c;
-  try {
-    const reader = stream.getReader();
-    let chunk;
-    while (!(chunk = await reader.read()).done) {
-      (_a = opts.onData) == null ? void 0 : _a.call(opts, chunk);
-    }
-    (_b = opts.onEnd) == null ? void 0 : _b.call(opts);
-  } catch (error) {
-    (_c = opts.onError) == null ? void 0 : _c.call(opts, error);
-  }
-}
-function transformStreamWithRouter(router, appStream) {
-  const finalPassThrough = createPassthrough();
-  let isAppRendering = true;
-  let routerStreamBuffer = "";
-  let pendingClosingTags = "";
-  let bodyStarted = false;
-  let headStarted = false;
-  let leftover = "";
-  let leftoverHtml = "";
-  function getBufferedRouterStream() {
-    const html = routerStreamBuffer;
-    routerStreamBuffer = "";
-    return html;
-  }
-  function decodeChunk(chunk) {
-    if (chunk instanceof Uint8Array) {
-      return textDecoder.decode(chunk);
-    }
-    return String(chunk);
-  }
-  const injectedHtmlDonePromise = createControlledPromise();
-  let processingCount = 0;
-  router.serverSsr.injectedHtml.forEach((promise) => {
-    handleInjectedHtml(promise);
-  });
-  const stopListeningToInjectedHtml = router.subscribe(
-    "onInjectedHtml",
-    (e) => {
-      handleInjectedHtml(e.promise);
-    }
-  );
-  function handleInjectedHtml(promise) {
-    processingCount++;
-    promise.then((html) => {
-      if (!bodyStarted) {
-        routerStreamBuffer += html;
-      } else {
-        finalPassThrough.write(html);
-      }
-    }).catch(injectedHtmlDonePromise.reject).finally(() => {
-      processingCount--;
-      if (!isAppRendering && processingCount === 0) {
-        stopListeningToInjectedHtml();
-        injectedHtmlDonePromise.resolve();
-      }
-    });
-  }
-  injectedHtmlDonePromise.then(() => {
-    const finalHtml = leftoverHtml + getBufferedRouterStream() + pendingClosingTags;
-    finalPassThrough.end(finalHtml);
-  }).catch((err) => {
-    console.error("Error reading routerStream:", err);
-    finalPassThrough.destroy(err);
-  });
-  readStream(appStream, {
-    onData: (chunk) => {
-      const text = decodeChunk(chunk.value);
-      let chunkString = leftover + text;
-      const bodyEndMatch = chunkString.match(patternBodyEnd);
-      const htmlEndMatch = chunkString.match(patternHtmlEnd);
-      if (!bodyStarted) {
-        const bodyStartMatch = chunkString.match(patternBodyStart);
-        if (bodyStartMatch) {
-          bodyStarted = true;
-        }
-      }
-      if (!headStarted) {
-        const headStartMatch = chunkString.match(patternHeadStart);
-        if (headStartMatch) {
-          headStarted = true;
-          const index = headStartMatch.index;
-          const headTag = headStartMatch[0];
-          const remaining = chunkString.slice(index + headTag.length);
-          finalPassThrough.write(
-            chunkString.slice(0, index) + headTag + getBufferedRouterStream()
-          );
-          chunkString = remaining;
-        }
-      }
-      if (!bodyStarted) {
-        finalPassThrough.write(chunkString);
-        leftover = "";
-        return;
-      }
-      if (bodyEndMatch && htmlEndMatch && bodyEndMatch.index < htmlEndMatch.index) {
-        const bodyEndIndex = bodyEndMatch.index;
-        pendingClosingTags = chunkString.slice(bodyEndIndex);
-        finalPassThrough.write(
-          chunkString.slice(0, bodyEndIndex) + getBufferedRouterStream()
-        );
-        leftover = "";
-        return;
-      }
-      let result;
-      let lastIndex = 0;
-      while ((result = patternClosingTag.exec(chunkString)) !== null) {
-        lastIndex = result.index + result[0].length;
-      }
-      if (lastIndex > 0) {
-        const processed = chunkString.slice(0, lastIndex) + getBufferedRouterStream() + leftoverHtml;
-        finalPassThrough.write(processed);
-        leftover = chunkString.slice(lastIndex);
-      } else {
-        leftover = chunkString;
-        leftoverHtml += getBufferedRouterStream();
-      }
-    },
-    onEnd: () => {
-      isAppRendering = false;
-      if (processingCount === 0) {
-        injectedHtmlDonePromise.resolve();
-      }
-    },
-    onError: (error) => {
-      console.error("Error reading appStream:", error);
-      finalPassThrough.destroy(error);
-    }
-  });
-  return finalPassThrough.stream;
-}
-function toHeadersInstance(init) {
-  if (init instanceof Headers) {
-    return new Headers(init);
-  } else if (Array.isArray(init)) {
-    return new Headers(init);
-  } else if (typeof init === "object") {
-    return new Headers(init);
-  } else {
-    return new Headers();
-  }
-}
-function mergeHeaders(...headers) {
-  return headers.reduce((acc, header) => {
-    const headersInstance = toHeadersInstance(header);
-    for (const [key, value] of headersInstance.entries()) {
-      if (key === "set-cookie") {
-        const splitCookies = splitSetCookieString(value);
-        splitCookies.forEach((cookie) => acc.append("set-cookie", cookie));
-      } else {
-        acc.set(key, value);
-      }
-    }
-    return acc;
-  }, new Headers());
-}
-const startSerializer = {
-  stringify: (value) => JSON.stringify(value, function replacer(key, val) {
-    const ogVal = this[key];
-    const serializer = serializers.find((t) => t.stringifyCondition(ogVal));
-    if (serializer) {
-      return serializer.stringify(ogVal);
-    }
-    return val;
-  }),
-  parse: (value) => JSON.parse(value, function parser(key, val) {
-    const ogVal = this[key];
-    if (isPlainObject(ogVal)) {
-      const serializer = serializers.find((t) => t.parseCondition(ogVal));
-      if (serializer) {
-        return serializer.parse(ogVal);
-      }
-    }
-    return val;
-  }),
-  encode: (value) => {
-    if (Array.isArray(value)) {
-      return value.map((v) => startSerializer.encode(v));
-    }
-    if (isPlainObject(value)) {
-      return Object.fromEntries(
-        Object.entries(value).map(([key, v]) => [
-          key,
-          startSerializer.encode(v)
-        ])
-      );
-    }
-    const serializer = serializers.find((t) => t.stringifyCondition(value));
-    if (serializer) {
-      return serializer.stringify(value);
-    }
-    return value;
-  },
-  decode: (value) => {
-    if (isPlainObject(value)) {
-      const serializer = serializers.find((t) => t.parseCondition(value));
-      if (serializer) {
-        return serializer.parse(value);
-      }
-    }
-    if (Array.isArray(value)) {
-      return value.map((v) => startSerializer.decode(v));
-    }
-    if (isPlainObject(value)) {
-      return Object.fromEntries(
-        Object.entries(value).map(([key, v]) => [
-          key,
-          startSerializer.decode(v)
-        ])
-      );
-    }
-    return value;
-  }
-};
-const createSerializer = (key, check, toValue, fromValue) => ({
-  key,
-  stringifyCondition: check,
-  stringify: (value) => ({ [`$${key}`]: toValue(value) }),
-  parseCondition: (value) => Object.hasOwn(value, `$${key}`),
-  parse: (value) => fromValue(value[`$${key}`])
-});
-const serializers = [
-  createSerializer(
-    // Key
-    "undefined",
-    // Check
-    (v) => v === void 0,
-    // To
-    () => 0,
-    // From
-    () => void 0
-  ),
-  createSerializer(
-    // Key
-    "date",
-    // Check
-    (v) => v instanceof Date,
-    // To
-    (v) => v.toISOString(),
-    // From
-    (v) => new Date(v)
-  ),
-  createSerializer(
-    // Key
-    "error",
-    // Check
-    (v) => v instanceof Error,
-    // To
-    (v) => ({
-      ...v,
-      message: v.message,
-      stack: void 0,
-      cause: v.cause
-    }),
-    // From
-    (v) => Object.assign(new Error(v.message), v)
-  ),
-  createSerializer(
-    // Key
-    "formData",
-    // Check
-    (v) => v instanceof FormData,
-    // To
-    (v) => {
-      const entries = {};
-      v.forEach((value, key) => {
-        const entry = entries[key];
-        if (entry !== void 0) {
-          if (Array.isArray(entry)) {
-            entry.push(value);
-          } else {
-            entries[key] = [entry, value];
-          }
-        } else {
-          entries[key] = value;
-        }
-      });
-      return entries;
-    },
-    // From
-    (v) => {
-      const formData = new FormData();
-      Object.entries(v).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((val) => formData.append(key, val));
-        } else {
-          formData.append(key, value);
-        }
-      });
-      return formData;
-    }
-  ),
-  createSerializer(
-    // Key
-    "bigint",
-    // Check
-    (v) => typeof v === "bigint",
-    // To
-    (v) => v.toString(),
-    // From
-    (v) => BigInt(v)
-  )
-];
+const defaultStreamHandler = defineHandlerCallback(
+  ({ request, router, responseHeaders }) => renderRouterToStream({
+    request,
+    router,
+    responseHeaders,
+    children: /* @__PURE__ */ jsx(StartServer, { router })
+  })
+);
 function flattenMiddlewares(middlewares) {
   const seen = /* @__PURE__ */ new Set();
   const flattened = [];
@@ -954,15 +557,6 @@ function flattenMiddlewares(middlewares) {
   };
   recurse(middlewares);
   return flattened;
-}
-function json(payload, init) {
-  return new Response(JSON.stringify(payload), {
-    ...init,
-    headers: mergeHeaders(
-      { "content-type": "application/json" },
-      init == null ? void 0 : init.headers
-    )
-  });
 }
 const eventStorage = new AsyncLocalStorage();
 function defineEventHandler(handler) {
@@ -1002,240 +596,6 @@ const getResponseHeaders = createWrapperFunction(getResponseHeaders$1);
 function requestHandler(handler) {
   return handler;
 }
-const minifiedTsrBootStrapScript = 'const __TSR_SSR__={matches:[],streamedValues:{},initMatch:o=>(__TSR_SSR__.matches.push(o),o.extracted?.forEach(l=>{if(l.type==="stream"){let r;l.value=new ReadableStream({start(e){r={enqueue:t=>{try{e.enqueue(t)}catch{}},close:()=>{try{e.close()}catch{}}}}}),l.value.controller=r}else{let r,e;l.value=new Promise((t,a)=>{e=a,r=t}),l.value.reject=e,l.value.resolve=r}}),!0),resolvePromise:({matchId:o,id:l,promiseState:r})=>{const e=__TSR_SSR__.matches.find(t=>t.id===o);if(e){const t=e.extracted?.[l];if(t&&t.type==="promise"&&t.value&&r.status==="success")return t.value.resolve(r.data),!0}return!1},injectChunk:({matchId:o,id:l,chunk:r})=>{const e=__TSR_SSR__.matches.find(t=>t.id===o);if(e){const t=e.extracted?.[l];if(t&&t.type==="stream"&&t.value?.controller)return t.value.controller.enqueue(new TextEncoder().encode(r.toString())),!0}return!1},closeStream:({matchId:o,id:l})=>{const r=__TSR_SSR__.matches.find(e=>e.id===o);if(r){const e=r.extracted?.[l];if(e&&e.type==="stream"&&e.value?.controller)return e.value.controller.close(),!0}return!1},cleanScripts:()=>{document.querySelectorAll(".tsr-once").forEach(o=>{o.remove()})}};window.__TSR_SSR__=__TSR_SSR__;\n';
-function attachRouterServerSsrUtils(router, manifest) {
-  router.ssr = {
-    manifest,
-    serializer: startSerializer
-  };
-  router.serverSsr = {
-    injectedHtml: [],
-    streamedKeys: /* @__PURE__ */ new Set(),
-    injectHtml: (getHtml) => {
-      const promise = Promise.resolve().then(getHtml);
-      router.serverSsr.injectedHtml.push(promise);
-      router.emit({
-        type: "onInjectedHtml",
-        promise
-      });
-      return promise.then(() => {
-      });
-    },
-    injectScript: (getScript, opts) => {
-      return router.serverSsr.injectHtml(async () => {
-        const script = await getScript();
-        return `<script class='tsr-once'>${script}${""}; if (typeof __TSR_SSR__ !== 'undefined') __TSR_SSR__.cleanScripts()<\/script>`;
-      });
-    },
-    streamValue: (key, value) => {
-      warning(
-        !router.serverSsr.streamedKeys.has(key),
-        "Key has already been streamed: " + key
-      );
-      router.serverSsr.streamedKeys.add(key);
-      router.serverSsr.injectScript(
-        () => `__TSR_SSR__.streamedValues['${key}'] = { value: ${jsesc(
-          router.ssr.serializer.stringify(value),
-          {
-            isScriptContext: true,
-            wrap: true,
-            json: true
-          }
-        )}}`
-      );
-    },
-    onMatchSettled
-  };
-  router.serverSsr.injectScript(() => minifiedTsrBootStrapScript, {
-    logScript: false
-  });
-}
-function dehydrateRouter(router) {
-  var _a, _b, _c;
-  const dehydratedRouter = {
-    manifest: router.ssr.manifest,
-    dehydratedData: (_b = (_a = router.options).dehydrate) == null ? void 0 : _b.call(_a),
-    lastMatchId: ((_c = router.state.matches[router.state.matches.length - 1]) == null ? void 0 : _c.id) || ""
-  };
-  router.serverSsr.injectScript(
-    () => `__TSR_SSR__.dehydrated = ${jsesc(
-      router.ssr.serializer.stringify(dehydratedRouter),
-      {
-        isScriptContext: true,
-        wrap: true,
-        json: true
-      }
-    )}`
-  );
-}
-function extractAsyncLoaderData(loaderData, ctx) {
-  const extracted = [];
-  const replaced = replaceBy(loaderData, (value, path) => {
-    if (value instanceof ReadableStream) {
-      const [copy1, copy2] = value.tee();
-      const entry = {
-        type: "stream",
-        path,
-        id: extracted.length,
-        matchIndex: ctx.match.index,
-        stream: copy2
-      };
-      extracted.push(entry);
-      return copy1;
-    } else if (value instanceof Promise) {
-      const deferredPromise = defer(value);
-      const entry = {
-        type: "promise",
-        path,
-        id: extracted.length,
-        matchIndex: ctx.match.index,
-        promise: deferredPromise
-      };
-      extracted.push(entry);
-    }
-    return value;
-  });
-  return { replaced, extracted };
-}
-function onMatchSettled(opts) {
-  const { router, match } = opts;
-  let extracted = void 0;
-  let serializedLoaderData = void 0;
-  if (match.loaderData !== void 0) {
-    const result = extractAsyncLoaderData(match.loaderData, {
-      match
-    });
-    match.loaderData = result.replaced;
-    extracted = result.extracted;
-    serializedLoaderData = extracted.reduce(
-      (acc, entry) => {
-        return deepImmutableSetByPath(acc, ["temp", ...entry.path], void 0);
-      },
-      { temp: result.replaced }
-    ).temp;
-  }
-  const initCode = `__TSR_SSR__.initMatch(${jsesc(
-    {
-      id: match.id,
-      __beforeLoadContext: router.ssr.serializer.stringify(
-        match.__beforeLoadContext
-      ),
-      loaderData: router.ssr.serializer.stringify(serializedLoaderData),
-      error: router.ssr.serializer.stringify(match.error),
-      extracted: extracted == null ? void 0 : extracted.map((entry) => pick(entry, ["type", "path"])),
-      updatedAt: match.updatedAt,
-      status: match.status
-    },
-    {
-      isScriptContext: true,
-      wrap: true,
-      json: true
-    }
-  )})`;
-  router.serverSsr.injectScript(() => initCode);
-  if (extracted) {
-    extracted.forEach((entry) => {
-      if (entry.type === "promise") return injectPromise(entry);
-      return injectStream(entry);
-    });
-  }
-  function injectPromise(entry) {
-    router.serverSsr.injectScript(async () => {
-      await entry.promise;
-      return `__TSR_SSR__.resolvePromise(${jsesc(
-        {
-          matchId: match.id,
-          id: entry.id,
-          promiseState: entry.promise[TSR_DEFERRED_PROMISE]
-        },
-        {
-          isScriptContext: true,
-          wrap: true,
-          json: true
-        }
-      )})`;
-    });
-  }
-  function injectStream(entry) {
-    router.serverSsr.injectHtml(async () => {
-      try {
-        const reader = entry.stream.getReader();
-        let chunk = null;
-        while (!(chunk = await reader.read()).done) {
-          if (chunk.value) {
-            const code = `__TSR_SSR__.injectChunk(${jsesc(
-              {
-                matchId: match.id,
-                id: entry.id,
-                chunk: chunk.value
-              },
-              {
-                isScriptContext: true,
-                wrap: true,
-                json: true
-              }
-            )})`;
-            router.serverSsr.injectScript(() => code);
-          }
-        }
-        router.serverSsr.injectScript(
-          () => `__TSR_SSR__.closeStream(${jsesc(
-            {
-              matchId: match.id,
-              id: entry.id
-            },
-            {
-              isScriptContext: true,
-              wrap: true,
-              json: true
-            }
-          )})`
-        );
-      } catch (err) {
-        console.error("stream read error", err);
-      }
-      return "";
-    });
-  }
-}
-function deepImmutableSetByPath(obj, path, value) {
-  if (path.length === 0) {
-    return value;
-  }
-  const [key, ...rest] = path;
-  if (Array.isArray(obj)) {
-    return obj.map((item, i) => {
-      if (i === Number(key)) {
-        return deepImmutableSetByPath(item, rest, value);
-      }
-      return item;
-    });
-  }
-  if (isPlainObject(obj)) {
-    return {
-      ...obj,
-      [key]: deepImmutableSetByPath(obj[key], rest, value)
-    };
-  }
-  return obj;
-}
-function replaceBy(obj, cb, path = []) {
-  if (isPlainArray(obj)) {
-    return obj.map((value, i) => replaceBy(value, cb, [...path, `${i}`]));
-  }
-  if (isPlainObject(obj)) {
-    const newObj2 = {};
-    for (const key in obj) {
-      newObj2[key] = replaceBy(obj[key], cb, [...path, key]);
-    }
-    return newObj2;
-  }
-  const newObj = cb(obj, path);
-  if (newObj !== obj) {
-    return newObj;
-  }
-  return obj;
-}
 const VIRTUAL_MODULES = {
   routeTree: "tanstack-start-route-tree:v",
   startManifest: "tanstack-start-manifest:v",
@@ -1246,7 +606,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-jH9v-NhQ.mjs');
+      return await import('./_tanstack-start-manifest_v-C-wIwO_z.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1260,6 +620,16 @@ async function getStartManifest(opts) {
   const startManifest = tsrStartManifest();
   const rootRoute = startManifest.routes[rootRouteId] = startManifest.routes[rootRouteId] || {};
   rootRoute.assets = rootRoute.assets || [];
+  let script = `import('${startManifest.clientEntry}')`;
+  rootRoute.assets.push({
+    tag: "script",
+    attrs: {
+      type: "module",
+      suppressHydrationWarning: true,
+      async: true
+    },
+    children: script
+  });
   const manifest = {
     ...startManifest,
     routes: Object.fromEntries(
@@ -1333,11 +703,11 @@ const handleServerAction = async ({
           if (isCreateServerFn) {
             payload2 = search.payload;
           }
-          payload2 = payload2 ? startSerializer.parse(payload2) : payload2;
+          payload2 = payload2 ? tsrSerializer.parse(payload2) : payload2;
           return await action(payload2, signal);
         }
         const jsonPayloadAsString = await request.text();
-        const payload = startSerializer.parse(jsonPayloadAsString);
+        const payload = tsrSerializer.parse(jsonPayloadAsString);
         if (isCreateServerFn) {
           return await action(payload, signal);
         }
@@ -1355,7 +725,7 @@ const handleServerAction = async ({
       if (isNotFound(result)) {
         return isNotFoundResponse(result);
       }
-      return new Response(result !== void 0 ? startSerializer.stringify(result) : void 0, {
+      return new Response(result !== void 0 ? tsrSerializer.stringify(result) : void 0, {
         status: getResponseStatus(getEvent()),
         headers: {
           "Content-Type": "application/json"
@@ -1373,7 +743,7 @@ const handleServerAction = async ({
       console.info();
       console.error(error);
       console.info();
-      return new Response(startSerializer.stringify(error), {
+      return new Response(tsrSerializer.stringify(error), {
         status: 500,
         headers: {
           "Content-Type": "application/json"
@@ -1632,7 +1002,20 @@ async function handleServerRoutes(opts) {
       if (method) {
         const handler = serverTreeResult.foundRoute.options.methods[method];
         if (handler) {
-          middlewares.push(handlerToMiddleware(handler));
+          if (typeof handler === "function") {
+            middlewares.push(handlerToMiddleware(handler));
+          } else {
+            if (handler._options.middlewares && handler._options.middlewares.length) {
+              middlewares.push(
+                ...flattenMiddlewares(handler._options.middlewares).map(
+                  (d) => d.options.server
+                )
+              );
+            }
+            if (handler._options.handler) {
+              middlewares.push(handlerToMiddleware(handler._options.handler));
+            }
+          }
         }
       }
     }
@@ -1696,70 +1079,7 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
-function defineHandlerCallback(handler) {
-  return handler;
-}
-const defaultStreamHandler = defineHandlerCallback(
-  async ({ request, router, responseHeaders }) => {
-    if (typeof ReactDOMServer.renderToReadableStream === "function") {
-      const stream = await ReactDOMServer.renderToReadableStream(
-        /* @__PURE__ */ jsx(StartServer, { router }),
-        {
-          signal: request.signal
-        }
-      );
-      if (isbot(request.headers.get("User-Agent"))) {
-        await stream.allReady;
-      }
-      const responseStream = transformReadableStreamWithRouter(
-        router,
-        stream
-      );
-      return new Response(responseStream, {
-        status: router.state.statusCode,
-        headers: responseHeaders
-      });
-    }
-    if (typeof ReactDOMServer.renderToPipeableStream === "function") {
-      const reactAppPassthrough = new PassThrough();
-      try {
-        const pipeable = ReactDOMServer.renderToPipeableStream(
-          /* @__PURE__ */ jsx(StartServer, { router }),
-          {
-            ...isbot(request.headers.get("User-Agent")) ? {
-              onAllReady() {
-                pipeable.pipe(reactAppPassthrough);
-              }
-            } : {
-              onShellReady() {
-                pipeable.pipe(reactAppPassthrough);
-              }
-            },
-            onError: (error, info) => {
-              if (error instanceof Error && error.message === "ShellBoundaryError")
-                return;
-              console.error("Error in renderToPipeableStream:", error, info);
-            }
-          }
-        );
-      } catch (e) {
-        console.error("Error in renderToPipeableStream:", e);
-      }
-      const responseStream = transformPipeableStreamWithRouter(
-        router,
-        reactAppPassthrough
-      );
-      return new Response(responseStream, {
-        status: router.state.statusCode,
-        headers: responseHeaders
-      });
-    }
-    throw new Error(
-      "No renderToReadableStream or renderToPipeableStream found in react-dom/server. Ensure you are using a version of react-dom that supports streaming."
-    );
-  }
-);
-const appCss = "/assets/app-DW4kEmFG.css";
+const appCss = "/assets/app-CylBKoNv.css";
 const queryClient = new QueryClient();
 const Route$6 = createRootRoute({
   head: () => ({
@@ -1796,27 +1116,27 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$5 = () => import('./_layout-Lyr9J-to.mjs');
+const $$splitComponentImporter$5 = () => import('./_layout-eMnQzL2l.mjs');
 const Route$5 = createFileRoute("/_layout")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
 });
-const $$splitComponentImporter$4 = () => import('./index-C_GgxjIS.mjs');
+const $$splitComponentImporter$4 = () => import('./index-BBKIpxQD.mjs');
 const Route$4 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
-const $$splitComponentImporter$3 = () => import('./teleop-BWMbf3g0.mjs');
+const $$splitComponentImporter$3 = () => import('./teleop-CJtRcbbG.mjs');
 const Route$3 = createFileRoute("/_layout/teleop")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
-const $$splitComponentImporter$2 = () => import('./settings-BZ06j0kL.mjs');
+const $$splitComponentImporter$2 = () => import('./settings-DYpLmW7s.mjs');
 const Route$2 = createFileRoute("/_layout/settings")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-DU0_NC_t.mjs');
+const $$splitComponentImporter$1 = () => import('./field-BeKYLgcV.mjs');
 const Route$1 = createFileRoute("/_layout/field")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
-const $$splitComponentImporter = () => import('./devices-yOBaFYvf.mjs');
+const $$splitComponentImporter = () => import('./devices-ybOZitsC.mjs');
 const Route = createFileRoute("/_layout/devices")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });

@@ -9,10 +9,14 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "types" : ["vite/client"],
-    "noEmit" : true,
-    "strictNullChecks" : true
+    "types": [
+      "vite/client"
+    ],
+    "noEmit": true,
+    "strictNullChecks": true
   }
 }
