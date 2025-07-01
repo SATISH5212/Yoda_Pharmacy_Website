@@ -9,27 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LayoutRouteImport } from './routes/_layout'
-import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutFieldsRouteImport } from './routes/_layout/fields'
 import { Route as LayoutDevicesRouteImport } from './routes/_layout/devices'
 
-const HomepageRoute = HomepageRouteImport.update({
-  id: '/homepage',
-  path: '/homepage',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,9 +26,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthIndexRoute = AuthIndexRouteImport.update({
-  id: '/auth/',
-  path: '/auth/',
+const SignUpIndexRoute = SignUpIndexRouteImport.update({
+  id: '/sign-up/',
+  path: '/sign-up/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeleopRoute = LayoutTeleopRouteImport.update({
@@ -65,95 +54,59 @@ const LayoutDevicesRoute = LayoutDevicesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
   '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
-  '/auth': typeof AuthIndexRoute
+  '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
   '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
-  '/auth': typeof AuthIndexRoute
+  '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_auth': typeof AuthRoute
   '/_layout': typeof LayoutRouteWithChildren
-  '/homepage': typeof HomepageRoute
   '/_layout/devices': typeof LayoutDevicesRoute
   '/_layout/fields': typeof LayoutFieldsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
-  '/auth/': typeof AuthIndexRoute
+  '/sign-up/': typeof SignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/homepage'
-    | '/devices'
-    | '/fields'
-    | '/settings'
-    | '/teleop'
-    | '/auth'
+  fullPaths: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/homepage'
-    | '/devices'
-    | '/fields'
-    | '/settings'
-    | '/teleop'
-    | '/auth'
+  to: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
   id:
     | '__root__'
     | '/'
-    | '/_auth'
     | '/_layout'
-    | '/homepage'
     | '/_layout/devices'
     | '/_layout/fields'
     | '/_layout/settings'
     | '/_layout/teleop'
-    | '/auth/'
+    | '/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
   LayoutRoute: typeof LayoutRouteWithChildren
-  HomepageRoute: typeof HomepageRoute
-  AuthIndexRoute: typeof AuthIndexRoute
+  SignUpIndexRoute: typeof SignUpIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/homepage': {
-      id: '/homepage'
-      path: '/homepage'
-      fullPath: '/homepage'
-      preLoaderRoute: typeof HomepageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_layout': {
       id: '/_layout'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -163,11 +116,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/': {
-      id: '/auth/'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthIndexRouteImport
+    '/sign-up/': {
+      id: '/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/teleop': {
@@ -220,10 +173,8 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
   LayoutRoute: LayoutRouteWithChildren,
-  HomepageRoute: HomepageRoute,
-  AuthIndexRoute: AuthIndexRoute,
+  SignUpIndexRoute: SignUpIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -2,11 +2,12 @@ import { AuthSwitchProps } from '@/types/dataTypes'
 import { SignInPayLoad } from '@/types/signinTypes'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { Navigate, } from '@tanstack/react-router'
 import { useState } from 'react'
 
-const Registration = async (newStudent: SignInPayLoad) => {
-    console.log("newStudent is ", newStudent)
+import { useNavigate } from '@tanstack/react-router';
+const SignUp = async (newStudent: SignInPayLoad) => {
+
     const response = await fetch(`https://demetercloud.onrender.com/v1.0/register`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -21,12 +22,12 @@ const Registration = async (newStudent: SignInPayLoad) => {
 
 
 function SignIn({ onSwitch }: AuthSwitchProps) {
-
+    const navigate = useNavigate();
     const nav = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
     const mutation = useMutation({
-        mutationFn: Registration,
+        mutationFn: SignUp,
         onSuccess: () => {
             nav({
                 to: "/fields"
@@ -141,7 +142,10 @@ function SignIn({ onSwitch }: AuthSwitchProps) {
                         <button
                             type="button"
                             className="text-green-400 text-xs font-bold cursor-pointer"
-                            onClick={onSwitch}
+                            onClick={() => {
+                                navigate({ to: "/" });
+                            }
+                            }
                         > Login
                         </button>
                     </div>

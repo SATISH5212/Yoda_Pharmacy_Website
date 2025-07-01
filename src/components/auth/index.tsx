@@ -193,15 +193,18 @@ const LoginPage = () => {
                         <button
                             type="button"
                             className="text-green-400 text-xs font-bold cursor-pointer"
-                        // onClick={onSwitch}
+                            onClick={() => {
+                                navigate({ to: "/sign-up" });
+                            }
+                            }
                         > Sign Up
                         </button>
                     </div>
 
                 </div>
-            </form>
+            </form >
             <ToastContainer position="top-center" autoClose={3000} />
-        </div>
+        </div >
     )
 }
 
