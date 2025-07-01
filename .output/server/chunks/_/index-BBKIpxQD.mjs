@@ -287,4 +287,4 @@ const SplitComponent = function Index() {
 };
 
 export { SplitComponent as component };
-//# sourceMappingURL=index-C_GgxjIS.mjs.map
+//# sourceMappingURL=index-BBKIpxQD.mjs.map

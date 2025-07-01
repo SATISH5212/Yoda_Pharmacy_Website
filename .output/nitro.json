@@ -1,12 +1,16 @@
 {
+<<<<<<< HEAD
   "date": "2025-06-30T11:57:35.070Z",
+=======
+  "date": "2025-07-01T03:01:35.713Z",
+>>>>>>> f1f94900b2ef82f04b716922583f19c5a5a49c45
   "preset": "node-server",
   "framework": {
     "name": "nitro",
     "version": ""
   },
   "versions": {
-    "nitro": "2.11.12"
+    "nitro": "2.11.13"
   },
   "commands": {
     "preview": "node ./server/index.mjs"
