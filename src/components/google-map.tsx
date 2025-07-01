@@ -10,7 +10,7 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { DrawToolsProps } from "@/types/dataTypes";
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
-import { Trash2 } from "lucide-react";
+import { Trash2,Circle} from "lucide-react";
 
 
 const containerStyle = {
@@ -135,11 +135,13 @@ const DrawTools = ({
                             options={{
                                 fillColor: "rgba(144, 222, 144, 0.5)",
                                 fillOpacity: 0.5,
-                                strokeColor: "#008000",
-                                strokeWeight: 2,
+                                strokeColor: "white",
+                                strokeWeight: 1,
                             }}
                         />
                     )}
+
+            
 
                     {/* Markers */}
                     {accessPoint && <Marker position={accessPoint} label={{ text: "Field Access Point", color: "white", fontSize: "10px" }} />}

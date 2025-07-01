@@ -1246,7 +1246,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-DxrI6AFw.mjs');
+      return await import('./_tanstack-start-manifest_v-yguUEViK.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1759,7 +1759,7 @@ const defaultStreamHandler = defineHandlerCallback(
     );
   }
 );
-const appCss = "/assets/app-B6lh7TyO.css";
+const appCss = "/assets/app-98BcDiJL.css";
 const queryClient = new QueryClient();
 const Route$7 = createRootRoute({
   head: () => ({
@@ -1796,11 +1796,11 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$6 = () => import('./homepage-wRlhhpA7.mjs');
+const $$splitComponentImporter$6 = () => import('./homepage-CwuVEYzJ.mjs');
 const Route$6 = createFileRoute("/homepage")({
   component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
 });
-const $$splitComponentImporter$5 = () => import('./_layout-BhL_YcRj.mjs');
+const $$splitComponentImporter$5 = () => import('./_layout-CMybIvEl.mjs');
 const Route$5 = createFileRoute("/_layout")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
 });
@@ -1808,19 +1808,19 @@ const $$splitComponentImporter$4 = () => import('./index-C_GgxjIS.mjs');
 const Route$4 = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
-const $$splitComponentImporter$3 = () => import('./teleop-BAh_tiCq.mjs');
+const $$splitComponentImporter$3 = () => import('./teleop-DOLmF6Wi.mjs');
 const Route$3 = createFileRoute("/_layout/teleop")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
-const $$splitComponentImporter$2 = () => import('./settings-DHFEwr_z.mjs');
+const $$splitComponentImporter$2 = () => import('./settings-Cq-HcXJu.mjs');
 const Route$2 = createFileRoute("/_layout/settings")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-_vvdDG9n.mjs');
+const $$splitComponentImporter$1 = () => import('./field-DrT3hgcV.mjs');
 const Route$1 = createFileRoute("/_layout/field")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
-const $$splitComponentImporter = () => import('./devices-UZM50tZ1.mjs');
+const $$splitComponentImporter = () => import('./devices-Cq2dcoQv.mjs');
 const Route = createFileRoute("/_layout/devices")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });

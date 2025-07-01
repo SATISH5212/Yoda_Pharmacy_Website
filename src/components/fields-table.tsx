@@ -24,9 +24,6 @@ async function getFieldsData(): Promise<FieldResponse> {
 
 export default function FieldsTable() {
 
-    
-
-
     const { data} = useQuery<FieldResponse>({
         queryKey: ['users'],
         queryFn: () => getFieldsData(),
@@ -97,7 +94,7 @@ export default function FieldsTable() {
     });
 
     return (
-        <div >
+        <div className="rounded">
             <table className="min-w-full">
 
                 <thead>

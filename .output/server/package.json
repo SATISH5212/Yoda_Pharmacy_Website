@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@react-google-maps/api": "2.20.7",
     "@react-leaflet/core": "2.1.0",
     "@tanstack/form-core": "1.12.3",
     "@tanstack/history": "1.120.17",
