@@ -1,19 +1,19 @@
-import { FormValues } from '@/lib/interfaces/auth'
-import { loginAPI } from '@/lib/services/auth'
-import { LoginPayload } from '@/types/dataTypes'
+import { FormValues } from '@/lib/interfaces/auth';
+import { loginAPI } from '@/lib/services/auth';
+import { LoginPayload } from '@/types/dataTypes';
 // import { useForm } from '@tanstack/react-form'
-import { useForm } from "react-hook-form";
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
-import { Eye, EyeOff } from 'lucide-react'
-import { useState } from 'react'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { toast } from "sonner";
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import Cookies from "js-cookie";
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "sonner";
 
 
-export function LoginPage() {
+const LoginPage = () => {
     const navigate = useNavigate();
     const [validation, setValidations] = useState<any>({});
     const [view, setView] = useState(false);
@@ -45,7 +45,7 @@ export function LoginPage() {
             Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
             localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/field`,
+                to: `/fields`,
             });
         },
         onError: (error: any) => {
@@ -76,7 +76,7 @@ export function LoginPage() {
     };
     const tokenlocal = localStorage.getItem("authToken");
     if (tokenlocal) {
-        navigate({ to: "/field" });
+        navigate({ to: "/fields" });
     }
 
 
@@ -204,3 +204,5 @@ export function LoginPage() {
         </div>
     )
 }
+
+export default LoginPage;

@@ -16,7 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
-import { Route as LayoutFieldRouteImport } from './routes/_layout/field'
+import { Route as LayoutFieldsRouteImport } from './routes/_layout/fields'
 import { Route as LayoutDevicesRouteImport } from './routes/_layout/devices'
 
 const HomepageRoute = HomepageRouteImport.update({
@@ -52,9 +52,9 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutFieldRoute = LayoutFieldRouteImport.update({
-  id: '/field',
-  path: '/field',
+const LayoutFieldsRoute = LayoutFieldsRouteImport.update({
+  id: '/fields',
+  path: '/fields',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutDevicesRoute = LayoutDevicesRouteImport.update({
@@ -67,7 +67,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
-  '/field': typeof LayoutFieldRoute
+  '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
   '/auth': typeof AuthIndexRoute
@@ -76,7 +76,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/homepage': typeof HomepageRoute
   '/devices': typeof LayoutDevicesRoute
-  '/field': typeof LayoutFieldRoute
+  '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
   '/auth': typeof AuthIndexRoute
@@ -88,7 +88,7 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutRouteWithChildren
   '/homepage': typeof HomepageRoute
   '/_layout/devices': typeof LayoutDevicesRoute
-  '/_layout/field': typeof LayoutFieldRoute
+  '/_layout/fields': typeof LayoutFieldsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
   '/auth/': typeof AuthIndexRoute
@@ -99,7 +99,7 @@ export interface FileRouteTypes {
     | '/'
     | '/homepage'
     | '/devices'
-    | '/field'
+    | '/fields'
     | '/settings'
     | '/teleop'
     | '/auth'
@@ -108,7 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/homepage'
     | '/devices'
-    | '/field'
+    | '/fields'
     | '/settings'
     | '/teleop'
     | '/auth'
@@ -119,7 +119,7 @@ export interface FileRouteTypes {
     | '/_layout'
     | '/homepage'
     | '/_layout/devices'
-    | '/_layout/field'
+    | '/_layout/fields'
     | '/_layout/settings'
     | '/_layout/teleop'
     | '/auth/'
@@ -184,11 +184,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/field': {
-      id: '/_layout/field'
-      path: '/field'
-      fullPath: '/field'
-      preLoaderRoute: typeof LayoutFieldRouteImport
+    '/_layout/fields': {
+      id: '/_layout/fields'
+      path: '/fields'
+      fullPath: '/fields'
+      preLoaderRoute: typeof LayoutFieldsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/devices': {
@@ -203,14 +203,14 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutDevicesRoute: typeof LayoutDevicesRoute
-  LayoutFieldRoute: typeof LayoutFieldRoute
+  LayoutFieldsRoute: typeof LayoutFieldsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTeleopRoute: typeof LayoutTeleopRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutDevicesRoute: LayoutDevicesRoute,
-  LayoutFieldRoute: LayoutFieldRoute,
+  LayoutFieldsRoute: LayoutFieldsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTeleopRoute: LayoutTeleopRoute,
 }

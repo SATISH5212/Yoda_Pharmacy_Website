@@ -5,7 +5,7 @@ import axios from 'axios'
 import { AddRobotProps, RobotConfig } from '@/types/dataTypes'
 import { ToastContainer, toast } from 'react-toastify';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL
+const BASE_URL = import.meta.env.VITE_PUBLIC_API_URL
 
 
 const addRobot = async (robotConfig: RobotConfig) => {
@@ -154,7 +154,7 @@ export default function AddRobot({ onBack }: AddRobotProps) {
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             className="bg-gray-100 rounded w-52  p-1.5 text-xs"
-                                            
+
                                         >
                                             <option value="">Robot Type</option>
                                             {/* {

@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
-const Registration = async (newStudent:SignInPayLoad) => {
+const Registration = async (newStudent: SignInPayLoad) => {
     console.log("newStudent is ", newStudent)
     const response = await fetch(`https://demetercloud.onrender.com/v1.0/register`, {
         method: "POST",
@@ -20,16 +20,16 @@ const Registration = async (newStudent:SignInPayLoad) => {
 }
 
 
-function SignIn({ onSwitch } : AuthSwitchProps) {
+function SignIn({ onSwitch }: AuthSwitchProps) {
 
-    const nav=useNavigate();
-    const [showPassword, setShowPassword] = useState(false); 
+    const nav = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const mutation = useMutation({
         mutationFn: Registration,
         onSuccess: () => {
-              nav({
-                to: "/field"
+            nav({
+                to: "/fields"
             })
         },
     })
@@ -133,7 +133,7 @@ function SignIn({ onSwitch } : AuthSwitchProps) {
                                 className="bg-gray-100 rounded w-90 p-2 text-xs"
                             />
                         )}
-                         
+
                     />
 
                     <div className='flex gap-1'>
