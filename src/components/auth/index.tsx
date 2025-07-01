@@ -178,6 +178,18 @@ export function LoginPage() {
                                         "Login"
                                     )}
                                 </button>
+                                <div className='text-xs'>
+                        <span>Don't have an Account? </span>
+                        <button
+                            type="button"
+                            className="text-green-400 text-xs font-bold cursor-pointer"
+                            onClick={() => {
+                                navigate({ to: "/sign-up" });
+                            }
+                            }
+                        > Sign Up
+                        </button>
+                    </div>
                             </div>
                         </form>
                     </div>
