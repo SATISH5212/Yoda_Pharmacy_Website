@@ -17,3 +17,12 @@ export const addFieldBoundaryAPI = async (payload: any) => {
         throw err;
     }
 };
+
+export const getSingleFieldAPI = async ({ field_id }: { field_id: string }) => {
+    try {
+        const response = await $fetch.get(`/fieldmapping/${field_id}`);
+        return response;
+    } catch (err) {
+        throw err;
+    }
+};

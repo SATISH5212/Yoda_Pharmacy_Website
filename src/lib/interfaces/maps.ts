@@ -15,4 +15,5 @@ export interface IFieldFormPageProps {
     fieldAccessPoint: Coordinates | null;
     isSubmittable: boolean | string;
     handleCancel: () => void;
+    fieldCentroid: Coordinates | null;
 }
