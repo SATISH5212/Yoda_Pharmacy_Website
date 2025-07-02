@@ -11,7 +11,7 @@ async function getRobotsData(page: number, page_size: number) {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`
         }
     });
     const data = await response.json();
