@@ -49,6 +49,7 @@ const MapFormPage = () => {
                 location: locationInfo?.location ?? "",
                 field_area: locationInfo?.area ?? 0,
                 field_access_point: fieldAccessPoint,
+                robot_home: fieldAccessPoint,
             };
             return await addFieldBoundaryAPI(payload);
         },

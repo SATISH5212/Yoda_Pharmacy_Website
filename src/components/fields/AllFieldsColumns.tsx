@@ -51,9 +51,12 @@ export const allFieldsColumns = [
         accessorKey: "action",
         cell: (info: any) => {
             const row = info.row.original;
+            const field_id = row.id as string
+            console.log("Rowdata:", row);
             return (
                 <Link
-                    to={`/devices`}
+                    to="/fields/$field_id"
+                    params={{ field_id }}
                     className="flex justify-center hover:text-blue-700"
                     title="View Details"
                 >
