@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
+import { Route as AddFieldIndexRouteImport } from './routes/add-field/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutFieldsRouteImport } from './routes/_layout/fields'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const SignUpIndexRoute = SignUpIndexRouteImport.update({
   id: '/sign-up/',
   path: '/sign-up/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddFieldIndexRoute = AddFieldIndexRouteImport.update({
+  id: '/add-field/',
+  path: '/add-field/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeleopRoute = LayoutTeleopRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/fields': typeof LayoutFieldsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
+  '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 export interface FileRoutesById {
@@ -76,13 +84,28 @@ export interface FileRoutesById {
   '/_layout/fields': typeof LayoutFieldsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
+  '/add-field/': typeof AddFieldIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
+  fullPaths:
+    | '/'
+    | '/devices'
+    | '/fields'
+    | '/settings'
+    | '/teleop'
+    | '/add-field'
+    | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/devices' | '/fields' | '/settings' | '/teleop' | '/sign-up'
+  to:
+    | '/'
+    | '/devices'
+    | '/fields'
+    | '/settings'
+    | '/teleop'
+    | '/add-field'
+    | '/sign-up'
   id:
     | '__root__'
     | '/'
@@ -91,12 +114,14 @@ export interface FileRouteTypes {
     | '/_layout/fields'
     | '/_layout/settings'
     | '/_layout/teleop'
+    | '/add-field/'
     | '/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRoute: typeof LayoutRouteWithChildren
+  AddFieldIndexRoute: typeof AddFieldIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
 }
 
@@ -121,6 +146,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-up'
       fullPath: '/sign-up'
       preLoaderRoute: typeof SignUpIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-field/': {
+      id: '/add-field/'
+      path: '/add-field'
+      fullPath: '/add-field'
+      preLoaderRoute: typeof AddFieldIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/teleop': {
@@ -174,6 +206,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
+  AddFieldIndexRoute: AddFieldIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
 }
 export const routeTree = rootRouteImport

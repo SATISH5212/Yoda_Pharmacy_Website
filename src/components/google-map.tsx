@@ -10,7 +10,7 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { DrawToolsProps } from "@/types/dataTypes";
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
-import { Trash2,Circle} from "lucide-react";
+import { Trash2, Circle } from "lucide-react";
 
 
 const containerStyle = {
@@ -128,7 +128,6 @@ const DrawTools = ({
                     onClick={handleMapClick}
                     mapTypeId="satellite"
                 >
-                    {/* Drawn polygon */}
                     {polygonPath.length > 0 && (
                         <Polygon
                             path={polygonPath}
@@ -141,7 +140,7 @@ const DrawTools = ({
                         />
                     )}
 
-            
+
 
                     {/* Markers */}
                     {accessPoint && <Marker position={accessPoint} label={{ text: "Field Access Point", color: "white", fontSize: "10px" }} />}

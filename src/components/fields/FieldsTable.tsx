@@ -1,11 +1,6 @@
-import { BASE_URL } from "@/config/appConfig";
-import { useQuery } from "@tanstack/react-query";
-import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Eye } from "lucide-react";
-import { FieldResponse } from "@/types/dataTypes";
 import { getAllFieldsAPI } from "@/lib/services/fields";
+import { FieldResponse } from "@/types/dataTypes";
+import { useQuery } from "@tanstack/react-query";
 import TanStackTable from "../core/TanstackTable";
 import { allFieldsColumns } from "./AllFieldsColumns";
 
