@@ -25,6 +25,7 @@ const MapFormPage = () => {
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
+    const [fieldCentroid, setFieldCentroid] = useState<Coordinates>(null);
 
     const {
         register,
@@ -43,6 +44,7 @@ const MapFormPage = () => {
         mutationKey: ["add-field-boundary"],
         retry: 1,
         mutationFn: async (data: FormData) => {
+            console.log("locationInfo0001:", locationInfo);
             const payload = {
                 field_name: data.field_name.trim(),
                 field_boundary: formCoordinates,
@@ -50,6 +52,7 @@ const MapFormPage = () => {
                 field_area: locationInfo?.area ?? 0,
                 field_access_point: fieldAccessPoint,
                 robot_home: fieldAccessPoint,
+                centroid: locationInfo?.centroid || null
             };
             return await addFieldBoundaryAPI(payload);
         },
@@ -125,10 +128,11 @@ const MapFormPage = () => {
                     mode={mode}
                     setMode={setMode}
                     setLocationInfo={setLocationInfo}
+                    setFieldCentroid={setFieldCentroid}
                 />
             </div>
             <FieldFormPage
-                handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} isSubmittable={isSubmittable} handleCancel={handleCancel} />
+                handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} isSubmittable={isSubmittable} handleCancel={handleCancel} fieldCentroid={fieldCentroid} />
         </div>
     );
 }

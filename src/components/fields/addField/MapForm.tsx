@@ -2,7 +2,7 @@ import { IFieldFormPageProps } from "@/lib/interfaces/maps";
 import { FC } from "react";
 
 const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
-    const { handleSubmit, onSubmit, register, isPending, errors, displayArea, handleAddAccessPoint, fieldAccessPoint, isSubmittable, handleCancel } = props
+    const { handleSubmit, onSubmit, register, isPending, errors, displayArea, handleAddAccessPoint, fieldAccessPoint, isSubmittable, handleCancel, fieldCentroid } = props
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl">
             <form

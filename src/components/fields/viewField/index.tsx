@@ -54,6 +54,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
     const {
         data: viewFieldData,
+        isLoading,
+        isError,
     } = useQuery({
         queryKey: ["view-fieldData", field_id],
         queryFn: async () => {
@@ -69,45 +71,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         enabled: !!field_id,
     });
 
-    const calculateArea = useCallback((coordinates: Coordinates[]) => {
-        if (coordinates.length < 3) return "0.00";
-
-        try {
-            const turfCoordinates: [number, number][] = [
-                ...coordinates.map((p) => [p.lng, p.lat] as [number, number]),
-                [coordinates[0].lng, coordinates[0].lat],
-            ];
-
-            const turfPoly = turf.polygon([turfCoordinates]);
-            const areaInSquareMeters = turf.area(turfPoly);
-            const areaInAcres = areaInSquareMeters / ACRES_CONVERSION_FACTOR;
-
-            return areaInAcres.toFixed(2);
-        } catch (error) {
-            console.error("Error calculating area:", error);
-            return "0.00";
-        }
-    }, []);
-    const getPolygonCenter = useCallback((coordinates: Coordinates[]) => {
-        if (coordinates.length === 0) return DEFAULT_CENTER;
-
-        try {
-            const turfCoordinates: [number, number][] = [
-                ...coordinates.map((p) => [p.lng, p.lat] as [number, number]),
-                [coordinates[0].lng, coordinates[0].lat],
-            ];
-
-            const turfPoly = turf.polygon([turfCoordinates]);
-            const centroid = turf.centroid(turfPoly);
-            const [lng, lat] = centroid.geometry.coordinates;
-
-            return { lat, lng };
-        } catch (error) {
-            console.error("Error calculating center:", error);
-            return DEFAULT_CENTER;
-        }
-    }, []);
-
     const calculateBounds = useCallback((coordinates: Coordinates[]) => {
         const allPoints = [...coordinates];
         const lats = allPoints.map(p => p.lat);
@@ -122,10 +85,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     }, []);
     useEffect(() => {
         if (viewFieldData?.data?.field_boundary.length > 0) {
-            const center = getPolygonCenter(viewFieldData?.data?.field_boundary);
-            setMapCenter(center);
-            const area = calculateArea(viewFieldData?.data?.field_boundary);
-            setCalculatedArea(area);
+            setMapCenter(viewFieldData?.data?.centroid);
+            setCalculatedArea(viewFieldData?.data?.field_area);
             const bounds = calculateBounds(viewFieldData?.data?.field_boundary);
             const latDiff = bounds.north - bounds.south;
             const lngDiff = bounds.east - bounds.west;
@@ -139,7 +100,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
             setMapZoom(zoom);
         }
-    }, [viewFieldData, getPolygonCenter, calculateArea, calculateBounds]);
+    }, [viewFieldData, calculateBounds]);
 
     const polygonOptions = useMemo(() => ({
         fillColor: "rgba(144, 238, 144, 0.4)",
@@ -160,6 +121,11 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
     return (
         <div className="relative w-full h-screen">
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+                    <div className="loader">Loading...</div>
+                </div>
+            )}
             <LoadScript
                 googleMapsApiKey={GOOGLE_MAP_API_KEY}
                 libraries={GOOGLE_MAPS_LIBRARIES}
@@ -203,7 +169,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
                     {showInfoWindow && (
                         <InfoWindow
-                            position={getPolygonCenter(viewFieldData?.data?.field_boundary)}
+                            position={viewFieldData?.data?.centroid}
                             onCloseClick={handleInfoWindowClose}
                         >
                             <div className="p-2 min-w-[200px]">
@@ -248,10 +214,11 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                             {viewFieldData?.data?.field_boundary.length}
                         </span>
                     </div>
+
                     <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Access Point:</span>
+                        <span className="text-sm text-gray-600">Location:</span>
                         <span className="text-green-600">
-                            <MapPin size={16} className="inline" />
+                            {"Not specified"}
                         </span>
                     </div>
                 </div>
@@ -261,21 +228,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 >
                     {showInfoWindow ? "Hide Details" : "Show Details"}
                 </button>
-            </div>
-
-
-            <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-3">
-                <h3 className="font-semibold text-sm mb-2">Legend</h3>
-                <div className="space-y-2 text-xs">
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-green-200 border-2 border-green-600 rounded"></div>
-                        <span>Field Boundary</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-red-500 rounded-full border-2 border-white"></div>
-                        <span>Access Point</span>
-                    </div>
-                </div>
             </div>
         </div>
     );
