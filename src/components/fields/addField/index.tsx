@@ -23,6 +23,7 @@ const MapFormPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
+     const [robot_home, setRobotHome] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const {
@@ -48,7 +49,7 @@ const MapFormPage = () => {
                 location: locationInfo?.location ?? "",
                 field_area: locationInfo?.area ?? 0,
                 field_access_point: fieldAccessPoint,
-                robot_home: fieldAccessPoint,
+                robot_home: robot_home,
                 centroid: locationInfo?.centroid || null
             };
             return await addFieldBoundaryAPI(payload);
@@ -76,17 +77,24 @@ const MapFormPage = () => {
             return;
         }
 
+        if(!robot_home){
+            toast.error("Please set robot home point");
+            return;
+        }
+
+
         try {
             await mutateAddBoundary(data);
         } catch (error) {
             console.error("Form submission error:", error);
         }
-    }, [formCoordinates, fieldAccessPoint, mutateAddBoundary]);
+    }, [formCoordinates, fieldAccessPoint, robot_home,mutateAddBoundary]);
 
     const handleReset = useCallback(() => {
         reset();
         setFormCoordinates([]);
         setFieldAccessPoint(null);
+        setRobotHome(null);
         setLocationInfo(null);
         setMode("idle");
     }, [reset]);
@@ -94,6 +102,11 @@ const MapFormPage = () => {
     const handleAddAccessPoint = useCallback(() => {
         setMode("field_access_point");
         toast.info("Click on the map to place Field Access Point", TOAST_CONFIG);
+    }, []);
+
+    const handleRobotHome = useCallback(() => {
+        setMode("robot_home"); 
+        toast.info("Click on the map to place Robot Home Point", TOAST_CONFIG);
     }, []);
 
     const handleCancel = useCallback(() => {
@@ -113,8 +126,9 @@ const MapFormPage = () => {
             fieldName?.trim() &&
             formCoordinates.length > 0 &&
             fieldAccessPoint !== null &&
+            robot_home !== null &&
             !isPending;
-    }, [isValid, fieldName, formCoordinates.length, fieldAccessPoint, isPending]);
+    }, [isValid, fieldName, formCoordinates.length, fieldAccessPoint, robot_home, isPending]);
 
     return (
         <div className="relative w-full h-screen">
@@ -122,13 +136,14 @@ const MapFormPage = () => {
                 <DrawTools
                     setFormCoordinates={setFormCoordinates}
                     setFieldAccessPoint={setFieldAccessPoint}
+                    setRobotHome={setRobotHome}
                     mode={mode}
                     setMode={setMode}
                     setLocationInfo={setLocationInfo}
                 />
             </div>
             <FieldFormPage
-                handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} isSubmittable={isSubmittable} handleCancel={handleCancel} />
+                handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} />
         </div>
     );
 }

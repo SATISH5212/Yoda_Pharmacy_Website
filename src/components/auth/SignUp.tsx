@@ -1,11 +1,10 @@
 import { AuthSwitchProps } from '@/types/dataTypes'
-import { SignInPayLoad } from '@/types/signinTypes'
-import { useForm } from '@tanstack/react-form'
+import { FormValues, SignUpPayload, ValidationErrors } from '@/lib/interfaces/auth'
+import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { Navigate, } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { useNavigate } from '@tanstack/react-router';
 const SignUp = async (newStudent: SignInPayLoad) => {
 
     const response = await fetch(`https://demetercloud.onrender.com/v1.0/register`, {
@@ -20,141 +19,228 @@ const SignUp = async (newStudent: SignInPayLoad) => {
 }
 
 
-function SignIn({ onSwitch }: AuthSwitchProps) {
+import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react'
+import { toast, Toaster } from 'sonner'
+import { SignInPayLoad } from '@/types/signinTypes'
+import { SignUpAPI } from '@/lib/services/auth'
+
+export function Register() {
     const navigate = useNavigate();
-    const nav = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
-
-    const mutation = useMutation({
-        mutationFn: SignUp,
-        onSuccess: () => {
-            nav({
-                to: "/fields"
-            })
-        },
-    })
-
-    const form = useForm({
+    const [validation, setValidations] = useState<ValidationErrors>({});
+    const [view, setView] = useState(false);
+    const [conflictError, setConflictError] = useState<{ message?: string }>({});
+    const {
+        register,
+        handleSubmit,
+        clearErrors,
+    } = useForm<FormValues>({
         defaultValues: {
-            first_name: '',
-            last_name: '',
-            phone: '',
-            email: '',
-            password: ''
+            first_name: "",
+            last_name: "",  
+            phone: "",
+            email: "",
+            password: "",
         },
-        onSubmit: async ({ value }) => {
-            const userAdd = {
-                first_name: value.first_name,
-                last_name: value.last_name,
-                phone: value.phone,
-                email: value.email,
-                password: value.password
+    });
+
+    const { mutateAsync: mutateRegister, isPending: isPendingLogin } = useMutation({
+        mutationKey: ["SignUp-user"],
+        retry: false,
+        mutationFn: async (data: FormValues) => {
+            const response = await SignUpAPI(data);
+            return response;
+        },
+
+        onSuccess: (response) => {
+            const message = response?.data?.message;
+            toast.success(message);
+            // const accessToken = response?.data?.data?.access_token;
+            // Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
+            // localStorage.setItem("authToken", accessToken);
+            navigate({
+                to: `/fields`,
+            });
+        },
+
+        onError: (error : any) => {
+            console.log("SignUp error", error);
+            if (error?.status === 422 || error?.status === 409) {
+                const errorMessages = error?.data?.errors || error?.data?.message;
+                setValidations(errorMessages);
+                console.log("validation error", validation);
+
+            } else if (
+                error?.status === 409 ||
+                error?.status === 401 ||
+                error?.status === 400 ||
+                error?.status === 404
+            ) {
+                setConflictError({ message: error?.data?.message });
             }
-            mutation.mutate(userAdd)
-        }
-    })
+        },
+    });
+
+
+    const clearFieldError = (field: keyof FormValues) => {
+        setValidations((prev: any) => ({
+            ...prev,
+            [field]: null,
+        }));
+        setConflictError({});
+        clearErrors(field);
+    };
+
+    const onSubmit = (data: FormValues) => {
+        const payload: FormValues = {
+            ...data,
+            first_name: data.first_name?.trim() === "" ? null : data.first_name,
+            last_name: data.last_name?.trim() === "" ? null : data.last_name,
+            phone: data.phone?.trim() === "" ? null : data.phone,
+            email: data.email,
+            password: data.password,
+        };
+        mutateRegister(payload);
+    };
+
 
     return (
-        <div style={{ height: "320px", width: "400px", backgroundColor: "white", marginLeft: "400px", borderRadius: "10px" }} className='shadow-lg border-0 mt-35'>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    form.handleSubmit()
-                }}
-            >
+        <>
+            <div className="h-screen w-screen flex text-xs bg-white justify-center">
+                {/* Left Image Panel */}
+                {/* <div className="w-8/12 rounded-xl overflow-hidden m-4">
+                    <img
+                        className="w-full h-full object-cover"
+                        src="/assets/image.webp"
+                        alt="Main Image"
+                    />
+                </div> */}
 
-                <div className='ml-5 flex flex-col gap-4'>
-                    <div className='flex gap-2 mt-9'>
-                        <div>
-                            <form.Field
-                                name="first_name"
-                                children={(field) => (
-                                    <input
-                                        type="text"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        placeholder='First Name'
-                                        className="bg-gray-100 rounded w-44 p-2 text-xs"
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <form.Field
-                                name="last_name"
-                                children={(field) => (
-                                    <input
-                                        type="text"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        placeholder='Last Name'
-                                        className="bg-gray-100 rounded w-44 p-2 text-xs"
-                                    />
-                                )}
-                            />
-                        </div>
+                {/* Right Form Panel */}
+                <div className="w-5/12 flex flex-col items-center gap-10 h-dvh px-24 box-border  justify-center">
+                    <div>
+                        <img src="/assets/logo.svg" alt="Logo" className="mb-3" />
                     </div>
 
-                    <form.Field
-                        name="phone"
-                        children={(field) => (
-                            <input
-                                type="text"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                placeholder='Phone'
-                                className="bg-gray-100 rounded w-90 p-2 text-xs"
-                            />
-                        )}
-                    />
+                    <div className="w-full space-y-5 text-35353d text-xs font-normal border p-2 rounded-2xl bg-white shadow-lg ">
+                        <div className="text-center">
+                            <div className="text-xl text-title font-normal">Sign Up</div>
+                        </div>
 
-                    <form.Field
-                        name="email"
-                        children={(field) => (
-                            <input
-                                type="text"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                placeholder='Email'
-                                className="bg-gray-100 rounded w-90 p-2 text-xs"
-                            />
-                        )}
-                    />
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                            {/* Name Fields */}
+                            <div className="flex gap-2">
+                                <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
+                                    {/* <User size={16} /> */}
+                                    <input
 
-                    <form.Field
-                        name="password"
-                        children={(field) => (
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                placeholder='Password'
-                                className="bg-gray-100 rounded w-90 p-2 text-xs"
-                            />
-                        )}
+                                        placeholder="First Name"
+                                        className="h-full outline-none p-2 w-full bg-inherit"
+                                        type="text"
+                                        {...register('first_name', {
+                                            onChange: () => clearFieldError('first_name'),
+                                        })}
+                                    />
+                                </div>
+                                <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
+                                    {/* <User size={16} /> */}
+                                    <input
+                                        placeholder="Last Name"
+                                        className="h-full outline-none p-2 w-full bg-inherit"
+                                        type="text"
+                                        {...register('last_name', {
+                                            onChange: () => clearFieldError('last_name'),
+                                        })}
+                                    />
+                                </div>
+                            </div>
 
-                    />
+                            {/* Phone Field */}
+                            <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
+                                <Phone size={14} />
+                                <input
+                                    placeholder="Phone Number"
+                                    className="h-full outline-none p-2 w-full bg-inherit"
+                                    type="text"
+                                    {...register('phone', {
+                                        onChange: () => clearFieldError('phone'),
+                                    })}
+                                />
+                            </div>
 
-                    <div className='flex gap-1'>
-                        <span className='text-xs'>Already have an Account?</span>
-                        <button
-                            type="button"
-                            className="text-green-400 text-xs font-bold cursor-pointer"
-                            onClick={() => {
-                                navigate({ to: "/" });
-                            }
-                            }
-                        > Login
-                        </button>
+                            {/* Email Field */}
+                            <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
+                                <Mail size={16} />
+                                <input
+                                    placeholder="Enter your email"
+                                    className="h-full outline-none p-2 w-full bg-inherit"
+                                    type="email"
+                                    {...register('email', {
+                                        onChange: () => clearFieldError('email'),
+                                    })}
+                                />
+                            </div>
+                            {validation.email && (
+                                <p className="text-red-500 text-xs">{validation.email}</p>
+                            )}
+
+                            {/* Password Field */}
+                            <div className="space-y-1 text-title font-light">
+                                <div className="font-normal">Password</div>
+                                <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
+                                    <Lock size={17} />
+                                    <input
+                                        placeholder="Enter your Password"
+                                        className="h-full outline-none p-2 w-full bg-inherit font-light"
+                                        type={view ? 'text' : 'password'}
+                                        {...register('password', {
+                                            onChange: () => clearFieldError('password'),
+                                        })}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="pr-2.5"
+                                        onClick={() => setView((prev) => !prev)}
+                                    >
+                                        {view ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </button>
+                                </div>
+                                {validation.password && (
+                                    <p className="text-red-500 text-xs">{validation.password}</p>
+                                )}
+                                {conflictError.message && (
+                                    <p className="text-red-500 text-xs">{conflictError.message}</p>
+                                )}
+                            </div>
+
+
+                            <div className="text-center pt-5 space-y-2">
+                                <button
+                                    type="submit"
+                                    className="w-full text-white bg-primary p-2 rounded-full disabled:opacity-50 flex items-center justify-center text-sm"
+                                    disabled={isPendingLogin}
+                                >
+                                    {isPendingLogin ? 'Registering...' : 'Register'}
+                                </button>
+
+                                <div className="text-xs">
+                                    <span>Already have an account?</span>
+                                    <button
+                                        type="button"
+                                        className="text-green-400 font-bold ml-1 cursor-pointer"
+                                        onClick={() => navigate({ to: '/' })}
+                                    >
+                                        Login
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
                     </div>
-
-
-                    <button className='mt-2 mr-3 p-2 rounded-xl w-90 text-sm bg-green-300 text-center' type='submit' style={{ cursor: 'pointer' }}>Register</button>
                 </div>
-            </form>
-        </div>
-    )
+            </div>
+            <Toaster richColors position="top-right" />
+        </>
+    );
 }
 
-export default SignIn;
+export default Register

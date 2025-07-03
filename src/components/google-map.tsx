@@ -105,12 +105,14 @@ const usePolygonCalculations = () => {
 const DrawTools: React.FC<DrawToolsProps> = ({
     setFormCoordinates,
     setFieldAccessPoint,
+    setRobotHome,
     setLocationInfo,
     mode,
     setMode,
 }) => {
     const [polygonPath, setPolygonPath] = useState<Coordinates[]>([]);
     const [accessPoint, setAccessPoint] = useState<Coordinates | undefined>();
+    const [robotPoint, setRobotPoint] = useState<Coordinates | null>(null);
     const [googleInstance, setGoogleInstance] = useState<typeof window.google | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER);
@@ -238,8 +240,13 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 setFieldAccessPoint(point);
                 setMode("idle");
             }
+            else if (mode === "robot_home") {
+                setRobotPoint(point);
+                setRobotHome(point);
+                setMode("idle");
+            } 
         },
-        [mode, setFieldAccessPoint, setMode]
+        [mode, setFieldAccessPoint, setMode ,setRobotHome]
     );
 
     const handleDelete = useCallback(() => {
@@ -247,6 +254,8 @@ const DrawTools: React.FC<DrawToolsProps> = ({
         setFormCoordinates([]);
         setAccessPoint(undefined);
         setFieldAccessPoint(null);
+        setRobotHome(null);
+        setRobotPoint(null);
         setLocationInfo(null);
         setSearchMarker(null);
         setLatInput("");
@@ -258,7 +267,7 @@ const DrawTools: React.FC<DrawToolsProps> = ({
             drawnShapeRef.current.setMap(null);
             drawnShapeRef.current = null;
         }
-    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo]);
+    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo,setRobotHome]);
 
     const handleGoogleMapsLoad = useCallback(() => {
         setGoogleInstance(window.google);
@@ -309,6 +318,13 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                             label={{ text: "Field Access Point", color: "white", fontSize: "10px" }}
                         />
                     )}
+                     {robotPoint && (
+                        <Marker
+                            position={robotPoint}
+                            label={{ text: "Robot Point", color: "white", fontSize: "10px" }}
+                        />
+                    )}
+                    
                     {searchMarker && (
                         <Marker
                             position={searchMarker}
