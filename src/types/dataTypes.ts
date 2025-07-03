@@ -53,6 +53,7 @@ export interface AuthSwitchProps {
 export interface DrawToolsProps {
     setFormCoordinates: (coords: { lat: number; lng: number }[]) => void;
     setFieldAccessPoint: React.Dispatch<React.SetStateAction<Coordinates>>;
+    setRobotHome: React.Dispatch<React.SetStateAction<Coordinates>>;
     mode: string;
     setMode: React.Dispatch<React.SetStateAction<string>>;
     setLocationInfo: React.Dispatch<React.SetStateAction<LocationInfo>>;

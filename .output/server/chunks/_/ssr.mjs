@@ -606,7 +606,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-kLgeAOk6.mjs');
+      return await import('./_tanstack-start-manifest_v-DH5cyFeD.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1079,7 +1079,7 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
-const appCss = "/assets/app-1wXKAIqf.css";
+const appCss = "/assets/app-D-VPB2zD.css";
 const queryClient = new QueryClient();
 const Route$f = createRootRoute({
   head: () => ({
@@ -1134,7 +1134,7 @@ const $$splitComponentImporter$c = () => import('./index-DB0apuW-.mjs');
 const Route$c = createFileRoute("/sign-up/")({
   component: lazyRouteComponent($$splitComponentImporter$c, "component", () => Route$c.ssr)
 });
-const $$splitComponentImporter$b = () => import('./index-ybl047bv.mjs');
+const $$splitComponentImporter$b = () => import('./index-C5IGFBLI.mjs');
 const Route$b = createFileRoute("/add-field/")({
   component: lazyRouteComponent($$splitComponentImporter$b, "component", () => Route$b.ssr)
 });
@@ -1158,7 +1158,7 @@ const $$splitComponentImporter$6 = () => import('./index-DrXTg-qx.mjs');
 const Route$6 = createFileRoute("/_layout/fields/")({
   component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
 });
-const $$splitComponentImporter$5 = () => import('./index-DgtwbHiF.mjs');
+const $$splitComponentImporter$5 = () => import('./index-C48DP6WK.mjs');
 const Route$5 = createFileRoute("/_layout/fields/$field_id/")({
   component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
 });

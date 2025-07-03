@@ -13,6 +13,8 @@ export interface IFieldFormPageProps {
     displayArea: string;
     handleAddAccessPoint: () => void;
     fieldAccessPoint: Coordinates | null;
+    handleRobotHome: () => void;
+    robot_home: Coordinates | null;
     isSubmittable: boolean | string;
     handleCancel: () => void;
 }
