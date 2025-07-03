@@ -23,7 +23,7 @@ export function Register() {
     } = useForm<FormValues>({
         defaultValues: {
             first_name: "",
-            last_name: "",
+            last_name: "",  
             phone: "",
             email: "",
             password: "",
