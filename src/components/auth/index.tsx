@@ -84,7 +84,7 @@ export function LoginPage() {
                 <div className="w-8/12 rounded-xl overflow-hidden m-4">
                     <img
                         className="w-full h-full object-cover"
-                        src="/assets/image.webp"
+                        src="/assets/monarchTractor.jpg"
                         alt="Main Image"
                     />
                 </div>
