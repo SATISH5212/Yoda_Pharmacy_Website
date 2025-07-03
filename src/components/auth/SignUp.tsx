@@ -103,12 +103,12 @@ export function Register() {
                 </div> */}
 
                 {/* Right Form Panel */}
-                <div className="w-4/12 flex flex-col items-center gap-10 h-dvh px-24 box-border justify-center">
+                <div className="w-5/12 flex flex-col items-center gap-10 h-dvh px-24 box-border  justify-center">
                     <div>
                         <img src="/assets/logo.svg" alt="Logo" className="mb-3" />
                     </div>
 
-                    <div className="w-full space-y-5 text-35353d text-xs font-normal ">
+                    <div className="w-full space-y-5 text-35353d text-xs font-normal border p-2 rounded-2xl bg-white shadow-lg ">
                         <div className="text-center">
                             <div className="text-xl text-title font-normal">Sign Up</div>
                         </div>
@@ -117,7 +117,7 @@ export function Register() {
                             {/* Name Fields */}
                             <div className="flex gap-2">
                                 <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
-                                    <User size={16} />
+                                    {/* <User size={16} /> */}
                                     <input
 
                                         placeholder="First Name"
@@ -129,7 +129,7 @@ export function Register() {
                                     />
                                 </div>
                                 <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
-                                    <User size={16} />
+                                    {/* <User size={16} /> */}
                                     <input
                                         placeholder="Last Name"
                                         className="h-full outline-none p-2 w-full bg-inherit"
