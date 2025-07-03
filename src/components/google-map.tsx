@@ -109,7 +109,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
     setLocationInfo,
     mode,
     setMode,
-    setFieldCentroid,
 }) => {
     const [polygonPath, setPolygonPath] = useState<Coordinates[]>([]);
     const [accessPoint, setAccessPoint] = useState<Coordinates | undefined>();
@@ -204,8 +203,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 drawnShapeRef.current = overlay;
 
                 const locationInfo = await calculateAreaAndLocation(path);
-                setFieldCentroid(locationInfo?.centroid || null);
-
                 console.log("Location info result:", locationInfo);
 
                 if (locationInfo) {

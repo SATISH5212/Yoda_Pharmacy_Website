@@ -25,8 +25,6 @@ const MapFormPage = () => {
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
-    const [fieldCentroid, setFieldCentroid] = useState<Coordinates>(null);
-
     const {
         register,
         handleSubmit,
@@ -128,7 +126,6 @@ const MapFormPage = () => {
                     mode={mode}
                     setMode={setMode}
                     setLocationInfo={setLocationInfo}
-                    setFieldCentroid={setFieldCentroid}
                 />
             </div>
             <FieldFormPage
