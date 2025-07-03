@@ -40,6 +40,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
     const {
         data: viewFieldData,
+        isLoading,
+        isError,
     } = useQuery({
         queryKey: ["view-fieldData", field_id],
         queryFn: async () => {
@@ -105,6 +107,11 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
     return (
         <div className="relative w-full h-screen">
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+                    <div className="loader">Loading...</div>
+                </div>
+            )}
             <LoadScript
                 googleMapsApiKey={GOOGLE_MAP_API_KEY}
                 libraries={GOOGLE_MAPS_LIBRARIES}
@@ -193,10 +200,11 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                             {viewFieldData?.data?.field_boundary.length}
                         </span>
                     </div>
+
                     <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Access Point:</span>
+                        <span className="text-sm text-gray-600">Location:</span>
                         <span className="text-green-600">
-                            <MapPin size={16} className="inline" />
+                            {"Not specified"}
                         </span>
                     </div>
                 </div>

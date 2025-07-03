@@ -4,6 +4,7 @@ import {
     LoadScript,
     Marker,
     Polygon,
+    InfoWindow,
 } from "@react-google-maps/api";
 import * as turf from "@turf/turf";
 import { AlertCircle, MapPin, Trash2 } from "lucide-react";
@@ -17,7 +18,7 @@ const MAP_CONTAINER_STYLE = {
     height: "100vh",
 };
 const DEFAULT_CENTER = { lat: 17.385, lng: 78.4867 };
-const DEFAULT_ZOOM = 13;
+const DEFAULT_ZOOM = 5;
 const ACRES_CONVERSION_FACTOR = 4046.86;
 
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
@@ -73,7 +74,7 @@ const usePolygonCalculations = () => {
             try {
                 setGeocodingStatus("Calculating area and location...");
                 const coordinates: [number, number][] = [
-                    ...path.map((p) => [p.lng, p.lat] as [number, number]),
+                    ...path.map((p): [number, number] => [p.lng, p.lat]),
                     [path[0].lng, path[0].lat],
                 ];
 
@@ -108,11 +109,18 @@ const DrawTools: React.FC<DrawToolsProps> = ({
     setLocationInfo,
     mode,
     setMode,
+    setFieldCentroid,
 }) => {
     const [polygonPath, setPolygonPath] = useState<Coordinates[]>([]);
     const [accessPoint, setAccessPoint] = useState<Coordinates | undefined>();
     const [googleInstance, setGoogleInstance] = useState<typeof window.google | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
+    const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER);
+    const [searchMarker, setSearchMarker] = useState<Coordinates | null>(null);
+    const [latInput, setLatInput] = useState("");
+    const [lngInput, setLngInput] = useState("");
+    const [searchedAddress, setSearchedAddress] = useState<string>("");
+    const [showInfoWindow, setShowInfoWindow] = useState(false);
 
     const drawnShapeRef = useRef<google.maps.Polygon | google.maps.Rectangle | null>(null);
 
@@ -171,10 +179,10 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                     const ne = bounds.getNorthEast();
                     const sw = bounds.getSouthWest();
                     return [
-                        { lat: ne.lat(), lng: sw.lng() }, // NW
-                        { lat: ne.lat(), lng: ne.lng() }, // NE
-                        { lat: sw.lat(), lng: ne.lng() }, // SE
-                        { lat: sw.lat(), lng: sw.lng() }, // SW
+                        { lat: ne.lat(), lng: sw.lng() },
+                        { lat: ne.lat(), lng: ne.lng() },
+                        { lat: sw.lat(), lng: ne.lng() },
+                        { lat: sw.lat(), lng: sw.lng() },
                     ];
                 }
             }
@@ -189,18 +197,15 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 setIsCalculating(true);
                 const path = extractPathFromOverlay(overlay);
 
-                console.log("Extracted path:", path);
-
-                if (path.length < 3) {
-                    console.warn("Invalid path: less than 3 points");
-                    return;
-                }
+                if (path.length < 3) return;
 
                 setPolygonPath(path);
                 setFormCoordinates(path);
                 drawnShapeRef.current = overlay;
 
                 const locationInfo = await calculateAreaAndLocation(path);
+                setFieldCentroid(locationInfo?.centroid || null);
+
                 console.log("Location info result:", locationInfo);
 
                 if (locationInfo) {
@@ -248,6 +253,11 @@ const DrawTools: React.FC<DrawToolsProps> = ({
         setAccessPoint(undefined);
         setFieldAccessPoint(null);
         setLocationInfo(null);
+        setSearchMarker(null);
+        setLatInput("");
+        setLngInput("");
+        setSearchedAddress("");
+        setShowInfoWindow(false);
 
         if (drawnShapeRef.current) {
             drawnShapeRef.current.setMap(null);
@@ -257,49 +267,32 @@ const DrawTools: React.FC<DrawToolsProps> = ({
 
     const handleGoogleMapsLoad = useCallback(() => {
         setGoogleInstance(window.google);
-        console.log("Google Maps loaded successfully");
     }, []);
 
-    const renderPolygon = () => {
-        if (polygonPath.length === 0) return null;
+    const handleSearch = async () => {
+        const lat = parseFloat(latInput);
+        const lng = parseFloat(lngInput);
+        if (!isNaN(lat) && !isNaN(lng)) {
+            const point = { lat, lng };
+            setMapCenter(point);
+            setSearchMarker(point);
 
-        return (
-            <Polygon
-                path={polygonPath}
-                options={displayPolygonOptions}
-            />
-        );
-    };
-
-    const renderMarkers = () => {
-        if (!accessPoint) return null;
-
-        return (
-            <Marker
-                position={accessPoint}
-                label={{
-                    text: "Field Access Point",
-                    color: "white",
-                    fontSize: "10px",
-                }}
-            />
-        );
-    };
-
-    const renderDrawingManager = () => {
-        if (!googleInstance) return null;
-
-        return (
-            <DrawingManager
-                onPolygonComplete={handlePolygonComplete}
-                onRectangleComplete={handlePolygonComplete}
-                options={drawingManagerOptions}
-            />
-        );
+            try {
+                const res = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+                );
+                const data = await res.json();
+                setSearchedAddress(data.display_name || "Address not found");
+            } catch {
+                setSearchedAddress("Unable to fetch address");
+            }
+        }
     };
 
     return (
         <div className="relative">
+
+
             <LoadScript
                 googleMapsApiKey={GOOGLE_MAP_API_KEY}
                 libraries={GOOGLE_MAPS_LIBRARIES}
@@ -307,47 +300,82 @@ const DrawTools: React.FC<DrawToolsProps> = ({
             >
                 <GoogleMap
                     mapContainerStyle={MAP_CONTAINER_STYLE}
-                    center={DEFAULT_CENTER}
+                    center={mapCenter}
                     zoom={DEFAULT_ZOOM}
                     onClick={handleMapClick}
                     mapTypeId="satellite"
                 >
-                    {renderPolygon()}
-                    {renderMarkers()}
-                    {renderDrawingManager()}
+                    {polygonPath.length > 0 && (
+                        <Polygon path={polygonPath} options={displayPolygonOptions} />
+                    )}
+                    {accessPoint && (
+                        <Marker
+                            position={accessPoint}
+                            label={{ text: "Field Access Point", color: "white", fontSize: "10px" }}
+                        />
+                    )}
+                    {searchMarker && (
+                        <Marker
+                            position={searchMarker}
+                            onMouseOver={() => setShowInfoWindow(true)}
+                            onMouseOut={() => setShowInfoWindow(false)}
+                        >
+                            {showInfoWindow && (
+                                <InfoWindow position={searchMarker}>
+                                    <div className="text-sm max-w-[150px] bg-white rounded-md shadow-md  border-gray-200 text-gray-800 font-medium">
+                                        {searchedAddress}
+                                    </div>
+                                </InfoWindow>
+                            )}
+                        </Marker>
+                    )}
+
+                    {googleInstance && (
+                        <DrawingManager
+                            onPolygonComplete={handlePolygonComplete}
+                            onRectangleComplete={handlePolygonComplete}
+                            options={drawingManagerOptions}
+                        />
+                    )}
                 </GoogleMap>
             </LoadScript>
+
             <button
                 onClick={handleDelete}
-                className="absolute top-1.5 left-23 bg-white text-black rounded-[2px] shadow px-2 py-1 text-xs cursor-pointer hover:bg-gray-300"
+                className="absolute top-1.5 left-25 bg-white text-black rounded-[2px] shadow px-2 py-1 text-xs cursor-pointer hover:bg-gray-300"
                 aria-label="Delete drawn shapes"
             >
                 <Trash2 size={18} />
             </button>
-            {(isCalculating || geocodingStatus) && (
-                <div className="absolute top-16 left-4 bg-white rounded-md shadow-lg p-3 max-w-xs">
-                    <div className="flex items-center space-x-2">
-                        {isCalculating ? (
-                            <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                                <span className="text-sm text-gray-700">Calculating...</span>
-                            </>
-                        ) : geocodingStatus.includes("error") || geocodingStatus.includes("failed") ? (
-                            <>
-                                <AlertCircle className="h-4 w-4 text-yellow-600" />
-                                <span className="text-sm text-gray-700">{geocodingStatus}</span>
-                            </>
-                        ) : (
-                            <>
-                                <MapPin className="h-4 w-4 text-green-600" />
-                                <span className="text-sm text-gray-700">{geocodingStatus}</span>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
+
+
+            <div className="absolute z-10 top-1 left-60 py-0.5 bg-white rounded shadow-lg flex gap-3 items-center  border-gray-200">
+                <input
+                    type="number"
+                    placeholder="Latitude"
+                    value={latInput}
+                    onChange={(e) => setLatInput(e.target.value)}
+                    className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded px-2  text-sm w-28 outline-none transition"
+                />
+                <input
+                    type="number"
+                    placeholder="Longitude"
+                    value={lngInput}
+                    onChange={(e) => setLngInput(e.target.value)}
+                    className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded px-2 text-sm w-28 outline-none transition"
+                />
+                <button
+                    onClick={handleSearch}
+                    className="bg-blue-600 hover:bg-blue-700 transition text-white px-3 py-0.5  text-sm rounded shadow"
+                >
+                    Go
+                </button>
+
+            </div>
         </div>
     );
 };
 
 export default DrawTools;
+
+
