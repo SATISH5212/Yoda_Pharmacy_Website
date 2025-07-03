@@ -27,7 +27,6 @@ const FieldsTable = () => {
         field_area: field.field_area || "2.4",
         field_status: field.field_status === "pending" ? "Active" : field.field_status,
     })) || [];
-    console.log("data001", data, allFieldsData);
 
     return (
         <TanStackTable

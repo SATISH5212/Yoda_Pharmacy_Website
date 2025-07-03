@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Eye } from "lucide-react";
+import { Eye, Waypoints } from "lucide-react";
 
 export const allFieldsColumns = [
     {
@@ -52,16 +52,25 @@ export const allFieldsColumns = [
         cell: (info: any) => {
             const row = info.row.original;
             const field_id = row.id as string
-            console.log("Rowdata:", row);
             return (
-                <Link
-                    to="/fields/$field_id"
-                    params={{ field_id }}
-                    className="flex justify-center hover:text-blue-700"
-                    title="View Details"
-                >
-                    <Eye size={12} />
-                </Link>
+                <div className="flex justify-center gap-2">
+                    <Link
+                        to="/fields/$field_id"
+                        params={{ field_id }}
+                        className="flex justify-center hover:text-blue-700"
+                        title="View Details"
+                    >
+                        <Eye size={12} />
+                    </Link>
+                    <Link
+                        to="/fields/$field_id/viewField"
+                        params={{ field_id }}
+                        className="flex justify-center hover:text-blue-700"
+                        title="View Details"
+                    >
+                        <Waypoints size={12} />
+                    </Link>
+                </div>
             );
         },
         width: "80px",

@@ -38,7 +38,6 @@ export function LoginPage() {
         },
 
         onSuccess: (response) => {
-            console.log("loginsuccess", response);
             const message = response?.data?.message;
             toast.success(message);
             const accessToken = response?.data?.data?.access_token;
@@ -51,11 +50,9 @@ export function LoginPage() {
         },
 
         onError: (error: any) => {
-            console.log("login error", error);
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
-                console.log("validation error", validation);
 
             } else if (
                 error?.status === 409 ||

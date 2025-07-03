@@ -68,7 +68,6 @@ const usePolygonCalculations = () => {
     const calculateAreaAndLocation = useCallback(
         async (path: Coordinates[]) => {
             if (path.length < 3) {
-                console.log("Path has less than 3 points, cannot calculate area");
                 return null;
             }
             try {
@@ -205,7 +204,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 drawnShapeRef.current = overlay;
 
                 const locationInfo = await calculateAreaAndLocation(path);
-                console.log("Location info result:", locationInfo);
 
                 if (locationInfo) {
                     setLocationInfo(locationInfo);

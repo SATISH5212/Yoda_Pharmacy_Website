@@ -4,12 +4,25 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { toast, Toaster } from 'sonner'
-import Cookies from 'node_modules/@types/js-cookie'
-import { SignUpAPI } from '@/lib/services/auth'
+
+const SignUp = async (newStudent: SignInPayLoad) => {
+
+    const response = await fetch(`https://demetercloud.onrender.com/v1.0/register`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(newStudent),
+    })
+    if (!response.ok) {
+        throw new Error('Failed to Add User')
+    }
+    return response.json()
+}
 
 
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react'
+import { toast, Toaster } from 'sonner'
+import { SignInPayLoad } from '@/types/signinTypes'
+import { SignUpAPI } from '@/lib/services/auth'
 
 export function Register() {
     const navigate = useNavigate();
