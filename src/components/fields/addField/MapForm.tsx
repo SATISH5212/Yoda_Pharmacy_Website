@@ -98,7 +98,7 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                     <button
                         type="button"
                         onClick={handleCancel}
-                        className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-xs transition-colors duration-200 disabled:opacity-50"
+                        className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-xs transition-colors duration-200 disabled:opacity-50 cursor-pointer "
                         disabled={isPending}
                     >
                         Cancel

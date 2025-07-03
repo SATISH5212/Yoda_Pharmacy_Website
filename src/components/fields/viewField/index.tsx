@@ -105,6 +105,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         setShowInfoWindow(false);
     }, []);
 
+    
+
     return (
         <div className="relative w-full h-screen">
             {isLoading && (
@@ -120,8 +122,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     mapContainerStyle={MAP_CONTAINER_STYLE}
                     center={mapCenter}
                     zoom={mapZoom}
-                    mapTypeId="satellite"
                     options={{
+                        mapTypeId: "satellite",
                         disableDefaultUI: false,
                         zoomControl: true,
                         mapTypeControl: true,
@@ -204,7 +206,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Location:</span>
                         <span className="text-green-600">
-                            {"Not specified"}
+                             {
+                               viewFieldData?.data?.location.split(",").slice(3).join(",") || "Not Set"
+                             }
                         </span>
                     </div>
                 </div>

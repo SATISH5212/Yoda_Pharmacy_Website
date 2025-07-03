@@ -43,6 +43,7 @@ export function LoginPage() {
             toast.success(message);
             const accessToken = response?.data?.data?.access_token;
             Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
+            localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
             localStorage.setItem("authToken", accessToken);
             navigate({
                 to: `/fields`,
