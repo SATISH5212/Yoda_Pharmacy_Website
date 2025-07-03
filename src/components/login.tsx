@@ -31,13 +31,11 @@ const LoginPage = async (userlogin: LoginPayload) => {
 export default function Login({ onSwitch }: AuthSwitchProps) {
 
     const navigate = useNavigate();
-    const [showPassword ,setShowPassword]=useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const mutation = useMutation({
         mutationFn: LoginPage,
         onSuccess: (res) => {
-            // toast.success(res?.data?.message || "Login successful!");
-            // console.log("onSuccess ", res.data);
 
             localStorage.setItem("access_token", res.data.access_token);
             navigate({
@@ -109,14 +107,15 @@ export default function Login({ onSwitch }: AuthSwitchProps) {
                         />
 
                         <button type="button" className='absolute ml-83 mt-2' onClick={() => {
-                            setShowPassword(prev => !prev) }}
-                            // const input = document.getElementById("input_password");
-                            // if (input instanceof HTMLInputElement) {
-                            //     input.type = input.type === "password" ? "text" : "password";
-                            // }
-                            
+                            setShowPassword(prev => !prev)
+                        }}
+                        // const input = document.getElementById("input_password");
+                        // if (input instanceof HTMLInputElement) {
+                        //     input.type = input.type === "password" ? "text" : "password";
+                        // }
+
                         >
-                           {showPassword ? <EyeOff size={15}/>: <Eye size={15} />}
+                            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                         </button>
                     </div>
 

@@ -13,7 +13,6 @@ const SignUp = async (newStudent: SignInPayLoad) => {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(newStudent),
     })
-    console.log("response is", response)
     if (!response.ok) {
         throw new Error('Failed to Add User')
     }
@@ -149,7 +148,7 @@ function SignIn({ onSwitch }: AuthSwitchProps) {
                         > Login
                         </button>
                     </div>
-                    
+
 
                     <button className='mt-2 mr-3 p-2 rounded-xl w-90 text-sm bg-green-300 text-center' type='submit' style={{ cursor: 'pointer' }}>Register</button>
                 </div>

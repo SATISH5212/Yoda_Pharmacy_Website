@@ -606,7 +606,7 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
-      return await import('./_tanstack-start-manifest_v-BoaJHrJy.mjs');
+      return await import('./_tanstack-start-manifest_v-rZGqarkO.mjs');
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1079,9 +1079,9 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
-const appCss = "/assets/app-CEDf1dMY.css";
+const appCss = "/assets/app-DUbeFAT6.css";
 const queryClient = new QueryClient();
-const Route$9 = createRootRoute({
+const Route$g = createRootRoute({
   head: () => ({
     meta: [
       {
@@ -1116,106 +1116,201 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
-const $$splitComponentImporter$8 = () => import('./homepage-CkAx28ea.mjs');
-const Route$8 = createFileRoute("/homepage")({
-  component: lazyRouteComponent($$splitComponentImporter$8, "component", () => Route$8.ssr)
-});
-const $$splitComponentImporter$7 = () => import('./_layout-CMybIvEl.mjs');
-const Route$7 = createFileRoute("/_layout")({
-  component: lazyRouteComponent($$splitComponentImporter$7, "component", () => Route$7.ssr)
-});
-const $$splitComponentImporter$6 = () => import('./_auth-C_qqKh6-.mjs');
-const Route$6 = createFileRoute("/_auth")({
-  component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
+const $$splitComponentImporter$f = () => import('./_layout-D8nbzhfF.mjs');
+const Route$f = createFileRoute("/_layout")({
+  component: lazyRouteComponent($$splitComponentImporter$f, "component", () => Route$f.ssr)
 });
 const authMiddleware = async ({
   location
 }) => {
   return;
 };
-const $$splitComponentImporter$5 = () => import('./index-eKEXrNxr.mjs');
-const Route$5 = createFileRoute("/")({
-  component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr),
+const $$splitComponentImporter$e = () => import('./index-BRB5IjOA.mjs');
+const Route$e = createFileRoute("/")({
+  component: lazyRouteComponent($$splitComponentImporter$e, "component", () => Route$e.ssr),
   beforeLoad: authMiddleware
 });
-const $$splitComponentImporter$4 = () => import('./index-exqPzYoZ.mjs');
-const Route$4 = createFileRoute("/auth/")({
+const $$splitComponentImporter$d = () => import('./index-G-Z4kdzh.mjs');
+const Route$d = createFileRoute("/sign-up/")({
+  component: lazyRouteComponent($$splitComponentImporter$d, "component", () => Route$d.ssr)
+});
+const $$splitComponentImporter$c = () => import('./index-Bj22YtvD.mjs');
+const Route$c = createFileRoute("/add-field/")({
+  component: lazyRouteComponent($$splitComponentImporter$c, "component", () => Route$c.ssr)
+});
+const $$splitComponentImporter$b = () => import('./teleop-iqa7MZtg.mjs');
+const Route$b = createFileRoute("/_layout/teleop")({
+  component: lazyRouteComponent($$splitComponentImporter$b, "component", () => Route$b.ssr)
+});
+const $$splitComponentImporter$a = () => import('./settings-C5F5hj5A.mjs');
+const Route$a = createFileRoute("/_layout/settings")({
+  component: lazyRouteComponent($$splitComponentImporter$a, "component", () => Route$a.ssr)
+});
+const $$splitComponentImporter$9 = () => import('./devices-BzOe5gax.mjs');
+const Route$9 = createFileRoute("/_layout/devices")({
+  component: lazyRouteComponent($$splitComponentImporter$9, "component", () => Route$9.ssr)
+});
+const $$splitComponentImporter$8 = () => import('./_robots-Bd3uF8lQ.mjs');
+const Route$8 = createFileRoute("/_layout/_robots")({
+  component: lazyRouteComponent($$splitComponentImporter$8, "component", () => Route$8.ssr)
+});
+const $$splitComponentImporter$7 = () => import('./index-FvBM-WqI.mjs');
+const Route$7 = createFileRoute("/_layout/fields/")({
+  component: lazyRouteComponent($$splitComponentImporter$7, "component", () => Route$7.ssr)
+});
+const $$splitComponentImporter$6 = () => import('./index-CCoPQKLb.mjs');
+const Route$6 = createFileRoute("/_layout/fields/$field_id/")({
+  component: lazyRouteComponent($$splitComponentImporter$6, "component", () => Route$6.ssr)
+});
+const $$splitComponentImporter$5 = () => import('./index-C7yS8ySJ.mjs');
+const Route$5 = createFileRoute("/_layout/_robots/robots/")({
+  component: lazyRouteComponent($$splitComponentImporter$5, "component", () => Route$5.ssr)
+});
+const $$splitComponentImporter$4 = () => import('./index-Epy2Xm4B.mjs');
+const Route$4 = createFileRoute("/_layout/fields/$field_id/viewField/")({
   component: lazyRouteComponent($$splitComponentImporter$4, "component", () => Route$4.ssr)
 });
-const $$splitComponentImporter$3 = () => import('./teleop-iqa7MZtg.mjs');
-const Route$3 = createFileRoute("/_layout/teleop")({
+const $$splitComponentImporter$3 = () => import('./_missions-DgUPL55h.mjs');
+const Route$3 = createFileRoute("/_layout/_robots/robots/$robot_id/_missions")({
   component: lazyRouteComponent($$splitComponentImporter$3, "component", () => Route$3.ssr)
 });
-const $$splitComponentImporter$2 = () => import('./settings-Cq-HcXJu.mjs');
-const Route$2 = createFileRoute("/_layout/settings")({
+const $$splitComponentImporter$2 = () => import('./index-fwtdMh_T.mjs');
+const Route$2 = createFileRoute("/_layout/_robots/robots/$robot_id/_missions/missions/")({
   component: lazyRouteComponent($$splitComponentImporter$2, "component", () => Route$2.ssr)
 });
-const $$splitComponentImporter$1 = () => import('./field-B25Ewxrj.mjs');
-const Route$1 = createFileRoute("/_layout/field")({
+const $$splitComponentImporter$1 = () => import('./index-DWwYc5N2.mjs');
+const Route$1 = createFileRoute("/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/")({
   component: lazyRouteComponent($$splitComponentImporter$1, "component", () => Route$1.ssr)
 });
-const $$splitComponentImporter = () => import('./devices-Cq2dcoQv.mjs');
-const Route = createFileRoute("/_layout/devices")({
+const $$splitComponentImporter = () => import('./index-CxNBXgj8.mjs');
+const Route = createFileRoute("/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/")({
   component: lazyRouteComponent($$splitComponentImporter, "component", () => Route.ssr)
 });
-const HomepageRoute = Route$8.update({
-  id: "/homepage",
-  path: "/homepage",
-  getParentRoute: () => Route$9
-});
-const LayoutRoute = Route$7.update({
+const LayoutRobotsRobotsRobot_idRouteImport = createFileRoute(
+  "/_layout/_robots/robots/$robot_id"
+)();
+const LayoutRoute = Route$f.update({
   id: "/_layout",
-  getParentRoute: () => Route$9
+  getParentRoute: () => Route$g
 });
-const AuthRoute = Route$6.update({
-  id: "/_auth",
-  getParentRoute: () => Route$9
-});
-const IndexRoute = Route$5.update({
+const IndexRoute = Route$e.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$9
+  getParentRoute: () => Route$g
 });
-const AuthIndexRoute = Route$4.update({
-  id: "/auth/",
-  path: "/auth/",
-  getParentRoute: () => Route$9
+const SignUpIndexRoute = Route$d.update({
+  id: "/sign-up/",
+  path: "/sign-up/",
+  getParentRoute: () => Route$g
 });
-const LayoutTeleopRoute = Route$3.update({
+const AddFieldIndexRoute = Route$c.update({
+  id: "/add-field/",
+  path: "/add-field/",
+  getParentRoute: () => Route$g
+});
+const LayoutTeleopRoute = Route$b.update({
   id: "/teleop",
   path: "/teleop",
   getParentRoute: () => LayoutRoute
 });
-const LayoutSettingsRoute = Route$2.update({
+const LayoutSettingsRoute = Route$a.update({
   id: "/settings",
   path: "/settings",
   getParentRoute: () => LayoutRoute
 });
-const LayoutFieldRoute = Route$1.update({
-  id: "/field",
-  path: "/field",
-  getParentRoute: () => LayoutRoute
-});
-const LayoutDevicesRoute = Route.update({
+const LayoutDevicesRoute = Route$9.update({
   id: "/devices",
   path: "/devices",
   getParentRoute: () => LayoutRoute
 });
+const LayoutRobotsRoute = Route$8.update({
+  id: "/_robots",
+  getParentRoute: () => LayoutRoute
+});
+const LayoutFieldsIndexRoute = Route$7.update({
+  id: "/fields/",
+  path: "/fields/",
+  getParentRoute: () => LayoutRoute
+});
+const LayoutRobotsRobotsRobot_idRoute = LayoutRobotsRobotsRobot_idRouteImport.update({
+  id: "/robots/$robot_id",
+  path: "/robots/$robot_id",
+  getParentRoute: () => LayoutRobotsRoute
+});
+const LayoutFieldsField_idIndexRoute = Route$6.update({
+  id: "/fields/$field_id/",
+  path: "/fields/$field_id/",
+  getParentRoute: () => LayoutRoute
+});
+const LayoutRobotsRobotsIndexRoute = Route$5.update({
+  id: "/robots/",
+  path: "/robots/",
+  getParentRoute: () => LayoutRobotsRoute
+});
+const LayoutFieldsField_idViewFieldIndexRoute = Route$4.update({
+  id: "/fields/$field_id/viewField/",
+  path: "/fields/$field_id/viewField/",
+  getParentRoute: () => LayoutRoute
+});
+const LayoutRobotsRobotsRobot_idMissionsRoute = Route$3.update({
+  id: "/_missions",
+  getParentRoute: () => LayoutRobotsRobotsRobot_idRoute
+});
+const LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute = Route$2.update({
+  id: "/missions/",
+  path: "/missions/",
+  getParentRoute: () => LayoutRobotsRobotsRobot_idMissionsRoute
+});
+const LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute = Route$1.update({
+  id: "/missions/$mission_id/",
+  path: "/missions/$mission_id/",
+  getParentRoute: () => LayoutRobotsRobotsRobot_idMissionsRoute
+});
+const LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute = Route.update(
+  {
+    id: "/missions/$mission_id/robotInfo/",
+    path: "/missions/$mission_id/robotInfo/",
+    getParentRoute: () => LayoutRobotsRobotsRobot_idMissionsRoute
+  }
+);
+const LayoutRobotsRobotsRobot_idMissionsRouteChildren = {
+  LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute,
+  LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute,
+  LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute
+};
+const LayoutRobotsRobotsRobot_idMissionsRouteWithChildren = LayoutRobotsRobotsRobot_idMissionsRoute._addFileChildren(
+  LayoutRobotsRobotsRobot_idMissionsRouteChildren
+);
+const LayoutRobotsRobotsRobot_idRouteChildren = {
+  LayoutRobotsRobotsRobot_idMissionsRoute: LayoutRobotsRobotsRobot_idMissionsRouteWithChildren
+};
+const LayoutRobotsRobotsRobot_idRouteWithChildren = LayoutRobotsRobotsRobot_idRoute._addFileChildren(
+  LayoutRobotsRobotsRobot_idRouteChildren
+);
+const LayoutRobotsRouteChildren = {
+  LayoutRobotsRobotsIndexRoute,
+  LayoutRobotsRobotsRobot_idRoute: LayoutRobotsRobotsRobot_idRouteWithChildren
+};
+const LayoutRobotsRouteWithChildren = LayoutRobotsRoute._addFileChildren(
+  LayoutRobotsRouteChildren
+);
 const LayoutRouteChildren = {
+  LayoutRobotsRoute: LayoutRobotsRouteWithChildren,
   LayoutDevicesRoute,
-  LayoutFieldRoute,
   LayoutSettingsRoute,
-  LayoutTeleopRoute
+  LayoutTeleopRoute,
+  LayoutFieldsIndexRoute,
+  LayoutFieldsField_idIndexRoute,
+  LayoutFieldsField_idViewFieldIndexRoute
 };
 const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren);
 const rootRouteChildren = {
   IndexRoute,
-  AuthRoute,
   LayoutRoute: LayoutRouteWithChildren,
-  HomepageRoute,
-  AuthIndexRoute
+  AddFieldIndexRoute,
+  SignUpIndexRoute
 };
-const routeTree = Route$9._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$g._addFileChildren(rootRouteChildren)._addFileTypes();
 const routeTree_gen = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   routeTree

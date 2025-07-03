@@ -49,11 +49,9 @@ export function LoginPage() {
         },
 
         onError: (error: any) => {
-            console.log("login error", error);
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
-                console.log("validation error", validation);
 
             } else if (
                 error?.status === 409 ||
@@ -77,12 +75,6 @@ export function LoginPage() {
     const onSubmit = (data: FormValues) => {
         mutateLogin(data);
     };
-    const tokenlocal = localStorage.getItem("authToken");
-    if (tokenlocal) {
-        navigate({ to: "/fields" });
-    }
-    console.log("dhdherror", validation);
-
     return (
         <>
             <div className="h-screen w-screen flex text-xs bg-white">
@@ -101,9 +93,6 @@ export function LoginPage() {
                     <div className="w-full space-y-5 text-35353d text-xs font-normal">
                         <div className="text-center">
                             <div className="text-xl 3xl:text-2xl text-title font-normal">Sign In</div>
-                            {/* <div className="text-gray-500 text-sm font-light">
-                Sign in to access your Account
-              </div> */}
                         </div>
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -179,17 +168,17 @@ export function LoginPage() {
                                     )}
                                 </button>
                                 <div className='text-xs'>
-                        <span>Don't have an Account? </span>
-                        <button
-                            type="button"
-                            className="text-green-400 text-xs font-bold cursor-pointer"
-                            onClick={() => {
-                                navigate({ to: "/sign-up" });
-                            }
-                            }
-                        > Sign Up
-                        </button>
-                    </div>
+                                    <span>Don't have an Account? </span>
+                                    <button
+                                        type="button"
+                                        className="text-green-400 text-xs font-bold cursor-pointer"
+                                        onClick={() => {
+                                            navigate({ to: "/sign-up" });
+                                        }
+                                        }
+                                    > Sign Up
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
