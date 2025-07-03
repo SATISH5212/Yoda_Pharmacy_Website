@@ -15,7 +15,7 @@ export type Coordinates = {
 import { Marker, Polyline, } from '@react-google-maps/api';
 import { useMemo } from 'react';
 import samplePath from "../viewField/samplePath";
-interface Waypoint {
+export interface Waypoint {
     x: number;
     y: number;
     theta: number;
@@ -23,7 +23,7 @@ interface Waypoint {
     omega: number;
 }
 
-const coordinates: {
+export const coordinates: {
     lat: number;
     lng: number;
     waypoint: Waypoint;
@@ -52,7 +52,7 @@ const MAP_CONTAINER_STYLE = {
     height: "100vh",
 };
 
-const DEFAULT_ZOOM = 30;
+const DEFAULT_ZOOM = 10;
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
@@ -107,7 +107,6 @@ const ViewFieldPathPage = () => {
         //     const { lat, lng } = offsetToLatLng(robotHome.lat, robotHome.lng, waypoint.x, waypoint.y);
 
         //     const distance = Math.sqrt(waypoint.x ** 2 + waypoint.y ** 2);
-        //     console.log
         //     coordinates.push({
         //         lat,
         //         lng,
@@ -126,8 +125,6 @@ const ViewFieldPathPage = () => {
                     waypoint.x,
                     waypoint.y
                 );
-                console.log(offsetToLatLng(17.469856405071194, 78.59649084252246, 4.536775917853563, -3.19812908237268), "mamam001")
-
                 const distance = Math.hypot(waypoint.x, waypoint.y)
                 coordinates.push({
                     lat,

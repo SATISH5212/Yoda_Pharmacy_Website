@@ -4,10 +4,10 @@ import {
     LoadScript,
     Marker,
     Polygon,
+    Polyline,
 } from "@react-google-maps/api";
 import { MapPin, Square } from "lucide-react";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
 import { getSingleFieldAPI } from "@/lib/services/fields";
 import { useQuery } from "@tanstack/react-query";
@@ -15,12 +15,22 @@ import {
     useParams
 } from "@tanstack/react-router";
 import { IViewFieldPageProps } from "@/lib/interfaces/maps";
+import samplePath from "./samplePath";
+import { Waypoint } from "../viewPath";
+
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
 };
-const DEFAULT_CENTER = { lat: 17.385, lng: 78.4867 };
-const DEFAULT_ZOOM = 13;
+
+const DEFAULT_CENTER = {
+    // lat: 17.385, lng: 78.4867
+    lat: 17.469856405071194,
+    lng: 78.59649084252246,
+};
+
+const DEFAULT_ZOOM = 30;
+
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
@@ -31,13 +41,13 @@ export type Coordinates = {
     lng: number
 };
 
-
 const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const { field_id } = useParams({ strict: false });
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [calculatedArea, setCalculatedArea] = useState<string>("");
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER);
     const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
+
     const {
         data: viewFieldData,
         isLoading,
@@ -69,6 +79,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
             west: Math.min(...lngs)
         };
     }, []);
+
     useEffect(() => {
         if (viewFieldData?.data?.field_boundary.length > 0) {
             setMapCenter(viewFieldData?.data?.centroid);
@@ -97,13 +108,80 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         editable: false,
         draggable: false,
     }), []);
+
     const handlePolygonClick = useCallback(() => {
-        setShowInfoWindow(true);
+        setShowInfoWindow(prev => !prev);
     }, []);
 
-    const handleInfoWindowClose = useCallback(() => {
-        setShowInfoWindow(false);
+    const covertXYToLatLng = useCallback((homeLat: number, homeLon: number, x: number, y: number) => {
+        const METERS_PER_DEGREE_LAT = 110540;
+        const METERS_PER_DEGREE_LON = 111320;
+        const dLat = y / METERS_PER_DEGREE_LAT;
+        const dLon = x / (Math.cos(homeLat * Math.PI / 180) * METERS_PER_DEGREE_LON);
+        const lat = homeLat + dLat;
+        const lng = homeLon + dLon;
+        return { lat, lng };
     }, []);
+
+    const pathForFeildAccessPoint = useMemo(() => {
+        const coordinates: Coordinates[] = [];
+        const robotHome = samplePath.mission?.RobotHome;
+        if (!robotHome) return coordinates;
+
+        coordinates.push({
+            lat: robotHome.lat,
+            lng: robotHome.lng,
+        });
+        samplePath.mission?.GoToField.forEach((segment: Waypoint[]) => {
+            segment.forEach((waypoint) => {
+                const { lat, lng } = covertXYToLatLng(
+                    robotHome.lat,
+                    robotHome.lng,
+                    waypoint.x,
+                    waypoint.y
+                );
+                coordinates.push({ lat, lng });
+            });
+        });
+
+        return coordinates;
+    }, [covertXYToLatLng]);
+
+
+    const pathForRobotMove = useMemo(() => {
+        const coordinates: Coordinates[] = [];
+        const robotHome = samplePath.mission?.RobotHome;
+
+        if (!robotHome) return coordinates;
+
+        samplePath.mission?.RobotPath.forEach((segment: Waypoint[]) => {
+            segment.forEach((waypoint) => {
+                const { lat, lng } = covertXYToLatLng(
+                    robotHome.lat,
+                    robotHome.lng,
+                    waypoint.x,
+                    waypoint.y
+                );
+                coordinates.push({ lat, lng });
+            });
+        });
+
+        return coordinates;
+    }, [covertXYToLatLng]);
+
+    const homeToFieldOptions = {
+        strokeColor: '#0d8226',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        geodesic: true,
+    };
+
+    const robotPathOptions = {
+        strokeColor: '#061666',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        geodesic: true,
+    };
 
     return (
         <div className="relative w-full h-screen">
@@ -119,17 +197,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 <GoogleMap
                     mapContainerStyle={MAP_CONTAINER_STYLE}
                     center={mapCenter}
-                    zoom={mapZoom}
+                    zoom={DEFAULT_ZOOM}
                     mapTypeId="satellite"
-                    options={{
-                        disableDefaultUI: false,
-                        zoomControl: true,
-                        mapTypeControl: true,
-                        scaleControl: true,
-                        streetViewControl: false,
-                        rotateControl: false,
-                        fullscreenControl: true
-                    }}
                 >
                     {viewFieldData?.data?.field_boundary.length > 0 && (
                         <Polygon
@@ -139,24 +208,38 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                         />
                     )}
 
+                    {pathForFeildAccessPoint.length > 0 && (
+                        <Polyline
+                            path={pathForFeildAccessPoint}
+                            options={homeToFieldOptions}
+                        />
+                    )}
 
+                    {pathForRobotMove.length > 0 && (
+                        <Polyline
+                            path={pathForRobotMove}
+                            options={robotPathOptions}
+                        />
+                    )}
+                    <Marker
+                        position={samplePath.mission.RobotHome}
+                        title="Robot Home"
+                        icon={{
+                            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                        }}
+                    />
                     <Marker
                         position={viewFieldData?.data?.field_access_point}
                         title="Field Access Point"
                         icon={{
-                            path: window.google?.maps.SymbolPath.CIRCLE,
-                            fillColor: "#FF4444",
-                            fillOpacity: 1,
-                            strokeColor: "#FFFFFF",
-                            strokeWeight: 2,
-                            scale: 8,
+                            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
                         }}
                     />
 
                     {showInfoWindow && (
                         <InfoWindow
                             position={viewFieldData?.data?.centroid}
-                            onCloseClick={handleInfoWindowClose}
+                            onCloseClick={handlePolygonClick}
                         >
                             <div className="p-2 min-w-[200px]">
                                 <h3 className="font-semibold text-lg mb-2">
@@ -182,39 +265,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     )}
                 </GoogleMap>
             </LoadScript>
-
-            <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm">
-                <h2 className="font-bold text-lg mb-3 text-gray-800">
-                    {viewFieldData?.data?.field_name || "Field Information"}
-                </h2>
-                <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Field Area:</span>
-                        <span className="font-semibold text-green-600">
-                            {calculatedArea} acres
-                        </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Boundary Points:</span>
-                        <span className="font-semibold">
-                            {viewFieldData?.data?.field_boundary.length}
-                        </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Location:</span>
-                        <span className="text-green-600">
-                            {"Not specified"}
-                        </span>
-                    </div>
-                </div>
-                <button
-                    onClick={() => setShowInfoWindow(!showInfoWindow)}
-                    className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-4 rounded transition-colors"
-                >
-                    {showInfoWindow ? "Hide Details" : "Show Details"}
-                </button>
-            </div>
         </div>
     );
 };

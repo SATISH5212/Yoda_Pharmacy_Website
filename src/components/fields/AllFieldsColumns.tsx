@@ -52,7 +52,6 @@ export const allFieldsColumns = [
         cell: (info: any) => {
             const row = info.row.original;
             const field_id = row.id as string
-            console.log("Rowdata:", row);
             return (
                 <div className="flex justify-center gap-2">
                     <Link

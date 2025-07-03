@@ -42,7 +42,6 @@ const MapFormPage = () => {
         mutationKey: ["add-field-boundary"],
         retry: 1,
         mutationFn: async (data: FormData) => {
-            console.log("locationInfo0001:", locationInfo);
             const payload = {
                 field_name: data.field_name.trim(),
                 field_boundary: formCoordinates,
