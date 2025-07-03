@@ -28,6 +28,8 @@ export type Coordinates = {
 export type LocationInfo = {
     location: string;
     area: string;
+    centroid: Coordinates;
+
 } | null;
 
 export interface AppProps {

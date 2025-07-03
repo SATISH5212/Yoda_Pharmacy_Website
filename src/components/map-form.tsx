@@ -70,7 +70,7 @@ function FieldForm({
                 location: locationInfo?.location || "",
                 field_area: locationInfo?.area || "",
                 field_access_point: fieldAccessPoint,
-                // robot_home: robotHome,
+                centroid: locationInfo?.centroid || null,
             };
 
             await fetch("https://demetercloud.onrender.com/v1.0/fieldmapping", {

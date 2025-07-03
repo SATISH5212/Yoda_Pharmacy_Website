@@ -1,17 +1,16 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
 import {
+    DrawingManager,
     GoogleMap,
     LoadScript,
-    DrawingManager,
     Marker,
     Polygon,
 } from "@react-google-maps/api";
 import * as turf from "@turf/turf";
-import axios from "axios";
-import { Trash2, MapPin, AlertCircle } from "lucide-react";
+import { AlertCircle, MapPin, Trash2 } from "lucide-react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
-import { DrawToolsProps } from "@/types/dataTypes";
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
+import { DrawToolsProps } from "@/types/dataTypes";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
@@ -210,7 +209,8 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                     console.error("Failed to calculate location info");
                     setLocationInfo({
                         location: "Calculation failed",
-                        area: "0"
+                        area: "0",
+                        centroid: { lat: 0, lng: 0 },
                     });
                 }
 

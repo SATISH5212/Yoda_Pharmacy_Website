@@ -16,3 +16,16 @@ export interface IFieldFormPageProps {
     isSubmittable: boolean | string;
     handleCancel: () => void;
 }
+
+
+export interface FieldData {
+    field_access_point: Coordinates;
+    field_boundary: Coordinates[];
+    field_name?: string;
+    field_area?: string;
+    location?: string;
+}
+
+export interface IViewFieldPageProps {
+    fieldData?: FieldData;
+}
