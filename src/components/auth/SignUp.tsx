@@ -1,27 +1,10 @@
-import { AuthSwitchProps } from '@/types/dataTypes'
 import { FormValues, SignUpPayload, ValidationErrors } from '@/lib/interfaces/auth'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-
-const SignUp = async (newStudent: SignInPayLoad) => {
-
-    const response = await fetch(`https://demetercloud.onrender.com/v1.0/register`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(newStudent),
-    })
-    if (!response.ok) {
-        throw new Error('Failed to Add User')
-    }
-    return response.json()
-}
-
-
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react'
 import { toast, Toaster } from 'sonner'
-import { SignInPayLoad } from '@/types/signinTypes'
 import { SignUpAPI } from '@/lib/services/auth'
 
 export function Register() {
@@ -36,7 +19,7 @@ export function Register() {
     } = useForm<FormValues>({
         defaultValues: {
             first_name: "",
-            last_name: "",  
+            last_name: "",
             phone: "",
             email: "",
             password: "",
@@ -62,7 +45,7 @@ export function Register() {
             });
         },
 
-        onError: (error : any) => {
+        onError: (error: any) => {
             console.log("SignUp error", error);
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
@@ -93,9 +76,9 @@ export function Register() {
     const onSubmit = (data: FormValues) => {
         const payload: FormValues = {
             ...data,
-            first_name: data.first_name?.trim() === "" ? null : data.first_name,
-            last_name: data.last_name?.trim() === "" ? null : data.last_name,
-            phone: data.phone?.trim() === "" ? null : data.phone,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            phone: data.phone,
             email: data.email,
             password: data.password,
         };
@@ -105,7 +88,11 @@ export function Register() {
 
     return (
         <>
-            <div className="h-screen w-screen flex text-xs bg-white justify-center">
+            <div
+                className="h-screen w-screen flex text-xs justify-center bg-cover bg-center bg-no-repeat"
+            // style={{ backgroundImage: "url('/assets/monarchTractor.jpg')" }}
+            >
+
                 {/* Left Image Panel */}
                 {/* <div className="w-8/12 rounded-xl overflow-hidden m-4">
                     <img
@@ -116,7 +103,7 @@ export function Register() {
                 </div> */}
 
                 {/* Right Form Panel */}
-                <div className="w-5/12 flex flex-col items-center gap-10 h-dvh px-24 box-border  justify-center">
+                <div className="w-5/12 flex flex-col items-center gap-1 h-dvh px-24 box-border  justify-center">
                     <div>
                         <img src="/assets/logo.svg" alt="Logo" className="mb-3" />
                     </div>
@@ -141,6 +128,8 @@ export function Register() {
                                         })}
                                     />
                                 </div>
+                                   
+ 
                                 <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
                                     {/* <User size={16} /> */}
                                     <input
@@ -216,7 +205,7 @@ export function Register() {
                             <div className="text-center pt-5 space-y-2">
                                 <button
                                     type="submit"
-                                    className="w-full text-white bg-primary p-2 rounded-full disabled:opacity-50 flex items-center justify-center text-sm"
+                                    className="w-full text-white bg-primary p-2 rounded-full disabled:opacity-50 flex items-center justify-center text-sm cursor-pointer"
                                     disabled={isPendingLogin}
                                 >
                                     {isPendingLogin ? 'Registering...' : 'Register'}

@@ -12,6 +12,8 @@ const FieldsTable = () => {
         queryFn: async () => {
             const response = await getAllFieldsAPI();
             if (response?.status === 200 || response?.status === 201) {
+                console.log("fields table data",response.data);
+                
                 return response.data;
             }
             throw new Error("Failed to fetch gateways");

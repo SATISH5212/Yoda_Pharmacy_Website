@@ -1,13 +1,12 @@
+import CreateMission from '@/components/create-mission'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_layout/teleop')({
-  component: Teleop,
+  component: RouteComponent,
 })
 
-function Teleop() {
-  return (
-    <div>
-            <h1>Tele Operation</h1>
-    </div>
-  )
+function RouteComponent() {
+  return <div>
+    <CreateMission />
+  </div>
 }

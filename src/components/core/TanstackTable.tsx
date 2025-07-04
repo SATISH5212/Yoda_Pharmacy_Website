@@ -201,6 +201,20 @@ const TanStackTable: FC<
 
 export default TanStackTable;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import {
 //     flexRender,
 //     getCoreRowModel,
