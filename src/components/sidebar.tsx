@@ -12,13 +12,13 @@ export function Sidebar() {
             <Link to="/fields" className="[&.active]:bg-[#0ed78d] mb-8 hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
                 <Sprout size={20} strokeWidth={2} />
             </Link>
-            <Link to="/devices" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
+            <Link to="/robots" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
                 <Bot size={20} strokeWidth={2} />
             </Link>
             <Link to="/teleop" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
                 <Joystick size={20} strokeWidth={2} />
             </Link>
-            <Link to="/settings" className="[&.active]:bg-[#0ed78d]  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
+            <Link to="/robots" className="[&.active]:bg-[#0ed78d]  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
                 <Settings size={20} strokeWidth={2} />
             </Link>
 
