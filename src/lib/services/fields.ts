@@ -1,8 +1,9 @@
 
 import { $fetch } from "../fetch";
-export const getAllFieldsAPI = async () => {
+import { iFieldQueryParams } from "../interfaces/maps";
+export const getAllFieldsAPI = async (queryParams: iFieldQueryParams) => {
     try {
-        const response = await $fetch.get("/fieldmappings");
+        const response = await $fetch.get("/fieldmappings", queryParams);
         return response;
     } catch (err) {
         throw err;

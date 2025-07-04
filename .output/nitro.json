@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
+  "date": "2025-07-03T11:38:39.828Z",
+=======
   "date": "2025-07-03T11:57:52.825Z",
+>>>>>>> feature/add-home
   "preset": "node-server",
   "framework": {
     "name": "nitro",

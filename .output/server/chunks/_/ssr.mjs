@@ -606,7 +606,11 @@ async function loadVirtualModule(id) {
     case VIRTUAL_MODULES.routeTree:
       return await Promise.resolve().then(() => routeTree_gen);
     case VIRTUAL_MODULES.startManifest:
+<<<<<<< HEAD
+      return await import('./_tanstack-start-manifest_v-rZGqarkO.mjs');
+=======
       return await import('./_tanstack-start-manifest_v-Bdx0cLqm.mjs');
+>>>>>>> feature/add-home
     case VIRTUAL_MODULES.serverFnManifest:
       return await import('./_tanstack-start-server-fn-manifest_v-DtgTK7xl.mjs');
     default:
@@ -1079,7 +1083,11 @@ function isSpecialResponse(err) {
 function isResponse(response) {
   return response instanceof Response;
 }
+<<<<<<< HEAD
+const appCss = "/assets/app-DUbeFAT6.css";
+=======
 const appCss = "/assets/app-BDl4MP24.css";
+>>>>>>> feature/add-home
 const queryClient = new QueryClient();
 const Route$g = createRootRoute({
   head: () => ({
@@ -1116,7 +1124,11 @@ function RootDocument({ children }) {
     ] })
   ] });
 }
+<<<<<<< HEAD
+const $$splitComponentImporter$f = () => import('./_layout-D8nbzhfF.mjs');
+=======
 const $$splitComponentImporter$f = () => import('./_layout-fnbrVX_p.mjs');
+>>>>>>> feature/add-home
 const Route$f = createFileRoute("/_layout")({
   component: lazyRouteComponent($$splitComponentImporter$f, "component", () => Route$f.ssr)
 });
@@ -1125,16 +1137,28 @@ const authMiddleware = async ({
 }) => {
   return;
 };
+<<<<<<< HEAD
+const $$splitComponentImporter$e = () => import('./index-BRB5IjOA.mjs');
+=======
 const $$splitComponentImporter$e = () => import('./index-B92v3NH9.mjs');
+>>>>>>> feature/add-home
 const Route$e = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter$e, "component", () => Route$e.ssr),
   beforeLoad: authMiddleware
 });
+<<<<<<< HEAD
+const $$splitComponentImporter$d = () => import('./index-G-Z4kdzh.mjs');
+const Route$d = createFileRoute("/sign-up/")({
+  component: lazyRouteComponent($$splitComponentImporter$d, "component", () => Route$d.ssr)
+});
+const $$splitComponentImporter$c = () => import('./index-Bj22YtvD.mjs');
+=======
 const $$splitComponentImporter$d = () => import('./index-CSB3O7tG.mjs');
 const Route$d = createFileRoute("/sign-up/")({
   component: lazyRouteComponent($$splitComponentImporter$d, "component", () => Route$d.ssr)
 });
 const $$splitComponentImporter$c = () => import('./index-mhxZs3Qy.mjs');
+>>>>>>> feature/add-home
 const Route$c = createFileRoute("/add-field/")({
   component: lazyRouteComponent($$splitComponentImporter$c, "component", () => Route$c.ssr)
 });
@@ -1154,7 +1178,11 @@ const $$splitComponentImporter$8 = () => import('./_robots-Bd3uF8lQ.mjs');
 const Route$8 = createFileRoute("/_layout/_robots")({
   component: lazyRouteComponent($$splitComponentImporter$8, "component", () => Route$8.ssr)
 });
+<<<<<<< HEAD
+const $$splitComponentImporter$7 = () => import('./index-FvBM-WqI.mjs');
+=======
 const $$splitComponentImporter$7 = () => import('./index-Xr-6sU2-.mjs');
+>>>>>>> feature/add-home
 const Route$7 = createFileRoute("/_layout/fields/")({
   component: lazyRouteComponent($$splitComponentImporter$7, "component", () => Route$7.ssr)
 });

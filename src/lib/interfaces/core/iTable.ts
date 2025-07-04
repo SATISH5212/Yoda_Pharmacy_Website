@@ -1,18 +1,6 @@
 
 import { Dispatch, SetStateAction } from "react";
 
-export interface pageProps {
-    columns: any[];
-    data: any[];
-    loading?: boolean;
-    heightClass?: string;
-    getData?: any;
-    paginationDetails?: any;
-    removeSortingForColumnIds?: string[];
-    noDataLabel?: string;
-    isFetchingNextPage?: boolean;
-    onRowClick?: (row: any) => void;
-}
 
 export interface iConfirmDialog {
     removeConfirm: boolean;
@@ -24,4 +12,27 @@ export interface iConfirmDialog {
     isDeleteLoading?: boolean;
     setDeleteReason?: Dispatch<SetStateAction<string>>;
     deleteReason?: string
+}
+
+
+export interface DynamicPaginationProps {
+    paginationDetails: any;
+
+    totalItems?: number;
+    capturePageNum: (value: number) => void;
+    captureRowPerItems: (value: number) => void;
+    initialPage?: number;
+    limitOptionsFromProps?: { title: string; value: number }[];
+}
+
+
+export interface pageProps {
+    columns: any[];
+    data: any[];
+    loading?: boolean;
+    heightClass?: string;
+    getData?: any;
+    paginationDetails: any;
+    removeSortingForColumnIds?: string[];
+    noDataLabel?: string
 }

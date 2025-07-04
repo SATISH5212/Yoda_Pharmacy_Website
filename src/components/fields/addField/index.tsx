@@ -23,7 +23,7 @@ const MapFormPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
-     const [robot_home, setRobotHome] = useState<Coordinates>(null);
+    const [robot_home, setRobotHome] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const {
@@ -77,18 +77,16 @@ const MapFormPage = () => {
             return;
         }
 
-        if(!robot_home){
+        if (!robot_home) {
             toast.error("Please set robot home point");
             return;
         }
-
-
         try {
             await mutateAddBoundary(data);
         } catch (error) {
             console.error("Form submission error:", error);
         }
-    }, [formCoordinates, fieldAccessPoint, robot_home,mutateAddBoundary]);
+    }, [formCoordinates, fieldAccessPoint, robot_home, mutateAddBoundary]);
 
     const handleReset = useCallback(() => {
         reset();
@@ -105,7 +103,7 @@ const MapFormPage = () => {
     }, []);
 
     const handleRobotHome = useCallback(() => {
-        setMode("robot_home"); 
+        setMode("robot_home");
         toast.info("Click on the map to place Robot Home Point", TOAST_CONFIG);
     }, []);
 

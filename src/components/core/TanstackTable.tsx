@@ -1,409 +1,393 @@
-
+import { pageProps } from "@/lib/interfaces/core/iTable";
+import { useLocation } from "@tanstack/react-router";
 import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     Header,
     SortingState,
-    useReactTable,
+    useReactTable
 } from "@tanstack/react-table";
 import { FC, useState } from "react";
-import { useLocation, useRouter } from "@tanstack/react-router";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "../ui/table";
-import { NoUsersDataSvg } from "../svg/NoUsersDataSvg";
-import { Skeleton } from "../ui/skeleton";
-import { pageProps } from "@/lib/interfaces/core/iTable";
-import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import SortAscIcon from "../icons/table/sort-asc";
+import SortDescIcon from "../icons/table/sort-desc";
+import Pagination from "./Pagination";
 
-const TanStackTable: FC<
-    pageProps & {
-        lastRowRef?: (node: HTMLTableRowElement | null) => void;
-        onRowClick?: (row: any) => void;
-    }
-> = ({
+const TanStackTable: FC<pageProps> = ({
     columns,
     data,
     loading = false,
     getData,
+    paginationDetails,
     removeSortingForColumnIds,
     heightClass,
     noDataLabel,
-    lastRowRef,
-    isFetchingNextPage,
-    onRowClick,
 }) => {
-        const router = useRouter();
-        const location = useLocation();
-        const [sorting, setSorting] = useState<SortingState>([]);
-        const [globalFilter, setGlobalFilter] = useState("");
+    console.log(paginationDetails, "paginationDetails001");
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location?.search);
+    const table = useReactTable({
+        columns,
+        data: data?.length ? data : [],
+        state: {
+            sorting,
+        },
+        onSortingChange: setSorting,
+        getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        manualSorting: true,
+        manualPagination: true,
+    });
 
-        const table = useReactTable({
-            columns,
-            data: data?.length ? data : [],
-            state: {
-                sorting,
-                globalFilter,
-            },
-            onSortingChange: setSorting,
-            onGlobalFilterChange: setGlobalFilter,
-            getCoreRowModel: getCoreRowModel(),
-            getFilteredRowModel: getFilteredRowModel(),
-            getSortedRowModel: getSortedRowModel(),
+    const capturePageNum = (value: number) => {
+        getData({
+            ...searchParams,
+            page_size: searchParams.get("page_size")
+                ? +(searchParams.get("page_size") as string)
+                : 25,
+            page: value,
+            order_by: searchParams.get("order_by"),
+            order_type: searchParams.get("order_type"),
         });
-
-        const getWidth = (id: string) => {
-            const widthObj = columns.find((col) => col.id === id);
-            return widthObj ? widthObj?.width || widthObj?.size || "150px" : "150px";
-        };
-
-        const getSortIcon = (header: Header<any, unknown>) => {
-            if (!header.column.getCanSort()) return null;
-            const sortDirection = header.column.getIsSorted();
-            if (sortDirection === "asc") return <ArrowUp className="ml-1 h-3 w-3" />;
-            if (sortDirection === "desc") return <ArrowDown className="ml-1 h-3 w-3" />;
-            return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
-        };
-
-        return (
-            <div className={`scrollbar overflow-x-auto w-full ${heightClass || "h-auto"}`}>
-                <div className="absolute top-12.5 right-22 flex  z-10 justify-end mb-2">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={globalFilter ?? ""}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        className="border-gray-200 bg-white outline-1 px-1 py-0.5 text-xs rounded w-50"
-                    />
-                </div>
-
-                <div className={`overflow-auto scrollbar w-full relative ${heightClass || "h-auto"}`}>
-                    {!data.length && !loading ? (
-                        <div className="p-4 w-full flex flex-col items-center justify-center text-gray-500">
-                            <NoUsersDataSvg />
-                            <p className="mb-2 font-medium">
-                                {noDataLabel ? noDataLabel : "No users found"}
-                            </p>
-                        </div>
-                    ) : (
-                        <div className={`${heightClass || "h-auto"}`}>
-                            <Table className="relative w-full border">
-                                <TableHeader className="sticky top-0 z-1 bg-E8E8E8 h-5">
-                                    {table.getHeaderGroups().map((headerGroup) => (
-                                        <TableRow key={headerGroup.id} className="h-5">
-                                            {headerGroup.headers.map((header, index) => (
-                                                <TableHead
-                                                    key={index}
-                                                    colSpan={header.colSpan}
-                                                    className="bg-gray-200 h-5 px-3 border-gray-300 last:border-r-0"
-                                                    style={{
-                                                        width: getWidth(header.id),
-                                                        minWidth: getWidth(header.id),
-                                                    }}
-                                                >
-                                                    {!header.isPlaceholder && (
-                                                        <div
-                                                            className={`flex items-center justify-center h-full text-xs font-normal ${header.column.getCanSort() ? "cursor-pointer select-none" : ""
-                                                                }`}
-                                                            onClick={header.column.getToggleSortingHandler()}
-                                                        >
-                                                            <div className="flex items-center">
-                                                                <span className="text-center">
-                                                                    {flexRender(
-                                                                        header.column.columnDef.header,
-                                                                        header.getContext()
-                                                                    )}
-                                                                </span>
-                                                                {getSortIcon(header)}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </TableHead>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableHeader>
-
-                                <TableBody className="relative">
-                                    {loading && !isFetchingNextPage ? (
-                                        [...Array(15)].map((_, i) => (
-                                            <TableRow key={`loading-row-${i}`} className="border-b h-5">
-                                                {[...Array(columns.length)].map((_, j) => (
-                                                    <TableCell
-                                                        key={`loading-cell-${i}-${j}`}
-                                                        className="h-5 text-center"
-                                                        style={{
-                                                            width: getWidth(columns[j]?.id),
-                                                            minWidth: getWidth(columns[j]?.id),
-                                                        }}
-                                                    >
-                                                        {j === 1 ? (
-                                                            <div className="flex items-center justify-center gap-2">
-                                                                <Skeleton className="h-5 w-5 rounded-full bg-gray-200" />
-                                                                <Skeleton className="h-3 w-3/5 bg-gray-200" />
-                                                            </div>
-                                                        ) : (
-                                                            <div className="flex justify-center">
-                                                                <Skeleton className="h-3 w-3/5 bg-gray-200" />
-                                                            </div>
-                                                        )}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        <>
-                                            {table.getRowModel().rows.map((row, index) => {
-                                                const isLastRow = index === table.getRowModel().rows.length - 1;
-                                                return (
-                                                    <TableRow
-                                                        key={row.id}
-                                                        ref={isLastRow ? lastRowRef : null}
-                                                        onClick={() => onRowClick?.(row.original)}
-                                                        className="border-b h-6 hover:bg-gray-50 cursor-pointer"
-                                                    >
-                                                        {row.getVisibleCells().map((cell) => (
-                                                            <TableCell
-                                                                key={cell.id}
-                                                                className="p-0 text-center text-xs h-6"
-                                                                style={{
-                                                                    width: getWidth(cell.column.id),
-                                                                    minWidth: getWidth(cell.column.id),
-                                                                }}
-                                                            >
-                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                            </TableCell>
-                                                        ))}
-                                                    </TableRow>
-                                                );
-                                            })}
-                                            {isFetchingNextPage && (
-                                                <TableRow className="h-8">
-                                                    <TableCell colSpan={columns.length} className="text-center">
-                                                        <div className="flex justify-center">
-                                                            <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-                                                        </div>
-                                                    </TableCell>
-                                                </TableRow>
-                                            )}
-                                        </>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
     };
 
+    const captureRowPerItems = (value: number) => {
+        getData({
+            ...searchParams,
+            page_size: value,
+            page: 1,
+            order_by: searchParams.get("order_by"),
+            order_type: searchParams.get("order_type"),
+            //search_string:searchParams.get("search_string"),
+        });
+    };
+
+    const getWidth = (id: string) => {
+        const widthObj = columns.find((col) => col.id === id);
+        return widthObj ? widthObj?.width || widthObj?.size || "100px" : "100px";
+    };
+
+    const sortAndGetData = (header: Header<any, unknown>) => {
+        if (
+            removeSortingForColumnIds &&
+            removeSortingForColumnIds.length &&
+            removeSortingForColumnIds.includes(header.id)
+        ) {
+            return;
+        }
+
+        let orderBy = header.id;
+        let orderType = "asc";
+
+        if (searchParams.get("order_by")?.startsWith(header.id)) {
+            if (searchParams.get("order_by") == `${header.id}`) {
+                if (searchParams.get("order_type") == "asc") {
+                    orderType = "desc";
+                    orderBy = `${header.id}`;
+                } else {
+                    orderBy = "";
+                    orderType = "";
+                }
+            }
+        }
+
+        getData({
+            ...searchParams,
+            page: searchParams.get("page") || 1,
+            page_size: searchParams.get("page_size") || 25,
+            order_by: orderBy,
+            order_type: orderType,
+        });
+    };
+
+    return (
+        <div className="w-full rounded-md shadow-sm">
+            <div
+                className={`w-full relative bg-white ${heightClass || "h-96"} ram overflow-y-hidden`}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                {!data.length && !loading ? (
+                    <div className="flex justify-center items-center w-full h-full">
+                        <div className="flex flex-col justify-center items-center text-center">
+                            <img
+                                src={"/images/core/no-data.jpg"}
+                                alt="No Data"
+                                className="w-[300px] h-auto mx-auto"
+                            />
+                            <p className="text-[20px] text-zinc-800 font-normal mt-4">
+                                {" "}
+                                {noDataLabel ? noDataLabel : "No data available"}
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full h-full flex flex-col">
+                        <div className="w-full overflow-auto custom-scrollbar">
+                            {" "}
+                            <table className="w-full border-collapse bg-white min-w-full table-fixed">
+                                <thead className="bg-white border-b">
+                                    {table?.getHeaderGroups().map((headerGroup) => (
+                                        <tr
+                                            key={headerGroup.id + `-${new Date().getTime()}`}
+                                            className="border-b"
+                                        >
+                                            {headerGroup.headers.map(
+                                                (header: Header<any, unknown>, index: number) => {
+                                                    if (location.pathname.includes("/dashboard")) {
+                                                        return (
+                                                            <th
+                                                                key={index + `-${new Date().getTime()}`}
+                                                                colSpan={header.colSpan}
+                                                                className="bg-white text-left px-3 py-3 text-sm font-medium text-gray-900 sticky top-0 z-10"
+                                                                style={{
+                                                                    minWidth: getWidth(header.id),
+                                                                    width: getWidth(header.id),
+                                                                    position: "sticky",
+                                                                    top: 0,
+                                                                }}
+                                                            >
+                                                                {header.isPlaceholder ? null : (
+                                                                    <div
+                                                                        {...{
+                                                                            className: header.column.getCanSort()
+                                                                                ? "cursor-pointer select-none"
+                                                                                : "",
+                                                                            onClick:
+                                                                                header.column.getToggleSortingHandler(),
+                                                                        }}
+                                                                        className="flex items-center gap-2"
+                                                                    >
+                                                                        {flexRender(
+                                                                            header.column.columnDef.header,
+                                                                            header.getContext()
+                                                                        )}
+                                                                        {{
+                                                                            asc: (
+                                                                                <img
+                                                                                    src={
+                                                                                        "/images/dashboard/table/sort-asc.svg"
+                                                                                    }
+                                                                                    height={20}
+                                                                                    width={20}
+                                                                                    alt="Asc"
+                                                                                    className={
+                                                                                        removeSortingForColumnIds?.includes(
+                                                                                            header.id
+                                                                                        ) || header.colSpan == 2
+                                                                                            ? "hidden"
+                                                                                            : ""
+                                                                                    }
+                                                                                />
+                                                                            ),
+                                                                            desc: (
+                                                                                <img
+                                                                                    src={
+                                                                                        "/images/dashboard/table/sort-desc.svg"
+                                                                                    }
+                                                                                    height={20}
+                                                                                    width={20}
+                                                                                    alt="Desc"
+                                                                                    className={
+                                                                                        removeSortingForColumnIds?.includes(
+                                                                                            header.id
+                                                                                        ) || header.colSpan == 2
+                                                                                            ? "hidden"
+                                                                                            : ""
+                                                                                    }
+                                                                                />
+                                                                            ),
+                                                                        }[
+                                                                            header.column.getIsSorted() as string
+                                                                        ] ?? (
+                                                                                <img
+                                                                                    src={
+                                                                                        "/images/dashboard/table/sort-norm.svg"
+                                                                                    }
+                                                                                    height={15}
+                                                                                    width={15}
+                                                                                    alt="No Sort"
+                                                                                    className={
+                                                                                        removeSortingForColumnIds?.includes(
+                                                                                            header.id
+                                                                                        ) || header.colSpan == 2
+                                                                                            ? "hidden"
+                                                                                            : ""
+                                                                                    }
+                                                                                />
+                                                                            )}
+                                                                    </div>
+                                                                )}
+                                                            </th>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <th
+                                                                key={index + `-${new Date().getTime()}`}
+                                                                colSpan={header.colSpan}
+                                                                className="!bg-primary-200 text-left px-4 py-3 text-sm font-medium text-gray-900 sticky top-0 z-10"
+                                                                style={{
+                                                                    minWidth: getWidth(header.id),
+                                                                    width: getWidth(header.id),
+                                                                    position: "sticky",
+                                                                    top: 0,
+                                                                }}
+                                                            >
+                                                                {header.isPlaceholder ? null : (
+                                                                    <div
+                                                                        onClick={() => sortAndGetData(header)}
+                                                                        className="flex items-center gap-2 cursor-pointer"
+                                                                    >
+                                                                        {flexRender(
+                                                                            header.column.columnDef.header,
+                                                                            header.getContext()
+                                                                        )}
+                                                                        <SortItems
+                                                                            header={header}
+                                                                            removeSortingForColumnIds={
+                                                                                removeSortingForColumnIds
+                                                                            }
+                                                                            getData={getData}
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            </th>
+                                                        );
+                                                    }
+                                                }
+                                            )}
+                                        </tr>
+                                    ))}
+                                </thead>
+
+                                <tbody className={`divide-y divide-gray-200`}>
+                                    {data?.length ? (
+                                        table?.getRowModel().rows.map((row) => (
+                                            <tr
+                                                key={row.id + `-${new Date().getTime()}`}
+                                                className="bg-white hover:bg-primary-200/20 transition-colors duration-200"
+                                            >
+                                                {row.getVisibleCells().map((cell) => (
+                                                    <td
+                                                        className="px-4 py-1 text-sm text-gray-900 whitespace-nowrap"
+                                                        key={cell.id + `-${new Date().getTime()}`}
+                                                    >
+                                                        {flexRender(
+                                                            cell.column.columnDef.cell,
+                                                            cell.getContext()
+                                                        )}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))
+                                    ) : loading ? (
+                                        <tr>
+                                            <td
+                                                colSpan={columns?.length}
+                                                className="px-4 py-3 text-sm text-center text-gray-500"
+                                            >
+                                                Loading...
+                                            </td>
+                                        </tr>
+                                    ) : null}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+            </div>
+            {data?.length && paginationDetails ? (
+                <div className="border-t border-gray-200">
+                    <Pagination
+                        paginationDetails={paginationDetails}
+                        capturePageNum={capturePageNum}
+                        captureRowPerItems={captureRowPerItems}
+                    />
+                </div>
+            ) : null}
+        </div>
+    );
+};
+
+const SortItems = ({
+    header,
+    removeSortingForColumnIds,
+    getData,
+}: {
+    header: Header<any, unknown>;
+    removeSortingForColumnIds?: string[];
+    getData: (params: any) => void;
+}) => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location?.search);
+
+    const sortBy = searchParams.get("order_by");
+    const sortDirection = searchParams.get("order_type");
+
+    if (removeSortingForColumnIds?.includes(header.id)) {
+        return null;
+    }
+
+    const isAscending = sortBy === header.id && sortDirection === "asc";
+    const isDescending = sortBy === header.id && sortDirection === "desc";
+
+    return (
+        <div className="flex items-center flex-col">
+            <div
+                className={`[&_svg]:size-2 ${isAscending ? "text-primary-600 [&_svg]:size-2 " : ""}`}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    const newSearchParams = new URLSearchParams(searchParams);
+
+                    if (isAscending) {
+                        newSearchParams.delete("order_by");
+                        newSearchParams.delete("order_type");
+                    } else {
+                        newSearchParams.set("order_by", header.id);
+                        newSearchParams.set("order_type", "asc");
+                    }
+
+                    getData({
+                        ...Object.fromEntries(newSearchParams.entries()),
+                        page: searchParams.get("page") || 1,
+                        page_size: searchParams.get("page_size") || 25,
+                    });
+                }}
+            >
+                <SortAscIcon />
+            </div>
+
+            <div
+                className={`[&_svg]:size-2 ${isDescending ? "text-primary-600 [&_svg]:size-2 " : ""}`}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    const newSearchParams = new URLSearchParams(searchParams);
+
+                    if (isDescending) {
+                        newSearchParams.delete("order_by");
+                        newSearchParams.delete("order_type");
+                    } else {
+                        newSearchParams.set("order_by", header.id);
+                        newSearchParams.set("order_type", "desc");
+                    }
+
+                    getData({
+                        ...Object.fromEntries(newSearchParams.entries()),
+                        page: searchParams.get("page") || 1,
+                        page_size: searchParams.get("page_size") || 25,
+                    });
+                }}
+            >
+                <SortDescIcon />
+            </div>
+        </div>
+    );
+};
 export default TanStackTable;
-
-
-
-
-
-
-// import {
-//     flexRender,
-//     getCoreRowModel,
-//     getFilteredRowModel,
-//     getSortedRowModel,
-//     Header,
-//     SortingState,
-//     useReactTable,
-// } from "@tanstack/react-table";
-// import { FC, useState } from "react";
-// import { useLocation, useParams, useRouter } from "@tanstack/react-router";
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-// import { NoUsersDataSvg } from "../svg/NoUsersDataSvg";
-// import { Skeleton } from "../ui/skeleton";
-// import { pageProps } from "@/lib/interfaces/core/iTable";
-// const TanStackTable: FC<
-//     pageProps & {
-//         lastRowRef?: (node: HTMLTableRowElement | null) => void;
-//         onRowClick?: (row: any) => void;
-//     }
-// > = ({
-//     columns,
-//     data,
-//     loading = false,
-//     getData,
-//     removeSortingForColumnIds,
-//     heightClass,
-//     noDataLabel,
-//     lastRowRef,
-//     isFetchingNextPage,
-//     onRowClick,
-// }) => {
-//         const router = useRouter();
-//         const [sorting, setSorting] = useState<SortingState>([]);
-//         const location = useLocation();
-//         const searchParams = new URLSearchParams(location?.search);
-//         const table = useReactTable({
-//             columns,
-//             data: data?.length ? data : [],
-//             state: {
-//                 sorting,
-//             },
-//             onSortingChange: setSorting,
-//             getCoreRowModel: getCoreRowModel(),
-//             getFilteredRowModel: getFilteredRowModel(),
-//             getSortedRowModel: getSortedRowModel(),
-//         });
-//         const getWidth = (id: string) => {
-//             const widthObj = columns.find((col) => col.id === id);
-//             return widthObj ? widthObj?.width || widthObj?.size || "100px" : "100px";
-//         };
-//         return (
-//             <div
-//                 className={`scrollbar overflow-x-auto w-full ${heightClass ? heightClass : "h-auto"
-//                     }`}
-//             >
-//                 <div
-//                     className={`overflow-auto scrollbar w-full relative ease-in-out duration-300 transition-all ${heightClass ? heightClass : "h-auto"
-//                         }`}
-//                 >
-//                     {!data.length && !loading ? (
-//                         <div className="p-4 w-full  box-border flex flex-col items-center justify-center text-center text-gray-500">
-//                             <NoUsersDataSvg />
-//                             <p className="mb-2 font-medium">
-//                                 {noDataLabel ? noDataLabel : "No users found"}
-//                             </p>
-//                         </div>
-//                     ) : (
-//                         <div
-//                             className={` [&>*:first-child]:h-full ${heightClass ? heightClass : "h-auto"
-//                                 }`}
-//                         >
-//                             <Table className="relative">
-//                                 <TableHeader className="sticky top-0 z-1 bg-E8E8E8">
-//                                     {table?.getHeaderGroups().map((headerGroup) => (
-//                                         <TableRow key={headerGroup.id}>
-//                                             {headerGroup.headers.map(
-//                                                 (header: Header<any, unknown>, index: number) => (
-//                                                     <TableHead
-//                                                         key={index}
-//                                                         colSpan={header.colSpan}
-//                                                         className="bg-gray-200"
-//                                                     >
-//                                                         {header.isPlaceholder ? null : (
-//                                                             <div
-//                                                                 className={`flex items-center gap-1 text-xs font-normal ${header.column.getCanSort()
-//                                                                     ? "cursor-pointer select-none"
-//                                                                     : ""
-//                                                                     }`}
-//                                                                 style={{
-//                                                                     minWidth: getWidth(header.id),
-//                                                                     width: getWidth(header.id),
-//                                                                     borderRadius:
-//                                                                         index === 0
-//                                                                             ? "5px 0 0 0"
-//                                                                             : index === headerGroup.headers.length - 1
-//                                                                                 ? "0 5px 0 0"
-//                                                                                 : "0",
-//                                                                 }}
-//                                                             >
-//                                                                 {flexRender(
-//                                                                     header.column.columnDef.header,
-//                                                                     header.getContext()
-//                                                                 )}
-//                                                             </div>
-//                                                         )}
-//                                                     </TableHead>
-//                                                 )
-//                                             )}
-//                                         </TableRow>
-//                                     ))}
-//                                 </TableHeader>
-//                                 <TableBody className="relative">
-//                                     {loading && !isFetchingNextPage ? (
-//                                         [...Array(15)].map((_, i) => (
-//                                             <TableRow
-//                                                 key={`loading-row-${i}`}
-//                                                 className="border-b-4 border-b-lightgray text-xs 3xl:text-sm text-gray-700 font-normal"
-//                                             >
-//                                                 {[...Array(columns.length)].map((_, j) => (
-//                                                     <TableCell key={`loading-cell-${i}-${j}`}>
-//                                                         {j == 1 ? (
-//                                                             <div className="p-0 flex gap-0 items-center">
-//                                                                 <Skeleton className="h-7 w-7 rounded-full bg-gray-200" />
-//                                                                 <Skeleton className="h-3 w-3/5 bg-gray-200 rounded-none" />
-//                                                             </div>
-//                                                         ) : (
-//                                                             <div className="p-0">
-//                                                                 <Skeleton className="h-3 w-3/5 bg-gray-200 rounded-none" />
-//                                                             </div>
-//                                                         )}
-//                                                     </TableCell>
-//                                                 ))}
-//                                             </TableRow>
-//                                         ))
-//                                     ) : (
-//                                         <>
-
-//                                             {table?.getRowModel().rows.map((row, index) => {
-//                                                 const isLastRow =
-//                                                     index === table.getRowModel().rows.length - 1;
-//                                                 return (
-//                                                     <TableRow
-//                                                         key={row.id}
-//                                                         ref={isLastRow ? lastRowRef : null}
-//                                                         onClick={() => onRowClick?.(row.original)}
-//                                                         className={`border-b border-slate-200 h-full w-full text-center hover:text-black  hover:bg-white transition-colors duration-200 cursor-pointer`}
-//                                                     >
-//                                                         {row.getVisibleCells().map((cell) => (
-//                                                             <TableCell
-//                                                                 className={`p-0 !bg-transparent defaultCell transition-colors duration-200 cursor-pointer`}
-//                                                                 key={cell.id}
-//                                                             >
-//                                                                 {flexRender(
-//                                                                     cell.column.columnDef.cell,
-//                                                                     cell.getContext()
-//                                                                 )}
-//                                                             </TableCell>
-//                                                         ))}
-//                                                     </TableRow>
-//                                                 );
-//                                             })}
-//                                             {isFetchingNextPage && (
-//                                                 <TableRow>
-//                                                     <TableCell
-//                                                         colSpan={columns.length}
-//                                                         className="p-3 text-center"
-//                                                     >
-//                                                         <div className="flex justify-center py-2">
-//                                                             <div className="w-5 h-5 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-//                                                         </div>
-//                                                     </TableCell>
-//                                                 </TableRow>
-//                                             )}
-//                                         </>
-//                                     )}
-//                                 </TableBody>
-//                             </Table>
-//                         </div>
-//                     )}
-//                 </div>
-//             </div>
-//         );
-//     };
-// export default TanStackTable;
-
-
-
-
-
-
-
-
-
-
-

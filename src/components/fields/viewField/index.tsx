@@ -28,14 +28,11 @@ const DEFAULT_CENTER = {
     lat: 17.469856405071194,
     lng: 78.59649084252246,
 };
-
 const DEFAULT_ZOOM = 30;
-
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
 ];
-
 export type Coordinates = {
     lat: number,
     lng: number
@@ -94,8 +91,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
             else if (maxDiff > 0.02) zoom = 12;
             else if (maxDiff > 0.01) zoom = 14;
             else zoom = 15;
-
-            setMapZoom(zoom);
         }
     }, [viewFieldData, calculateBounds]);
 
@@ -122,7 +117,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         const lng = homeLon + dLon;
         return { lat, lng };
     }, []);
-
+    console.log("covertXYToLatLng", covertXYToLatLng)
     const pathForFeildAccessPoint = useMemo(() => {
         const coordinates: Coordinates[] = [];
         const robotHome = samplePath.mission?.RobotHome;
