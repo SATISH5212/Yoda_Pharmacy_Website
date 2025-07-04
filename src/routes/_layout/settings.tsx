@@ -1,4 +1,4 @@
-import AllRobotsPage from '@/components/RobotsData/all-robots'
+import AllRobotsPage from '@/components/robots'
 import { createFileRoute } from '@tanstack/react-router'
 
 
