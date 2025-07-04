@@ -1,3 +1,4 @@
+
 import {
     flexRender,
     getCoreRowModel,
@@ -9,7 +10,14 @@ import {
 } from "@tanstack/react-table";
 import { FC, useState } from "react";
 import { useLocation, useRouter } from "@tanstack/react-router";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "../ui/table";
 import { NoUsersDataSvg } from "../svg/NoUsersDataSvg";
 import { Skeleton } from "../ui/skeleton";
 import { pageProps } from "@/lib/interfaces/core/iTable";
@@ -33,16 +41,19 @@ const TanStackTable: FC<
     onRowClick,
 }) => {
         const router = useRouter();
-        const [sorting, setSorting] = useState<SortingState>([]);
         const location = useLocation();
+        const [sorting, setSorting] = useState<SortingState>([]);
+        const [globalFilter, setGlobalFilter] = useState("");
 
         const table = useReactTable({
             columns,
             data: data?.length ? data : [],
             state: {
                 sorting,
+                globalFilter,
             },
             onSortingChange: setSorting,
+            onGlobalFilterChange: setGlobalFilter,
             getCoreRowModel: getCoreRowModel(),
             getFilteredRowModel: getFilteredRowModel(),
             getSortedRowModel: getSortedRowModel(),
@@ -55,76 +66,77 @@ const TanStackTable: FC<
 
         const getSortIcon = (header: Header<any, unknown>) => {
             if (!header.column.getCanSort()) return null;
-            
             const sortDirection = header.column.getIsSorted();
-            if (sortDirection === 'asc') return <ArrowUp className="ml-1 h-3 w-3" />;
-            if (sortDirection === 'desc') return <ArrowDown className="ml-1 h-3 w-3" />;
+            if (sortDirection === "asc") return <ArrowUp className="ml-1 h-3 w-3" />;
+            if (sortDirection === "desc") return <ArrowDown className="ml-1 h-3 w-3" />;
             return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
         };
 
         return (
-            <div className={`scrollbar overflow-x-auto w-full  ${heightClass ? heightClass : "h-auto"}`}>
-                <div className={`overflow-auto scrollbar  w-full relative ease-in-out duration-300 transition-all ${heightClass ? heightClass : "h-auto"}`}>
+            <div className={`scrollbar overflow-x-auto w-full ${heightClass || "h-auto"}`}>
+                <div className="absolute top-12.5 right-22 flex  z-10 justify-end mb-2">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={globalFilter ?? ""}
+                        onChange={(e) => setGlobalFilter(e.target.value)}
+                        className="border-gray-200 bg-white outline-1 px-1 py-0.5 text-xs rounded w-50"
+                    />
+                </div>
+
+                <div className={`overflow-auto scrollbar w-full relative ${heightClass || "h-auto"}`}>
                     {!data.length && !loading ? (
-                        <div className="p-4 w-full box-border flex flex-col items-center justify-center text-center text-gray-500">
+                        <div className="p-4 w-full flex flex-col items-center justify-center text-gray-500">
                             <NoUsersDataSvg />
                             <p className="mb-2 font-medium">
                                 {noDataLabel ? noDataLabel : "No users found"}
                             </p>
                         </div>
                     ) : (
-                        <div className={`[&>*:first-child]:h-full ${heightClass ? heightClass : "h-auto"}`}>
-                            <Table className="relative w-full border ">
-                                {/* Reduced header height */}
+                        <div className={`${heightClass || "h-auto"}`}>
+                            <Table className="relative w-full border">
                                 <TableHeader className="sticky top-0 z-1 bg-E8E8E8 h-5">
-                                    {table?.getHeaderGroups().map((headerGroup) => (
+                                    {table.getHeaderGroups().map((headerGroup) => (
                                         <TableRow key={headerGroup.id} className="h-5">
-                                            {headerGroup.headers.map(
-                                                (header: Header<any, unknown>, index: number) => (
-                                                    <TableHead
-                                                        key={index}
-                                                        colSpan={header.colSpan}
-                                                        className="bg-gray-200 h-5 px-3 border-gray-300 last:border-r-0"
-                                                        style={{
-                                                            width: getWidth(header.id),
-                                                            minWidth: getWidth(header.id),
-                                                        }}
-                                                    >
-                                                        {header.isPlaceholder ? null : (
-                                                            <div
-                                                                className={`flex items-center justify-center h-full text-xs font-normal ${
-                                                                    header.column.getCanSort()
-                                                                        ? "cursor-pointer select-none"
-                                                                        : ""
-                                                                    }`}
-                                                                onClick={header.column.getToggleSortingHandler()}
-                                                            >
-                                                                <div className="flex items-center">
-                                                                    <span className="text-center">
-                                                                        {flexRender(
-                                                                            header.column.columnDef.header,
-                                                                            header.getContext()
-                                                                        )}
-                                                                    </span>
-                                                                    {getSortIcon(header)}
-                                                                </div>
+                                            {headerGroup.headers.map((header, index) => (
+                                                <TableHead
+                                                    key={index}
+                                                    colSpan={header.colSpan}
+                                                    className="bg-gray-200 h-5 px-3 border-gray-300 last:border-r-0"
+                                                    style={{
+                                                        width: getWidth(header.id),
+                                                        minWidth: getWidth(header.id),
+                                                    }}
+                                                >
+                                                    {!header.isPlaceholder && (
+                                                        <div
+                                                            className={`flex items-center justify-center h-full text-xs font-normal ${header.column.getCanSort() ? "cursor-pointer select-none" : ""
+                                                                }`}
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                        >
+                                                            <div className="flex items-center">
+                                                                <span className="text-center">
+                                                                    {flexRender(
+                                                                        header.column.columnDef.header,
+                                                                        header.getContext()
+                                                                    )}
+                                                                </span>
+                                                                {getSortIcon(header)}
                                                             </div>
-                                                        )}
-                                                    </TableHead>
-                                                )
-                                            )}
+                                                        </div>
+                                                    )}
+                                                </TableHead>
+                                            ))}
                                         </TableRow>
                                     ))}
                                 </TableHeader>
+
                                 <TableBody className="relative">
                                     {loading && !isFetchingNextPage ? (
                                         [...Array(15)].map((_, i) => (
-                                            <TableRow
-                                                key={`loading-row-${i}`}
-                                                className="border-b border-gray-200 text-xs  text-gray-700 font-normal h-5"
-                                            >
+                                            <TableRow key={`loading-row-${i}`} className="border-b h-5">
                                                 {[...Array(columns.length)].map((_, j) => (
-                                                    <TableCell 
+                                                    <TableCell
                                                         key={`loading-cell-${i}-${j}`}
                                                         className="h-5 text-center"
                                                         style={{
@@ -132,14 +144,14 @@ const TanStackTable: FC<
                                                             minWidth: getWidth(columns[j]?.id),
                                                         }}
                                                     >
-                                                        {j == 1 ? (
+                                                        {j === 1 ? (
                                                             <div className="flex items-center justify-center gap-2">
                                                                 <Skeleton className="h-5 w-5 rounded-full bg-gray-200" />
-                                                                <Skeleton className="h-3 w-3/5 bg-gray-200 rounded-none" />
+                                                                <Skeleton className="h-3 w-3/5 bg-gray-200" />
                                                             </div>
                                                         ) : (
                                                             <div className="flex justify-center">
-                                                                <Skeleton className="h-3 w-3/5 bg-gray-200 rounded-none" />
+                                                                <Skeleton className="h-3 w-3/5 bg-gray-200" />
                                                             </div>
                                                         )}
                                                     </TableCell>
@@ -148,29 +160,25 @@ const TanStackTable: FC<
                                         ))
                                     ) : (
                                         <>
-                                            {table?.getRowModel().rows.map((row, index) => {
-                                                const isLastRow =
-                                                    index === table.getRowModel().rows.length - 1;
+                                            {table.getRowModel().rows.map((row, index) => {
+                                                const isLastRow = index === table.getRowModel().rows.length - 1;
                                                 return (
                                                     <TableRow
                                                         key={row.id}
                                                         ref={isLastRow ? lastRowRef : null}
                                                         onClick={() => onRowClick?.(row.original)}
-                                                        className={`border-b border-gray-200 h-6 w-full hover:bg-gray-50 transition-colors duration-200 cursor-pointer`}
+                                                        className="border-b h-6 hover:bg-gray-50 cursor-pointer"
                                                     >
                                                         {row.getVisibleCells().map((cell) => (
                                                             <TableCell
-                                                                className={`p-0 !bg-transparent defaultCell transition-colors duration-200 cursor-pointer h-6 text-center text-xs`}
                                                                 key={cell.id}
+                                                                className="p-0 text-center text-xs h-6"
                                                                 style={{
                                                                     width: getWidth(cell.column.id),
                                                                     minWidth: getWidth(cell.column.id),
                                                                 }}
                                                             >
-                                                                {flexRender(
-                                                                    cell.column.columnDef.cell,
-                                                                    cell.getContext()
-                                                                )}
+                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                             </TableCell>
                                                         ))}
                                                     </TableRow>
@@ -178,10 +186,7 @@ const TanStackTable: FC<
                                             })}
                                             {isFetchingNextPage && (
                                                 <TableRow className="h-8">
-                                                    <TableCell
-                                                        colSpan={columns.length}
-                                                        className="p-2 text-center h-8"
-                                                    >
+                                                    <TableCell colSpan={columns.length} className="text-center">
                                                         <div className="flex justify-center">
                                                             <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
                                                         </div>
@@ -200,15 +205,6 @@ const TanStackTable: FC<
     };
 
 export default TanStackTable;
-
-
-
-
-
-
-
-
-
 
 
 
@@ -400,3 +396,14 @@ export default TanStackTable;
 //         );
 //     };
 // export default TanStackTable;
+
+
+
+
+
+
+
+
+
+
+

@@ -68,12 +68,12 @@ export function CreateMission() {
 
         },
 
-        // onSuccess : () =>{
-        //     toast.success('Mission created successfully');
-        //     navigate({
-        //         to: `/fields`,
-        //     });
-        // },
+        onSuccess : () =>{
+            toast.success('Mission created successfully');
+            // navigate({
+            //     to: `/fields`,
+            // });
+        },
 
         onError: (error: any) => {
             console.log('Create mission error', error);
@@ -117,7 +117,7 @@ export function CreateMission() {
     return (
         <>
             <div className="w-4/12 space-y-5 text-xs text-35353d font-normal border p-4 rounded-2xl bg-white shadow-lg m-auto mt-5">
-                <div className="text-center text-xl font-normal text-title">Create Mission</div>
+                <div className="text-center text-sm font-bold text-title">Create Mission</div>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex space-x-2">
                         <div className="w-1/2 space-y-1">
