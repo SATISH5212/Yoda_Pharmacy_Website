@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import TanStackTable from "../core/TanstackTable";
 import { allFieldsColumns } from "./AllFieldsColumns";
 import { iFieldQueryParams } from "@/lib/interfaces/maps";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
 
 const FieldsTable = () => {
@@ -27,10 +27,22 @@ const FieldsTable = () => {
         order_by: searchParams.get("order_by") || null,
         order_type: searchParams.get("order_type") || null,
     });
+    useEffect(() => {
+        const currentSearchParams = new URLSearchParams(location.search);
+        setPagination({
+            page: Number(currentSearchParams.get("page")) || 1,
+            page_size: Number(currentSearchParams.get("page_size")) || 10,
+            order_by: currentSearchParams.get("order_by") || null,
+            order_type: currentSearchParams.get("order_type") || null,
+        });
+    }, [location.search]);
+
     const {
         data: allFieldsData,
+        refetch,
+        isLoading
     } = useQuery({
-        queryKey: ["all-fieldsData"],
+        queryKey: ["all-fieldsData", pagination, debounceSearchString],
         queryFn: async () => {
             let queryParams: iFieldQueryParams = {
                 page: pagination.page,
@@ -39,7 +51,6 @@ const FieldsTable = () => {
                 order_type: pagination.order_type || undefined,
                 search_string: debounceSearchString || undefined,
             };
-
             const routerParams = {
                 ...queryParams,
             };
@@ -58,7 +69,25 @@ const FieldsTable = () => {
         staleTime: 0,
         enabled: true,
     });
-
+    const getData = (params: any) => {
+        setPagination({
+            page: params.page || 1,
+            page_size: params.page_size || 10,
+            order_by: params.order_by || null,
+            order_type: params.order_type || null,
+        });
+        const newSearchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                newSearchParams.set(key, String(value));
+            }
+        });
+        router.navigate({
+            to: "/fields",
+            search: Object.fromEntries(newSearchParams.entries()),
+            replace: true,
+        });
+    };
 
     const data = allFieldsData?.data?.records?.map((field: FieldResponse) => ({
         ...field,
@@ -71,13 +100,10 @@ const FieldsTable = () => {
             columns={allFieldsColumns}
             data={data}
             paginationDetails={allFieldsData?.data?.pagination_info || {}}
-            // loading={isLoading}
-            // heightClass={getTableHeight()}
-            loading={!allFieldsData}
+            loading={isLoading}
             heightClass="h-[400px]"
-            removeSortingForColumnIds={[
-
-            ]}
+            removeSortingForColumnIds={[]}
+            getData={getData}
         />
     );
 };
