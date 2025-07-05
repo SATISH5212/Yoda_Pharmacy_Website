@@ -4,8 +4,8 @@ import { getAllRobotsAPI } from '@/lib/services/robots';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import RobotGrid from './robots-grid';
 import Pagination from '../core/Pagination';
+import AllRobotsCards from './AllRobotsCards';
 
 const AllRobotsPage = () => {
     const navigate = useNavigate();
@@ -29,7 +29,6 @@ const AllRobotsPage = () => {
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
         searchParams.get("search_string") || ""
     );
-
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
@@ -41,7 +40,7 @@ const AllRobotsPage = () => {
     }, [location.search]);
 
     const {
-        data: allFieldsData,
+        data: allRobotsData,
         refetch,
         isLoading
     } = useQuery({
@@ -108,7 +107,7 @@ const AllRobotsPage = () => {
 
     if (isLoading) return <p>Loading robots...</p>;
 
-    const data = allFieldsData?.data;
+    const data = allRobotsData?.data;
     if (!data) return <p>No data available</p>;
 
     const paginationDetails = data?.pagination_info;
@@ -155,7 +154,7 @@ const AllRobotsPage = () => {
 
             </div>
             <div className="flex-1 min-h-0 mb-2 mx-2">
-                <RobotGrid robots={data.records} />
+                <AllRobotsCards robots={allRobotsData?.data.records} />
             </div>
             <div className="border-t border-gray-200 pt-2 sm:pt-3 md:pt-4 flex-shrink-0">
                 <Pagination

@@ -72,7 +72,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
                 )
             );
             router.navigate({
-                to: "/fields",
+                to: "/all-fields",
                 search: cleanParams,
                 replace: true,
             });
@@ -106,7 +106,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
             )
         );
         router.navigate({
-            to: "/fields",
+            to: "/all-fields",
             search: cleanParams,
             replace: true,
         });
