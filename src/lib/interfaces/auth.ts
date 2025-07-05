@@ -1,4 +1,7 @@
 export interface FormValues {
+    first_name: any;
+    last_name: any;
+    phone: any;
     email: string;
     password: string;
 }
@@ -25,3 +28,10 @@ export interface ValidationErrors {
     [key: string]: string[];
 }
 
+export interface SignUpPayload {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    password: string;
+}

@@ -2,7 +2,7 @@ import { IFieldFormPageProps } from "@/lib/interfaces/maps";
 import { FC } from "react";
 
 const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
-    const { handleSubmit, onSubmit, register, isPending, errors, displayArea, handleAddAccessPoint, fieldAccessPoint, isSubmittable, handleCancel, fieldCentroid } = props
+    const { handleSubmit, onSubmit, register, isPending, errors, displayArea, handleAddAccessPoint, fieldAccessPoint, handleRobotHome, robot_home ,isSubmittable, handleCancel} = props
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl">
             <form
@@ -72,12 +72,33 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                         </div>
                     </div>
 
+                     <div>
+                        <label className="text-xs font-medium text-gray-700">
+                            Robot Home <span className="text-red-500">*</span>
+                        </label>
+                        <div className="mt-1 flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={handleRobotHome}
+                                className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200 disabled:opacity-50"
+                                disabled={isPending}
+                            >
+                                {robot_home ? "✓ Set" : "+ Add"}
+                            </button>
+                            {robot_home && (
+                                <span className="text-xs text-gray-500 truncate">
+                                    ({robot_home.lat.toFixed(4)}, {robot_home.lng.toFixed(4)})
+                                </span>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
                 <div className="absolute bottom-4 right-4 flex gap-2">
                     <button
                         type="button"
                         onClick={handleCancel}
-                        className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-xs transition-colors duration-200 disabled:opacity-50"
+                        className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-xs transition-colors duration-200 disabled:opacity-50 cursor-pointer "
                         disabled={isPending}
                     >
                         Cancel

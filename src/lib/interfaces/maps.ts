@@ -4,6 +4,32 @@ export interface FormData {
     field_name: string;
 }
 
+export interface iFieldQueryParams {
+    stats_tab?: string;
+    user?: string;
+    company_document_id?: string;
+    page: number | string;
+    page_size: number | string;
+    order_by?: string | undefined;
+    order_type?: string | undefined;
+    search_string?: string;
+    status?: string | null;
+    contact_type_id?: string;
+    contact_type?: string;
+    company_id?: string;
+    response_id?: string;
+    type?: string | null;
+    date?: string;
+    tab?: string;
+    total?: number;
+    responseId?: string;
+    action?: string;
+    email?: string;
+    include_inprogress?: boolean;
+    type_status?: string;
+}
+
+
 export interface IFieldFormPageProps {
     handleSubmit: UseFormHandleSubmit<FormData>;
     onSubmit: SubmitHandler<FormData>;
@@ -13,6 +39,8 @@ export interface IFieldFormPageProps {
     displayArea: string;
     handleAddAccessPoint: () => void;
     fieldAccessPoint: Coordinates | null;
+    handleRobotHome: () => void;
+    robot_home: Coordinates | null;
     isSubmittable: boolean | string;
     handleCancel: () => void;
 }

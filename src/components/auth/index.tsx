@@ -42,6 +42,7 @@ export function LoginPage() {
             toast.success(message);
             const accessToken = response?.data?.data?.access_token;
             Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
+            localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
             localStorage.setItem("authToken", accessToken);
             navigate({
                 to: `/fields`,
@@ -81,7 +82,7 @@ export function LoginPage() {
                 <div className="w-8/12 rounded-xl overflow-hidden m-4">
                     <img
                         className="w-full h-full object-cover"
-                        src="/assets/image.webp"
+                        src="/assets/monarchTractor.jpg"
                         alt="Main Image"
                     />
                 </div>
