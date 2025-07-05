@@ -31,9 +31,7 @@ const AddRobot = () => {
         mutationKey: ["add-robot"],
         retry: false,
         mutationFn: async (data: RobotConfig) => {
-            console.log("response001", data);
             const response = await addRobotDataAPI(data);
-            console.log("response002", response);
             return response;
         },
         onSuccess: (response) => {
@@ -42,11 +40,8 @@ const AddRobot = () => {
             toast.success("Robot added successfully!");
         },
         onError: (error: any) => {
-            console.log("error001:", error);
-
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || {};
-                console.log(errorMessages, "API validation errors");
                 setApiErrors(errorMessages);
 
                 if (error?.data?.message) {

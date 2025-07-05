@@ -36,7 +36,7 @@ export function Register() {
     } = useForm<FormValues>({
         defaultValues: {
             first_name: "",
-            last_name: "",  
+            last_name: "",
             phone: "",
             email: "",
             password: "",
@@ -62,12 +62,10 @@ export function Register() {
             });
         },
 
-        onError: (error : any) => {
-            console.log("SignUp error", error);
+        onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
-                console.log("validation error", validation);
 
             } else if (
                 error?.status === 409 ||
