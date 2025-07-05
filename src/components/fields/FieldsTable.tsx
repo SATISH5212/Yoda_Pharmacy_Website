@@ -6,15 +6,12 @@ import { allFieldsColumns } from "./AllFieldsColumns";
 import { iFieldQueryParams } from "@/lib/interfaces/maps";
 import { useState, useEffect, FC } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { IFieldsTablePageProps } from "@/lib/interfaces/fields";
 
-export interface IFieldsTablePageProps {
-    searchString: string
-    setSearchString: React.Dispatch<React.SetStateAction<string>>
-    searchParams: URLSearchParams
-}
+
 
 const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
-    const { searchString, setSearchString, searchParams } = props
+    const { searchString, searchParams } = props
     const router = useRouter();
 
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
@@ -82,8 +79,6 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
             const response = await getAllFieldsAPI(queryParams);
             if (response?.status === 200 || response?.status === 201) {
-                console.log("fields table data",response.data);
-                
                 return response.data;
             }
             throw new Error("Failed to fetch fields");
@@ -124,15 +119,17 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
     })) || [];
 
     return (
-        <TanStackTable
-            columns={allFieldsColumns}
-            data={data}
-            paginationDetails={allFieldsData?.data?.pagination_info || {}}
-            loading={isLoading}
-            heightClass="h-[400px]"
-            removeSortingForColumnIds={[]}
-            getData={getData}
-        />
+        <div className="">
+            <TanStackTable
+                columns={allFieldsColumns}
+                data={data}
+                paginationDetails={allFieldsData?.data?.pagination_info || {}}
+                loading={isLoading}
+                heightClass="h-[400px]"
+                removeSortingForColumnIds={[]}
+                getData={getData}
+            />
+        </div>
     );
 };
 

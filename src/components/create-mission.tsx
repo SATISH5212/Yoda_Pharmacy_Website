@@ -54,7 +54,6 @@ export function CreateMission() {
         mutationKey: ['create-mission'],
         retry: false,
         mutationFn: async (data: missionFormValues) => {
-            console.log(data, "daaaa")
             const payload = {
                 mission_name: data.mission_name,
                 mission_type: data.mission_type ?? "",
@@ -68,7 +67,7 @@ export function CreateMission() {
 
         },
 
-        onSuccess : () =>{
+        onSuccess: () => {
             toast.success('Mission created successfully');
             // navigate({
             //     to: `/fields`,
@@ -76,11 +75,9 @@ export function CreateMission() {
         },
 
         onError: (error: any) => {
-            console.log('Create mission error', error);
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
-                console.log('Validation error', validation);
             } else if (
                 error?.status === 409 ||
                 error?.status === 401 ||
