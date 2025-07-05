@@ -82,6 +82,8 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
             const response = await getAllFieldsAPI(queryParams);
             if (response?.status === 200 || response?.status === 201) {
+                console.log("fields table data",response.data);
+                
                 return response.data;
             }
             throw new Error("Failed to fetch fields");

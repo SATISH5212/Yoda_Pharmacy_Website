@@ -34,7 +34,7 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                                 }
                             })}
                             className={`mt-1 bg-gray-50 border rounded-md w-full p-2 text-xs focus:outline-none focus:ring-2 transition-colors duration-200 ${errors.field_name
-                                ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                ? 'border-red-300  focus:border-red-500 focus:ring-red-500'
                                 : 'border-gray-200 focus:ring-green-500 focus:border-transparent'
                                 }`}
                             placeholder="Enter field name"

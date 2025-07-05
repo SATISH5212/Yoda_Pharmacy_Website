@@ -35,3 +35,13 @@ export interface SignUpPayload {
     email: string;
     password: string;
 }
+
+
+export interface missionFormValues {
+    mission_name: string;     
+    robot_id: number;
+    field_id: number;   
+    mission_type?: string;
+    buffer_zone_width: string;
+    row_spacing: string;
+}
