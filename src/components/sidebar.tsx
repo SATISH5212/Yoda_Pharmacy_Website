@@ -12,7 +12,7 @@ export function Sidebar() {
             <Link to="/fields" className="[&.active]:bg-[#0ed78d] mb-8 hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
                 <Sprout size={20} strokeWidth={2} />
             </Link>
-            <Link to="/robots" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
+            <Link to="/all-robots" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
                 <Bot size={20} strokeWidth={2} />
             </Link>
             <Link to="/teleop" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">

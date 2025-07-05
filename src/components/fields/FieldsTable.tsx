@@ -126,7 +126,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
                 paginationDetails={allFieldsData?.data?.pagination_info || {}}
                 loading={isLoading}
                 heightClass="h-[400px]"
-                removeSortingForColumnIds={[]}
+                removeSortingForColumnIds={["id", "field_area", "missions", "action"]}
                 getData={getData}
             />
         </div>

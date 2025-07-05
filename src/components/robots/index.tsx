@@ -66,7 +66,7 @@ const AllRobotsPage = () => {
             };
 
             router.navigate({
-                to: "/robots",
+                to: "/all-robots",
                 search: routerParams,
                 replace: true,
             });
