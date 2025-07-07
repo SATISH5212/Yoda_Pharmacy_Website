@@ -50,7 +50,6 @@ export function Register() {
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
-                console.log("validation error", validation);
 
             } else if (
                 error?.status === 409 ||

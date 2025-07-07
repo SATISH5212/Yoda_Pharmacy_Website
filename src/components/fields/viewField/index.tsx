@@ -117,7 +117,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         const lng = homeLon + dLon;
         return { lat, lng };
     }, []);
-    console.log("covertXYToLatLng", covertXYToLatLng)
+
     const pathForFeildAccessPoint = useMemo(() => {
         const coordinates: Coordinates[] = [];
         const robotHome = samplePath.mission?.RobotHome;

@@ -25,7 +25,6 @@ const TanStackTable: FC<pageProps> = ({
     heightClass,
     noDataLabel,
 }) => {
-    console.log(paginationDetails, "paginationDetails001");
     const [sorting, setSorting] = useState<SortingState>([]);
     const location = useLocation();
     const searchParams = new URLSearchParams(location?.search);

@@ -4,18 +4,23 @@ import { useQuery } from "@tanstack/react-query";
 import TanStackTable from "../core/TanstackTable";
 import { allFieldsColumns } from "./AllFieldsColumns";
 import { iFieldQueryParams } from "@/lib/interfaces/maps";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { useRouter } from "@tanstack/react-router";
 
-const FieldsTable = () => {
+export interface IFieldsTablePageProps {
+    searchString: string
+    setSearchString: React.Dispatch<React.SetStateAction<string>>
+    searchParams: URLSearchParams
+}
+
+const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
+    const { searchString, setSearchString, searchParams } = props
     const router = useRouter();
-    const searchParams = new URLSearchParams(location.search);
-    const [searchString, setSearchString] = useState<string>(
-        searchParams.get("search_string") || ""
-    );
+
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
         searchParams.get("search_string") || ""
     );
+
     const [pagination, setPagination] = useState<{
         page: number | string;
         page_size: number | string;
@@ -28,6 +33,13 @@ const FieldsTable = () => {
         order_type: searchParams.get("order_type") || null,
     });
     useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebounceSearchString(searchString);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchString]);
+    useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
             page: Number(currentSearchParams.get("page")) || 1,
@@ -36,6 +48,12 @@ const FieldsTable = () => {
             order_type: currentSearchParams.get("order_type") || null,
         });
     }, [location.search]);
+    useEffect(() => {
+        const urlSearchString = searchParams.get("search_string") || "";
+        if (urlSearchString !== debounceSearchString) {
+            setDebounceSearchString(urlSearchString);
+        }
+    }, [searchParams]);
 
     const {
         data: allFieldsData,
@@ -51,26 +69,30 @@ const FieldsTable = () => {
                 order_type: pagination.order_type || undefined,
                 search_string: debounceSearchString || undefined,
             };
-            const routerParams = {
-                ...queryParams,
-            };
+            const cleanParams = Object.fromEntries(
+                Object.entries(queryParams).filter(([_, value]) =>
+                    value !== undefined && value !== null && value !== ''
+                )
+            );
             router.navigate({
                 to: "/fields",
-                search: routerParams,
+                search: cleanParams,
                 replace: true,
             });
-            const response = await getAllFieldsAPI(routerParams);
+
+            const response = await getAllFieldsAPI(queryParams);
             if (response?.status === 200 || response?.status === 201) {
                 console.log("fields table data",response.data);
                 
                 return response.data;
             }
-            throw new Error("Failed to fetch gateways");
+            throw new Error("Failed to fetch fields");
         },
         refetchOnWindowFocus: false,
         staleTime: 0,
         enabled: true,
     });
+
     const getData = (params: any) => {
         setPagination({
             page: params.page || 1,
@@ -78,15 +100,19 @@ const FieldsTable = () => {
             order_by: params.order_by || null,
             order_type: params.order_type || null,
         });
-        const newSearchParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
-            if (value !== undefined && value !== null && value !== '') {
-                newSearchParams.set(key, String(value));
-            }
-        });
+
+        const allParams = {
+            ...params,
+            ...(debounceSearchString && { search_string: debounceSearchString })
+        };
+        const cleanParams = Object.fromEntries(
+            Object.entries(allParams).filter(([_, value]) =>
+                value !== undefined && value !== null && value !== ''
+            )
+        );
         router.navigate({
             to: "/fields",
-            search: Object.fromEntries(newSearchParams.entries()),
+            search: cleanParams,
             replace: true,
         });
     };

@@ -57,7 +57,6 @@ const Pagination = ({
     };
 
     const handleRowChange = (newLimit: string) => {
-        console.log("newLimit", newLimit);
         captureRowPerItems(Number(newLimit));
     };
 
@@ -109,8 +108,6 @@ const Pagination = ({
 
         return pageNumbers;
     };
-
-    console.log("paginationDetails", paginationDetails);
     return (
         <ShadCNPagination className="flex justify-between px-2 py-1 shadow-inner items-center">
             <PaginationContent
