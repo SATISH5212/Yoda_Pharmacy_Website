@@ -49,11 +49,6 @@ const usePolygonCalculations = () => {
         try {
             const response = await fetch(
                 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
-                {
-                    headers: {
-                        'User-Agent': 'YourAppName/1.0 (your-email@example.com)'
-                    }
-                }
             );
 
             if (!response.ok) {
@@ -86,6 +81,7 @@ const usePolygonCalculations = () => {
                 const [lngC, latC] = centroid.geometry.coordinates;
 
                 const location = await reverseGeocodeGoogle(latC, lngC);
+                console.log("location001", location);
                 const result = {
                     location,
                     area: areaInAcres.toFixed(2),

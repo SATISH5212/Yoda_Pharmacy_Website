@@ -37,7 +37,10 @@ export const allFieldsColumns = [
     {
         header: "Status",
         accessorKey: "field_status",
-        cell: (value: any) => value.getValue() === "pending" ? "Active" : value.getValue(),
+        cell: (value: any) => {
+            console.log(value.row.original.field_status, "vall");
+            value.getValue() == "pending" ? "Pending" : "Completed"
+        },
         width: "100px",
     },
     {

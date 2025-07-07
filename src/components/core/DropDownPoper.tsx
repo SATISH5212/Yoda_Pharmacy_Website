@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { Check, ChevronsUpDown, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "../ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 
 
-interface RobotSelectProps {
+interface IDropDownPoperProps {
     data: any[];
     onSelect?: (robot: any | null) => void;
     type: string
     isLoading: boolean
 }
 
-const RobotSelect: React.FC<RobotSelectProps> = (props) => {
+const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
     const { data, onSelect, type, isLoading } = props;
     const [open, setOpen] = useState(false);
     const [selectedField, setSelectedField] = useState<any | null>(null);
@@ -105,4 +105,4 @@ const RobotSelect: React.FC<RobotSelectProps> = (props) => {
     );
 };
 
-export default RobotSelect;
+export default DropDownPoper;
