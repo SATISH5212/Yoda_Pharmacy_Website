@@ -110,7 +110,7 @@ const MapFormPage = () => {
     const handleCancel = useCallback(() => {
         handleReset();
         navigate({
-            to: "/fields",
+            to: "/all-fields",
         });
 
     }, [handleReset]);

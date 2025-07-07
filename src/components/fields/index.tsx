@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import FieldsTable from "./FieldsTable";
 import { useState } from "react";
+import { Search } from "lucide-react";
 
 const FieldsPage = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const FieldsPage = () => {
                     <span
                         className="h-70% w-10 text-center text-gray-500 pointer-events-none flex items-center justify-center"
                     >
-                        🔍
+                        <Search size={14}/>
                     </span>
                     <input
                         type="text"

@@ -142,7 +142,7 @@ const AllRobotsPage = () => {
                 </div>
                 <div className="flex items-center">
                     <button
-                        className=" bg-green-600 border border rounded text-sm px-2 py-1 text-white"
+                        className=" bg-green-600 border rounded text-sm px-2 py-1 text-white"
                         onClick={() =>
                             navigate({
                                 to: "/add-robot",

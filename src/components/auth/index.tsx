@@ -45,7 +45,7 @@ export function LoginPage() {
             localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
             localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/fields`,
+                to: `/all-fields`,
             });
         },
 

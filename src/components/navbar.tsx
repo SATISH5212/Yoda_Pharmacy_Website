@@ -38,7 +38,7 @@ export const Navbar = () => {
 
     return (
         <div style={{ padding: "8px" }} className="border-b-1 flex justify-between items-center">
-            <Link to="/fields" className="text-sm font-bold">Robot Fields</Link>
+            <Link to="/all-fields" className="text-sm font-bold">Robot Fields</Link>
 
             <div className="flex gap-4 items-center">
                 {/* Search Icon */}
