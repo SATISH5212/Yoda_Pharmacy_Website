@@ -41,7 +41,7 @@ export function Register() {
             // Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
             // localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/fields`,
+                to: `/all-fields`,
             });
         },
 

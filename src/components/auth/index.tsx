@@ -28,7 +28,6 @@ export function LoginPage() {
             password: "",
         },
     });
-
     const { mutateAsync: mutateLogin, isPending: isPendingLogin } = useMutation({
         mutationKey: ["login-user"],
         retry: false,
@@ -45,7 +44,7 @@ export function LoginPage() {
             localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
             localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/fields`,
+                to: `/all-fields`,
             });
         },
 
