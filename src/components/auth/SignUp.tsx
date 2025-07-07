@@ -41,12 +41,11 @@ export function Register() {
             // Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
             // localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/fields`,
+                to: `/all-fields`,
             });
         },
 
         onError: (error: any) => {
-            console.log("SignUp error", error);
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || error?.data?.message;
                 setValidations(errorMessages);
@@ -127,8 +126,8 @@ export function Register() {
                                         })}
                                     />
                                 </div>
-                                   
- 
+
+
                                 <div className="flex items-center w-full rounded-md border border-e9e9e9 pl-2 bg-FAFAFA">
                                     {/* <User size={16} /> */}
                                     <input

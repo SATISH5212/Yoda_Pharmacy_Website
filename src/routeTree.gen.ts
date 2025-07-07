@@ -17,8 +17,9 @@ import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as AddFieldIndexRouteImport } from './routes/add-field/index'
 import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutAllRobotsRouteImport } from './routes/_layout/all-robots'
+import { Route as LayoutAllFieldsRouteImport } from './routes/_layout/all-fields'
 import { Route as LayoutRobotsRouteImport } from './routes/_layout/_robots'
-import { Route as LayoutFieldsIndexRouteImport } from './routes/_layout/fields/index'
 import { Route as LayoutAddRobotIndexRouteImport } from './routes/_layout/add-robot/index'
 import { Route as LayoutFieldsField_idIndexRouteImport } from './routes/_layout/fields/$field_id/index'
 import { Route as LayoutRobotsRobotsIndexRouteImport } from './routes/_layout/_robots/robots/index'
@@ -26,7 +27,6 @@ import { Route as LayoutFieldsField_idViewFieldIndexRouteImport } from './routes
 import { Route as LayoutRobotsRobotsRobot_idMissionsRouteImport } from './routes/_layout/_robots/robots/$robot_id/_missions'
 import { Route as LayoutRobotsRobotsRobot_idMissionsMissionsIndexRouteImport } from './routes/_layout/_robots/robots/$robot_id/_missions/missions/index'
 import { Route as LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRouteImport } from './routes/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/index'
-import { Route as LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRouteImport } from './routes/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/index'
 
 const LayoutRobotsRobotsRobot_idRouteImport = createFileRoute(
   '/_layout/_robots/robots/$robot_id',
@@ -61,13 +61,18 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutRobotsRoute = LayoutRobotsRouteImport.update({
-  id: '/_robots',
+const LayoutAllRobotsRoute = LayoutAllRobotsRouteImport.update({
+  id: '/all-robots',
+  path: '/all-robots',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutFieldsIndexRoute = LayoutFieldsIndexRouteImport.update({
-  id: '/fields/',
-  path: '/fields/',
+const LayoutAllFieldsRoute = LayoutAllFieldsRouteImport.update({
+  id: '/all-fields',
+  path: '/all-fields',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutRobotsRoute = LayoutRobotsRouteImport.update({
+  id: '/_robots',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutAddRobotIndexRoute = LayoutAddRobotIndexRouteImport.update({
@@ -115,58 +120,51 @@ const LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute =
     path: '/missions/$mission_id/',
     getParentRoute: () => LayoutRobotsRobotsRobot_idMissionsRoute,
   } as any)
-const LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute =
-  LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRouteImport.update(
-    {
-      id: '/missions/$mission_id/robotInfo/',
-      path: '/missions/$mission_id/robotInfo/',
-      getParentRoute: () => LayoutRobotsRobotsRobot_idMissionsRoute,
-    } as any,
-  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/all-fields': typeof LayoutAllFieldsRoute
+  '/all-robots': typeof LayoutAllRobotsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
   '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/add-robot': typeof LayoutAddRobotIndexRoute
-  '/fields': typeof LayoutFieldsIndexRoute
   '/robots': typeof LayoutRobotsRobotsIndexRoute
   '/fields/$field_id': typeof LayoutFieldsField_idIndexRoute
   '/robots/$robot_id': typeof LayoutRobotsRobotsRobot_idMissionsRouteWithChildren
   '/fields/$field_id/viewField': typeof LayoutFieldsField_idViewFieldIndexRoute
   '/robots/$robot_id/missions': typeof LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute
   '/robots/$robot_id/missions/$mission_id': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute
-  '/robots/$robot_id/missions/$mission_id/robotInfo': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/all-fields': typeof LayoutAllFieldsRoute
+  '/all-robots': typeof LayoutAllRobotsRoute
   '/settings': typeof LayoutSettingsRoute
   '/teleop': typeof LayoutTeleopRoute
   '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/add-robot': typeof LayoutAddRobotIndexRoute
-  '/fields': typeof LayoutFieldsIndexRoute
   '/robots': typeof LayoutRobotsRobotsIndexRoute
   '/fields/$field_id': typeof LayoutFieldsField_idIndexRoute
   '/robots/$robot_id': typeof LayoutRobotsRobotsRobot_idMissionsRouteWithChildren
   '/fields/$field_id/viewField': typeof LayoutFieldsField_idViewFieldIndexRoute
   '/robots/$robot_id/missions': typeof LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute
   '/robots/$robot_id/missions/$mission_id': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute
-  '/robots/$robot_id/missions/$mission_id/robotInfo': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/_robots': typeof LayoutRobotsRouteWithChildren
+  '/_layout/all-fields': typeof LayoutAllFieldsRoute
+  '/_layout/all-robots': typeof LayoutAllRobotsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/teleop': typeof LayoutTeleopRoute
   '/add-field/': typeof AddFieldIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/_layout/add-robot/': typeof LayoutAddRobotIndexRoute
-  '/_layout/fields/': typeof LayoutFieldsIndexRoute
   '/_layout/_robots/robots/': typeof LayoutRobotsRobotsIndexRoute
   '/_layout/fields/$field_id/': typeof LayoutFieldsField_idIndexRoute
   '/_layout/_robots/robots/$robot_id': typeof LayoutRobotsRobotsRobot_idRouteWithChildren
@@ -174,52 +172,52 @@ export interface FileRoutesById {
   '/_layout/fields/$field_id/viewField/': typeof LayoutFieldsField_idViewFieldIndexRoute
   '/_layout/_robots/robots/$robot_id/_missions/missions/': typeof LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute
   '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute
-  '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/': typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/all-fields'
+    | '/all-robots'
     | '/settings'
     | '/teleop'
     | '/add-field'
     | '/sign-up'
     | '/add-robot'
-    | '/fields'
     | '/robots'
     | '/fields/$field_id'
     | '/robots/$robot_id'
     | '/fields/$field_id/viewField'
     | '/robots/$robot_id/missions'
     | '/robots/$robot_id/missions/$mission_id'
-    | '/robots/$robot_id/missions/$mission_id/robotInfo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/all-fields'
+    | '/all-robots'
     | '/settings'
     | '/teleop'
     | '/add-field'
     | '/sign-up'
     | '/add-robot'
-    | '/fields'
     | '/robots'
     | '/fields/$field_id'
     | '/robots/$robot_id'
     | '/fields/$field_id/viewField'
     | '/robots/$robot_id/missions'
     | '/robots/$robot_id/missions/$mission_id'
-    | '/robots/$robot_id/missions/$mission_id/robotInfo'
   id:
     | '__root__'
     | '/'
     | '/_layout'
     | '/_layout/_robots'
+    | '/_layout/all-fields'
+    | '/_layout/all-robots'
     | '/_layout/settings'
     | '/_layout/teleop'
     | '/add-field/'
     | '/sign-up/'
     | '/_layout/add-robot/'
-    | '/_layout/fields/'
     | '/_layout/_robots/robots/'
     | '/_layout/fields/$field_id/'
     | '/_layout/_robots/robots/$robot_id'
@@ -227,7 +225,6 @@ export interface FileRouteTypes {
     | '/_layout/fields/$field_id/viewField/'
     | '/_layout/_robots/robots/$robot_id/_missions/missions/'
     | '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/'
-    | '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -281,18 +278,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/all-robots': {
+      id: '/_layout/all-robots'
+      path: '/all-robots'
+      fullPath: '/all-robots'
+      preLoaderRoute: typeof LayoutAllRobotsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/all-fields': {
+      id: '/_layout/all-fields'
+      path: '/all-fields'
+      fullPath: '/all-fields'
+      preLoaderRoute: typeof LayoutAllFieldsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/_robots': {
       id: '/_layout/_robots'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LayoutRobotsRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/fields/': {
-      id: '/_layout/fields/'
-      path: '/fields'
-      fullPath: '/fields'
-      preLoaderRoute: typeof LayoutFieldsIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/add-robot/': {
@@ -351,20 +355,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRouteImport
       parentRoute: typeof LayoutRobotsRobotsRobot_idMissionsRoute
     }
-    '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/': {
-      id: '/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/robotInfo/'
-      path: '/missions/$mission_id/robotInfo'
-      fullPath: '/robots/$robot_id/missions/$mission_id/robotInfo'
-      preLoaderRoute: typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRouteImport
-      parentRoute: typeof LayoutRobotsRobotsRobot_idMissionsRoute
-    }
   }
 }
 
 interface LayoutRobotsRobotsRobot_idMissionsRouteChildren {
   LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute: typeof LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute
   LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute: typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute
-  LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute: typeof LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute
 }
 
 const LayoutRobotsRobotsRobot_idMissionsRouteChildren: LayoutRobotsRobotsRobot_idMissionsRouteChildren =
@@ -373,8 +369,6 @@ const LayoutRobotsRobotsRobot_idMissionsRouteChildren: LayoutRobotsRobotsRobot_i
       LayoutRobotsRobotsRobot_idMissionsMissionsIndexRoute,
     LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute:
       LayoutRobotsRobotsRobot_idMissionsMissionsMission_idIndexRoute,
-    LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute:
-      LayoutRobotsRobotsRobot_idMissionsMissionsMission_idRobotInfoIndexRoute,
   }
 
 const LayoutRobotsRobotsRobot_idMissionsRouteWithChildren =
@@ -413,20 +407,22 @@ const LayoutRobotsRouteWithChildren = LayoutRobotsRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutRobotsRoute: typeof LayoutRobotsRouteWithChildren
+  LayoutAllFieldsRoute: typeof LayoutAllFieldsRoute
+  LayoutAllRobotsRoute: typeof LayoutAllRobotsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTeleopRoute: typeof LayoutTeleopRoute
   LayoutAddRobotIndexRoute: typeof LayoutAddRobotIndexRoute
-  LayoutFieldsIndexRoute: typeof LayoutFieldsIndexRoute
   LayoutFieldsField_idIndexRoute: typeof LayoutFieldsField_idIndexRoute
   LayoutFieldsField_idViewFieldIndexRoute: typeof LayoutFieldsField_idViewFieldIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutRobotsRoute: LayoutRobotsRouteWithChildren,
+  LayoutAllFieldsRoute: LayoutAllFieldsRoute,
+  LayoutAllRobotsRoute: LayoutAllRobotsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTeleopRoute: LayoutTeleopRoute,
   LayoutAddRobotIndexRoute: LayoutAddRobotIndexRoute,
-  LayoutFieldsIndexRoute: LayoutFieldsIndexRoute,
   LayoutFieldsField_idIndexRoute: LayoutFieldsField_idIndexRoute,
   LayoutFieldsField_idViewFieldIndexRoute:
     LayoutFieldsField_idViewFieldIndexRoute,
