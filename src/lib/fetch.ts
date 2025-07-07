@@ -49,7 +49,7 @@ class FetchService {
             return null;
         }
         try {
-            const response = await fetch(import.meta.env.VITE_PUBLIC_API_URL + "/auth/refresh", {
+            const response = await fetch(import.meta.env.VITE_PUBLIC_API_URL + "/refresh-token", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ refreshToken }),

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { ChevronDown, Plus } from "lucide-react";
-import ContactTypesPopover from "@/components/addRobotpoper";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRobotsAPI } from "@/lib/services/robots";
 import { getAllFieldsAPI } from "@/lib/services/fields";
+import DropDownPoper from "@/components/core/DropDownPoper";
 
 const AddMissionForm: FC = () => {
     const [robotsDropdown, setRobotsDropdown] = useState([])
@@ -51,17 +51,17 @@ const AddMissionForm: FC = () => {
     });
 
     return (
-        <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] space-y-4">
+        <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4 ">
             <h2 className="text-lg font-semibold">Register Fields</h2>
             <div className="flex justify-between items-center">
-                <ContactTypesPopover data={fieldsDropdown} type="fields" isLoading={isLoadingFields} />
+                <DropDownPoper data={fieldsDropdown} type="fields" isLoading={isLoadingFields} />
                 <button className="ml-2 text-green-600 text-sm flex items-center">
                     <Plus size={16} className="mr-1" /> Add New
                 </button>
             </div>
 
             <div className="flex justify-between items-center">
-                <ContactTypesPopover data={robotsDropdown} type="robots" isLoading={isLoadingRobots} />
+                <DropDownPoper data={robotsDropdown} type="robots" isLoading={isLoadingRobots} />
                 <button className="ml-2 text-green-600 text-sm flex items-center">
                     <Plus size={16} className="mr-1" /> Add New
                 </button>
@@ -81,11 +81,11 @@ const AddMissionForm: FC = () => {
                 </div>
             </div>
 
-            {/* Select Implement */}
+            <span className="text-md font-semibold text-gray-600">Select Implement</span>
             <input
                 className="w-full border rounded px-3 py-2 text-sm"
-                placeholder="Placeholder"
-                disabled
+                placeholder="select Implement"
+
             />
 
             {/* Select Operation & Pattern */}
@@ -93,46 +93,43 @@ const AddMissionForm: FC = () => {
                 <div className="relative w-1/2">
                     <input
                         className="w-full border rounded px-3 py-2 text-sm"
-                        placeholder="Placeholder"
-                        disabled
+
+
                     />
                     <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
                 </div>
                 <div className="relative w-1/2">
                     <input
                         className="w-full border rounded px-3 py-2 text-sm"
-                        placeholder="Placeholder"
-                        disabled
+
+
                     />
                     <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
                 </div>
             </div>
 
-            {/* SWAT Width & Crop Row Width */}
+
             <div className="flex gap-2">
                 <div className="relative w-1/2">
                     <input
                         className="w-full border rounded px-3 py-2 text-sm"
-                        placeholder="Placeholder"
-                        disabled
+
+
                     />
                     <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
                 </div>
                 <div className="relative w-1/2">
                     <input
                         className="w-full border rounded px-3 py-2 text-sm"
-                        placeholder="Placeholder"
+
                         disabled
                     />
                 </div>
             </div>
 
-            {/* Fetch Button */}
             <button className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full">
                 Fetch Estimations
             </button>
-
-            {/* Estimations Section */}
             <div className="bg-gray-100 rounded p-4">
                 <h3 className="text-sm font-semibold mb-2">Estimated</h3>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -143,7 +140,6 @@ const AddMissionForm: FC = () => {
                     <div className="bg-white rounded p-2 col-span-2">⛽ Fuel</div>
                 </div>
 
-                {/* Operating Params */}
                 <div className="mt-3 text-xs text-blue-600 font-medium">
                     Operating Parameters<br />
                     6.2 L/acres, 3.5 m, 5.0 m/s
