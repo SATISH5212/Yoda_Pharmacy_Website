@@ -7,7 +7,7 @@ const getIsAuthenticated = () => {
 
 const authRoutes = [
     "/",
-    //   "/signup",
+    "/sign-up",
     //   "/signin",
     //   "/verify",
     //   "/forgot-password",

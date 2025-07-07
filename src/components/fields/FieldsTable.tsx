@@ -119,7 +119,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
     })) || [];
 
     return (
-        <div className="">
+        <div className="h-calc(100vh-50px)">
             <TanStackTable
                 columns={allFieldsColumns}
                 data={data}

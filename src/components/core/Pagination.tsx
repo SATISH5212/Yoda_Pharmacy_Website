@@ -124,7 +124,7 @@ const Pagination = ({
                     <SelectTrigger className="w-24 py-0 h-[30px] text-zinc-800">
                         <SelectValue
                             placeholder={`Items per page`}
-                            className="font-normal text-sm  "
+                            className="font-normal text-sm"
                         />
                     </SelectTrigger>
                     <SelectContent className="w-[120px] bg-white pointer">

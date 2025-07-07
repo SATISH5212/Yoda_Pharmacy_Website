@@ -43,6 +43,7 @@ export interface IFieldFormPageProps {
     robot_home: Coordinates | null;
     isSubmittable: boolean | string;
     handleCancel: () => void;
+    setAddMissionForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 

@@ -28,7 +28,6 @@ export function LoginPage() {
             password: "",
         },
     });
-
     const { mutateAsync: mutateLogin, isPending: isPendingLogin } = useMutation({
         mutationKey: ["login-user"],
         retry: false,

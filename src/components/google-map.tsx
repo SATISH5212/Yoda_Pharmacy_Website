@@ -17,8 +17,10 @@ const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
 };
-const DEFAULT_CENTER = { lat: 17.385, lng: 78.4867 };
-const DEFAULT_ZOOM = 5;
+
+const DEFAULT_CENTER = { lat: 15.159614, lng: 79.85210 };
+
+const DEFAULT_ZOOM = 16;
 const ACRES_CONVERSION_FACTOR = 4046.86;
 
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
@@ -244,9 +246,9 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 setRobotPoint(point);
                 setRobotHome(point);
                 setMode("idle");
-            } 
+            }
         },
-        [mode, setFieldAccessPoint, setMode ,setRobotHome]
+        [mode, setFieldAccessPoint, setMode, setRobotHome]
     );
 
     const handleDelete = useCallback(() => {
@@ -267,7 +269,7 @@ const DrawTools: React.FC<DrawToolsProps> = ({
             drawnShapeRef.current.setMap(null);
             drawnShapeRef.current = null;
         }
-    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo,setRobotHome]);
+    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo, setRobotHome]);
 
     const handleGoogleMapsLoad = useCallback(() => {
         setGoogleInstance(window.google);
@@ -318,13 +320,13 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                             label={{ text: "Field Access Point", color: "white", fontSize: "10px" }}
                         />
                     )}
-                     {robotPoint && (
+                    {robotPoint && (
                         <Marker
                             position={robotPoint}
                             label={{ text: "Robot Point", color: "white", fontSize: "10px" }}
                         />
                     )}
-                    
+
                     {searchMarker && (
                         <Marker
                             position={searchMarker}

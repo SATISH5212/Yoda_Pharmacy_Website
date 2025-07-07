@@ -8,6 +8,7 @@ import { addFieldBoundaryAPI } from "@/lib/services/fields";
 import { useNavigate } from "@tanstack/react-router";
 import { FormData } from "@/lib/interfaces/maps";
 import FieldFormPage from "./MapForm";
+import AddMissionForm from "../addMission";
 const TOAST_CONFIG = {
     position: "top-right" as const,
     autoClose: 2000,
@@ -25,6 +26,7 @@ const MapFormPage = () => {
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
     const [robot_home, setRobotHome] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
+    const [showAddMissionForm, setShowAddMissionForm] = useState<boolean>(false);
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const {
         register,
@@ -56,8 +58,9 @@ const MapFormPage = () => {
         },
         onSuccess: () => {
             toast.success("Field registered successfully!");
-            handleReset();
+            // handleReset();
             // setField(false);
+            setShowAddMissionForm(true);
         },
         onError: (error: any) => {
             const errorMessage = error?.response?.data?.message || error?.message || "Failed to register field";
@@ -140,8 +143,12 @@ const MapFormPage = () => {
                     setLocationInfo={setLocationInfo}
                 />
             </div>
-            <FieldFormPage
-                handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} />
+            {/* {!showAddMissionForm ? ( */}
+            <AddMissionForm />
+            {/* ) : ( */}
+
+            {/* <FieldFormPage handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} setAddMissionForm={setShowAddMissionForm} /> */}
+            {/* )} */}
         </div>
     );
 }
