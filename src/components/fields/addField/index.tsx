@@ -143,12 +143,12 @@ const MapFormPage = () => {
                     setLocationInfo={setLocationInfo}
                 />
             </div>
-            {showAddMissionForm ? (
-                <AddMissionForm />
-            ) : (
+            {/* {!showAddMissionForm ? ( */}
+            <AddMissionForm />
+            {/* ) : ( */}
 
-                <FieldFormPage handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} setAddMissionForm={setShowAddMissionForm} />
-            )}
+            {/* <FieldFormPage handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} setAddMissionForm={setShowAddMissionForm} /> */}
+            {/* )} */}
         </div>
     );
 }

@@ -1,7 +1,7 @@
 
 import { $fetch } from "../fetch";
 import { iFieldQueryParams } from "../interfaces/maps";
-export const getAllFieldsAPI = async (queryParams: iFieldQueryParams) => {
+export const getAllFieldsAPI = async (queryParams?: iFieldQueryParams) => {
     try {
         const response = await $fetch.get("/fieldmappings", queryParams);
         return response;

@@ -45,7 +45,7 @@ const AllRobotsPage = () => {
         isLoading
     } = useQuery({
         queryKey: [
-            "all-fieldsData",
+            "all-robotsData",
             pagination.page,
             pagination.page_size,
             pagination.order_by,

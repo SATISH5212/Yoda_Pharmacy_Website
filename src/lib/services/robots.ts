@@ -11,7 +11,7 @@ export const addRobotDataAPI = async (payload: any) => {
 };
 
 
-export const getAllRobotsAPI = async (queryParams: iFieldQueryParams) => {
+export const getAllRobotsAPI = async (queryParams?: iFieldQueryParams) => {
     try {
         const response = await $fetch.get("/robots", queryParams);
         return response;

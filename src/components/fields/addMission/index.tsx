@@ -1,40 +1,75 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ChevronDown, Plus } from "lucide-react";
+import ContactTypesPopover from "@/components/addRobotpoper";
+import { useQuery } from "@tanstack/react-query";
+import { getAllRobotsAPI } from "@/lib/services/robots";
+import { getAllFieldsAPI } from "@/lib/services/fields";
 
 const AddMissionForm: FC = () => {
+    const [robotsDropdown, setRobotsDropdown] = useState([])
+    const [fieldsDropdown, setFieldsDropdown] = useState([])
+    const {
+        data: allRobotsData,
+        refetch,
+        isLoading: isLoadingRobots
+    } = useQuery({
+        queryKey: [
+            "all-robotsData",
+        ],
+        queryFn: async () => {
+
+            const response = await getAllRobotsAPI();
+            if (response?.status === 200 || response?.status === 201) {
+                setRobotsDropdown(response.data.data.records)
+                return response.data;
+            }
+            throw new Error("Failed to fetch robots");
+        },
+        refetchOnWindowFocus: false,
+        staleTime: 0,
+        enabled: true,
+    });
+    const {
+        data: allFieldsData,
+        isLoading: isLoadingFields,
+    } = useQuery({
+        queryKey: [
+            "all-fieldsData",
+        ],
+        queryFn: async () => {
+
+            const response = await getAllFieldsAPI();
+            if (response?.status === 200 || response?.status === 201) {
+                setFieldsDropdown(response.data.data.records)
+                return response.data;
+            }
+            throw new Error("Failed to fetch robots");
+        },
+        refetchOnWindowFocus: false,
+        staleTime: 0,
+        enabled: true,
+    });
+
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] space-y-4">
             <h2 className="text-lg font-semibold">Register Fields</h2>
-
-            {/* Select Field */}
             <div className="flex justify-between items-center">
-                <input
-                    className="w-full border rounded px-3 py-2 text-sm"
-                    placeholder="Placeholder"
-                />
+                <ContactTypesPopover data={fieldsDropdown} type="fields" isLoading={isLoadingFields} />
                 <button className="ml-2 text-green-600 text-sm flex items-center">
                     <Plus size={16} className="mr-1" /> Add New
                 </button>
             </div>
 
-            {/* Select Robot */}
             <div className="flex justify-between items-center">
-                <input
-                    className="w-full border rounded px-3 py-2 text-sm"
-                    placeholder="Placeholder"
-                    disabled
-                />
+                <ContactTypesPopover data={robotsDropdown} type="robots" isLoading={isLoadingRobots} />
                 <button className="ml-2 text-green-600 text-sm flex items-center">
                     <Plus size={16} className="mr-1" /> Add New
                 </button>
             </div>
-
-            {/* Robot Details */}
             <div className="border rounded p-3 space-y-2 bg-gray-50">
                 <div className="flex justify-between items-center">
                     <span className="font-medium text-sm">XAG’s P100 Pro</span>
                     <button className="text-gray-600">
-                        {/* Icon for drone/video */}
                         📹
                     </button>
                 </div>
