@@ -20,7 +20,7 @@ const TOAST_CONFIG = {
     },
 };
 
-const MapFormPage = () => {
+const addFieldPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
@@ -151,4 +151,4 @@ const MapFormPage = () => {
     );
 }
 
-export default MapFormPage;
+export default addFieldPage;

@@ -11,7 +11,7 @@ import { IFieldsTablePageProps } from "@/lib/interfaces/fields";
 
 
 const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
-    const { searchString, searchParams } = props
+    const { searchString, searchParams, status } = props
     const router = useRouter();
 
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
@@ -30,12 +30,14 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         order_type: searchParams.get("order_type") || null,
     });
     useEffect(() => {
+        if (status) {
+            return setDebounceSearchString(status)
+        }
         const timer = setTimeout(() => {
             setDebounceSearchString(searchString);
         }, 500);
-
         return () => clearTimeout(timer);
-    }, [searchString]);
+    }, [searchString, status]);
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
