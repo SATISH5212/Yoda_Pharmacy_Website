@@ -10,8 +10,8 @@ const FieldsPage = () => {
     );
 
     return (
-        <div className='ml-1 overflow-y-hidden h-[100vh] px-4'>
-            <div className="flex items-center justify-end bg-gray-100 rounded  h-9 w-full space-x-2 mb-2">
+        <div className='ml-1 overflow-hidden h-[92vh] px-4'>
+            <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
                 <select className="border border-gray-300 text-xs font-small tracking-tight rounded  h-6 w-35 items-center focus:outline-none ">
                     <option >Active </option>
                     <option> Pending</option>
@@ -51,8 +51,11 @@ const FieldsPage = () => {
                 </div>
 
             </div>
+            <div>
 
-            <FieldsTable searchString={searchString} searchParams={searchParams} />
+                <FieldsTable searchString={searchString} searchParams={searchParams} />
+            </div>
+
         </div>
 
 

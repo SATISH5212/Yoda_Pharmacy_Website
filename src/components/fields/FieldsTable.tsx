@@ -114,18 +114,15 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
     const data = allFieldsData?.data?.records?.map((field: FieldResponse) => ({
         ...field,
-        field_area: field.field_area || "2.4",
-        field_status: field.field_status === "pending" ? "Active" : field.field_status,
     })) || [];
 
     return (
-        <div className="h-calc(100vh-50px)">
+        <div >
             <TanStackTable
                 columns={allFieldsColumns}
                 data={data}
                 paginationDetails={allFieldsData?.data?.pagination_info || {}}
                 loading={isLoading}
-                heightClass="h-[400px]"
                 removeSortingForColumnIds={["id", "field_area", "missions", "action"]}
                 getData={getData}
             />
