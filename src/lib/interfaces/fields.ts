@@ -3,3 +3,7 @@ export interface IFieldsTablePageProps {
     searchParams: URLSearchParams
     status: string
 }
+export type Coordinates = {
+    lat: number,
+    lng: number
+}

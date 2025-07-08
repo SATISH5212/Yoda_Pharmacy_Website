@@ -9,105 +9,35 @@ import {
 import * as turf from "@turf/turf";
 import { AlertCircle, MapPin, Trash2 } from "lucide-react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
-
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
 import { DrawToolsProps } from "@/types/dataTypes";
-
+import { CordinatesToLocation } from "@/lib/helpers/latLongToLocation";
+import { PolygonOptions } from "@/lib/interfaces/maps";
+import { Coordinates } from "@/lib/interfaces/fields";
+import { usePolygonCalculations } from "@/lib/hooks/useMapAreaAndLocation";
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
 };
-
 const DEFAULT_CENTER = { lat: 15.159614, lng: 79.85210 };
-
 const DEFAULT_ZOOM = 16;
-const ACRES_CONVERSION_FACTOR = 4046.86;
-
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "drawing",
     "places",
     "geocoding",
 ];
 
-interface Coordinates {
-    lat: number;
-    lng: number;
-}
 
-interface PolygonOptions {
-    fillColor: string;
-    strokeColor: string;
-    strokeWeight: number;
-    clickable: boolean;
-    editable: boolean;
-    draggable: boolean;
-}
 
-const usePolygonCalculations = () => {
-    const [geocodingStatus, setGeocodingStatus] = useState<string>("");
-    const reverseGeocodeGoogle = async (lat: number, lng: number): Promise<string> => {
-        try {
-            const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
-            );
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data.display_name || "Address not found";
-        } catch (error) {
-            console.error("Nominatim geocoding error:", error);
-            return "Unable to fetch address";
-        }
-    };
-
-    const calculateAreaAndLocation = useCallback(
-        async (path: Coordinates[]) => {
-            if (path.length < 3) {
-                return null;
-            }
-            try {
-                setGeocodingStatus("Calculating area and location...");
-                const coordinates: [number, number][] = [
-                    ...path.map((p): [number, number] => [p.lng, p.lat]),
-                    [path[0].lng, path[0].lat],
-                ];
-
-                const turfPoly = turf.polygon([coordinates]);
-                const areaInSquareMeters = turf.area(turfPoly);
-                const areaInAcres = areaInSquareMeters / ACRES_CONVERSION_FACTOR;
-                const centroid = turf.centroid(turfPoly);
-                const [lngC, latC] = centroid.geometry.coordinates;
-
-                const location = await reverseGeocodeGoogle(latC, lngC);
-                console.log("location001", location);
-                const result = {
-                    location,
-                    area: areaInAcres.toFixed(2),
-                    centroid: { lat: latC, lng: lngC },
-                    areaInSquareMeters: areaInSquareMeters.toFixed(2)
-                };
-                setGeocodingStatus("");
-                return result;
-            } catch (error) {
-                setGeocodingStatus("Error calculating area and location");
-            }
-        },
-        []
-    );
-
-    return { calculateAreaAndLocation, geocodingStatus };
-};
-
-const DrawTools: React.FC<DrawToolsProps> = ({
-    setFormCoordinates,
-    setFieldAccessPoint,
-    setRobotHome,
-    setLocationInfo,
-    mode,
-    setMode,
-}) => {
+const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
+    const {
+        setFormCoordinates,
+        setFieldAccessPoint,
+        setRobotHome,
+        setLocationInfo,
+        mode,
+        setMode,
+    } = props
     const [polygonPath, setPolygonPath] = useState<Coordinates[]>([]);
     const [accessPoint, setAccessPoint] = useState<Coordinates | undefined>();
     const [robotPoint, setRobotPoint] = useState<Coordinates | null>(null);
@@ -119,10 +49,9 @@ const DrawTools: React.FC<DrawToolsProps> = ({
     const [lngInput, setLngInput] = useState("");
     const [searchedAddress, setSearchedAddress] = useState<string>("");
     const [showInfoWindow, setShowInfoWindow] = useState(false);
-
     const drawnShapeRef = useRef<google.maps.Polygon | google.maps.Rectangle | null>(null);
 
-    const { calculateAreaAndLocation, geocodingStatus } = usePolygonCalculations();
+    const { calculateAreaAndLocation } = usePolygonCalculations();
 
     const polygonOptions: PolygonOptions = useMemo(
         () => ({
@@ -138,7 +67,7 @@ const DrawTools: React.FC<DrawToolsProps> = ({
 
     const displayPolygonOptions = useMemo(
         () => ({
-            fillColor: "rgba(144, 222, 144, 0.5)",
+            fillColor: "rgba(16, 204, 16, 0.5)",
             fillOpacity: 0.5,
             strokeColor: "white",
             strokeWeight: 1,
@@ -148,7 +77,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
 
     const drawingManagerOptions = useMemo(() => {
         if (!googleInstance) return {};
-
         return {
             drawingControl: true,
             drawingControlOptions: {
@@ -194,13 +122,10 @@ const DrawTools: React.FC<DrawToolsProps> = ({
             try {
                 setIsCalculating(true);
                 const path = extractPathFromOverlay(overlay);
-
                 if (path.length < 3) return;
-
                 setPolygonPath(path);
                 setFormCoordinates(path);
                 drawnShapeRef.current = overlay;
-
                 const locationInfo = await calculateAreaAndLocation(path);
 
                 if (locationInfo) {
@@ -227,7 +152,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
     const handleMapClick = useCallback(
         (event: google.maps.MapMouseEvent) => {
             if (!event.latLng) return;
-
             const point: Coordinates = {
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng(),
@@ -340,25 +264,28 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                     )}
 
                     {googleInstance && (
-                        <DrawingManager
-                            onPolygonComplete={handlePolygonComplete}
-                            onRectangleComplete={handlePolygonComplete}
-                            options={drawingManagerOptions}
-                        />
+                        <div className="mr-20">
+
+                            <DrawingManager
+                                onPolygonComplete={handlePolygonComplete}
+                                onRectangleComplete={handlePolygonComplete}
+                                options={drawingManagerOptions}
+                            />
+                        </div>
                     )}
                 </GoogleMap>
             </LoadScript>
 
             <button
                 onClick={handleDelete}
-                className="absolute top-1.5 left-25 bg-white text-black rounded-[2px] shadow px-2 py-1 text-xs cursor-pointer hover:bg-gray-300"
+                className="absolute top-1.5 left-30 bg-white text-black rounded-[2px] shadow px-2 py-1 text-xs cursor-pointer hover:bg-gray-300"
                 aria-label="Delete drawn shapes"
             >
                 <Trash2 size={18} />
             </button>
 
 
-            <div className="absolute z-10 top-1 left-60 py-0.5 bg-white rounded shadow-lg flex gap-3 items-center  border-gray-200">
+            <div className="absolute  top-1 left-80 h-10 w-96 py-0.5 bg-white rounded shadow-lg flex gap-3 items-center border-gray-200">
                 <input
                     type="number"
                     placeholder="Latitude"
@@ -376,8 +303,7 @@ const DrawTools: React.FC<DrawToolsProps> = ({
                 <button
                     onClick={handleSearch}
                     className="bg-blue-600 hover:bg-blue-700 transition text-white px-3 py-0.5  text-sm rounded shadow"
-                >
-                    Go
+                >                    Go
                 </button>
 
             </div>
@@ -385,6 +311,6 @@ const DrawTools: React.FC<DrawToolsProps> = ({
     );
 };
 
-export default DrawTools;
+export default AddBoundaryMAP;
 
 
