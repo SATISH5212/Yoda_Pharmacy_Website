@@ -24,7 +24,7 @@ const addFieldPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
-    const [robot_home, setRobotHome] = useState<Coordinates>(null);
+    const [robotHome, setRobotHome] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
     const [showAddMissionForm, setShowAddMissionForm] = useState<boolean>(false);
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
@@ -39,19 +39,15 @@ const addFieldPage = () => {
     });
     const { mutateAsync: mutateAddBoundary, isPending } = useMutation({
         mutationKey: ["add-field-boundary"],
-        retry: 1,
+        retry: false,
         mutationFn: async (data: FormData) => {
-            console.log(formCoordinates, "formCoordinates001");
-            if (!formCoordinates.length) {
-                console.log("satiii001", formCoordinates);
-            }
             const payload = {
                 field_name: data.field_name.trim(),
                 field_boundary: formCoordinates,
                 location: locationInfo?.location ?? "",
                 field_area: locationInfo?.area ?? 0,
-                field_access_point: fieldAccessPoint,
-                robot_home: robot_home,
+                field_access_point: fieldAccessPoint ? fieldAccessPoint : undefined,
+                robot_home: robotHome ? robotHome : undefined,
                 centroid: locationInfo?.centroid || null
             };
             return await addFieldBoundaryAPI(payload);
@@ -64,14 +60,12 @@ const addFieldPage = () => {
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || {};
-                console.log(errorMessages, "errorMessages001");
                 setErrorMessages(errorMessages);
             }
         },
     });
 
     const onSubmit = useCallback(async (data: FormData) => {
-        console.log(data, "fiels001");
         if (!formCoordinates.length) return toast.error("Please add field boundary");
         setErrorMessages([]);
         if (data)
@@ -80,7 +74,7 @@ const addFieldPage = () => {
             } catch (error) {
                 console.error("Form submission error:", error);
             }
-    }, [formCoordinates, fieldAccessPoint, robot_home, mutateAddBoundary]);
+    }, [formCoordinates, fieldAccessPoint, robotHome, mutateAddBoundary]);
 
     const handleReset = useCallback(() => {
         reset();
@@ -140,7 +134,7 @@ const addFieldPage = () => {
                     handleAddAccessPoint={handleAddAccessPoint}
                     fieldAccessPoint={fieldAccessPoint}
                     handleRobotHome={handleRobotHome}
-                    robot_home={robot_home}
+                    robotHome={robotHome}
                     handleCancel={handleCancel}
                     setAddMissionForm={setShowAddMissionForm}
                     errorMessages={errorMessages} />

@@ -15,4 +15,8 @@ export interface RobotFormData {
 
 export interface IAllRobotsCardsProps {
     robots: RobotConfig[]
+    searchString?: string
+    robotType?: string
+    searchParams?: URLSearchParams
+    
 }

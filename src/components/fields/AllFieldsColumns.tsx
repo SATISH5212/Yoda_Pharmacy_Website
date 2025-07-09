@@ -1,3 +1,4 @@
+import { capitalize } from "@/lib/helpers/CaptalizeFirstLetter";
 import { Link } from "@tanstack/react-router";
 import { Eye, Waypoints } from "lucide-react";
 
@@ -78,9 +79,9 @@ export const allFieldsColumns = [
         cell: (value: any) => {
             const status = value.getValue();
             return (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                     <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-1.5"></span>
-                    {status}
+                    {capitalize(status || "")}
                 </span>
             );
         },
