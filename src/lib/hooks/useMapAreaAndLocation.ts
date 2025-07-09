@@ -22,7 +22,6 @@ export const usePolygonCalculations = () => {
                 const centroid = turf.centroid(turfPoly);
                 const [lngC, latC] = centroid.geometry.coordinates;
                 const location = await CordinatesToLocation(latC, lngC);
-                console.log("location001", location);
                 const result = {
                     location,
                     area: areaInAcres.toFixed(2),

@@ -2,7 +2,7 @@ import { IFieldFormPageProps } from "@/lib/interfaces/maps";
 import { FC } from "react";
 
 const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
-    const { handleSubmit, onSubmit, register, displayArea, isPending, handleAddAccessPoint, fieldAccessPoint, handleRobotHome, robot_home, handleCancel, errorMessages } = props
+    const { handleSubmit, onSubmit, register, displayArea, isPending, handleAddAccessPoint, fieldAccessPoint, handleRobotHome, robotHome, handleCancel, errorMessages } = props
     return (
         <div className="absolute z-10  right-4 bg-white shadow-2xl rounded-2xl h-[96vh] w-[26vw] -mr-2 my-4">
             <form
@@ -67,7 +67,7 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                                 onClick={handleRobotHome}
                                 className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-md text-xs font-medium disabled:opacity-50 transition-colors duration-200"
                             >
-                                {robot_home ? "✓ Set" : "+ Add"}
+                                {robotHome ? "✓ Set" : "+ Add"}
                             </button>
                             {errorMessages.robot_home && (
                                 <span className='text-red-500 text-[10px] mt-1'>{errorMessages.robot_home}</span>

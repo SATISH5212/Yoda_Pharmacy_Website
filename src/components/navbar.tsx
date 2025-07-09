@@ -7,10 +7,7 @@ import { capitalize } from "@/lib/helpers/CaptalizeFirstLetter";
 export const Navbar = () => {
     const router = useRouter();
     const pathname = useLocation();
-
     const currentPath = pathname.pathname.split("/")[1];
-    console.log(currentPath, "saasaa");
-
     const menuRef = useRef<HTMLDivElement>(null);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [userDetails, setUserDetails] = useState({
@@ -19,14 +16,11 @@ export const Navbar = () => {
         user_type: "",
     });
 
-    const handleNavigation = (path: string) => {
-        if (path === "/logout") {
-            router.navigate({ to: "/" });
-            Cookies.remove("token");
-            localStorage.removeItem("authToken");
-        } else {
-            router.navigate({ to: path });
-        }
+    const handleNavigation = () => {
+        router.navigate({ to: "/" });
+        Cookies.remove("token");
+        localStorage.removeItem("authToken");
+        localStorage.remove("userCredentials");
         setIsProfileMenuOpen(false);
     };
 
@@ -72,7 +66,7 @@ export const Navbar = () => {
                             <div className="text-xs text-gray-500 -mt-1"> {userDetails?.user_type ? userDetails?.user_type : "--"}</div>
                         </div>
                         <svg
-                            className="ml-4 w-4 h-4 text-gray-500"
+                            className=" flex w-6 h-6 text-gray-500"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="1.5"
@@ -95,13 +89,12 @@ export const Navbar = () => {
                             </div>
                             <button
                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={() => handleNavigation("/settings")}
                             >
                                 Settings
                             </button>
                             <button
                                 className="block w-full text-left px-4 py-2 text-sm text-red-600 hover: cursor-pointer hover:bg-gray-100"
-                                onClick={() => handleNavigation("/logout")}
+                                onClick={() => handleNavigation()}
                             >
                                 Sign Out
                             </button>

@@ -13,6 +13,7 @@ import {
 } from "@react-google-maps/api";
 import { Trash2 } from "lucide-react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
@@ -40,11 +41,10 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const [robotPoint, setRobotPoint] = useState<Coordinates | null>(null);
     const [googleInstance, setGoogleInstance] = useState<typeof window.google | null>(null);
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER);
-    const [latInput, setLatInput] = useState("");
-    const [lngInput, setLngInput] = useState("");
     const [searchMarker, setSearchMarker] = useState<Coordinates | null>(null);
     const [markerAddress, setMarkerAddress] = useState<string>("");
     const drawnShapeRef = useRef<google.maps.Polygon | google.maps.Rectangle | null>(null);
+    const [searchString, setSearchString] = useState("");
 
     const { calculateAreaAndLocation } = usePolygonCalculations();
 
@@ -77,9 +77,9 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
             },
             polygonOptions,
             rectangleOptions: polygonOptions,
-        };
-    }, [googleInstance, polygonOptions]);
 
+        }
+    }, [googleInstance, polygonOptions]);
     const extractPathFromOverlay = useCallback((overlay: google.maps.Polygon | google.maps.Rectangle): Coordinates[] => {
         if (overlay instanceof google.maps.Polygon) {
             const pathArray = overlay.getPath().getArray();
@@ -106,13 +106,11 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const handlePolygonComplete = useCallback(async (overlay: google.maps.Polygon | google.maps.Rectangle) => {
         try {
             const path = extractPathFromOverlay(overlay);
-            console.log(path, overlay, "over001");
             if (path.length < 3) return;
             setPolygonPath(path);
             setFormCoordinates(path);
             drawnShapeRef.current = overlay;
             const locationInfo = await calculateAreaAndLocation(path);
-
             if (locationInfo) {
                 setLocationInfo(locationInfo);
             } else {
@@ -141,6 +139,28 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
             return "Unable to fetch address";
         }
     }, []);
+    const handleLocationSearch = useCallback(async () => {
+        if (!searchString) return;
+        try {
+            const res = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchString)}&limit=1`
+            );
+            const data = await res.json();
+            if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lng = parseFloat(data[0].lon);
+                const point = { lat, lng };
+                setMapCenter(point);
+                setSearchMarker(point);
+                const address = await fetchAddress(point);
+                setMarkerAddress(address);
+            } else {
+                toast.info("No location found for search query.");
+            }
+        } catch (error) {
+            console.error("Error during location search:", error);
+        }
+    }, [searchString, fetchAddress]);
 
     const handleMapClick = useCallback(
         async (event: google.maps.MapMouseEvent) => {
@@ -175,8 +195,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         setRobotHome(null);
         setRobotPoint(null);
         setLocationInfo(null);
-        setLatInput("");
-        setLngInput("");
         setSearchMarker(null);
         setMarkerAddress("");
 
@@ -189,19 +207,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const handleGoogleMapsLoad = useCallback(() => {
         setGoogleInstance(window.google);
     }, []);
-
-    const handleSearch = useCallback(async () => {
-        const lat = parseFloat(latInput);
-        const lng = parseFloat(lngInput);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            const point = { lat, lng };
-            setMapCenter(point);
-            setSearchMarker(point);
-            const address = await fetchAddress(point);
-            setMarkerAddress(address);
-        }
-    }, [latInput, lngInput, fetchAddress]);
-
     return (
         <div className="relative">
             <LoadScript
@@ -298,25 +303,20 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
 
             <div className="absolute top-4 left-1/3 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 w-36 h-10 -mt-2">
                 <input
-                    type="number"
-                    placeholder="Latitude"
-                    value={latInput}
-                    onChange={(e) => setLatInput(e.target.value)}
+                    type="text"
+                    placeholder="Search location"
+                    value={searchString}
+                    onChange={(e) => setSearchString(e.target.value)}
                     className="flex-1 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-md px-3 py-1 text-sm outline-none transition"
                 />
-                <input
-                    type="number"
-                    placeholder="Longitude"
-                    value={lngInput}
-                    onChange={(e) => setLngInput(e.target.value)}
-                    className="flex-1 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-md px-3 py-1 text-sm outline-none transition"
-                />
+
                 <button
-                    onClick={handleSearch}
-                    className="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-1 text-sm rounded-md shadow"
+                    onClick={handleLocationSearch}
+                    className="bg-green-600 hover:bg-green-700 transition text-white px-4 py-1 text-sm rounded-md shadow"
                 >
-                    Go
+                    Search
                 </button>
+
             </div>
 
         </div>

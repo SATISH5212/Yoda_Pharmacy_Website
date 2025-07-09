@@ -42,7 +42,7 @@ export interface IFieldFormPageProps {
     handleAddAccessPoint: () => void;
     fieldAccessPoint: Coordinates | null;
     handleRobotHome: () => void;
-    robot_home: Coordinates | null;
+    robotHome: Coordinates | null;
     handleCancel: () => void;
     setAddMissionForm: React.Dispatch<React.SetStateAction<boolean>>
     errorMessages: any
