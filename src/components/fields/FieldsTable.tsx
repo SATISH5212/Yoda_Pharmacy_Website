@@ -30,14 +30,11 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         order_type: searchParams.get("order_type") || null,
     });
     useEffect(() => {
-        if (status) {
-            return setDebounceSearchString(status)
-        }
         const timer = setTimeout(() => {
             setDebounceSearchString(searchString);
         }, 500);
         return () => clearTimeout(timer);
-    }, [searchString, status]);
+    }, [searchString]);
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
@@ -59,7 +56,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         refetch,
         isLoading
     } = useQuery({
-        queryKey: ["all-fieldsData", pagination, debounceSearchString],
+        queryKey: ["all-fieldsData", pagination, debounceSearchString, status],
         queryFn: async () => {
             let queryParams: iFieldQueryParams = {
                 page: pagination.page,
@@ -67,6 +64,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
                 order_by: pagination.order_by || undefined,
                 order_type: pagination.order_type || undefined,
                 search_string: debounceSearchString || undefined,
+                field_status: status,
             };
             const cleanParams = Object.fromEntries(
                 Object.entries(queryParams).filter(([_, value]) =>
