@@ -1,14 +1,14 @@
-import { AppProps, Coordinates, LocationInfo } from "@/types/dataTypes";
-import { useState, useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import DrawTools from "@/components/google-map";
-import { useMutation } from "@tanstack/react-query";
-import { addFieldBoundaryAPI } from "@/lib/services/fields";
-import { useNavigate } from "@tanstack/react-router";
 import { FormData } from "@/lib/interfaces/maps";
-import FieldFormPage from "./MapForm";
+import { addFieldBoundaryAPI } from "@/lib/services/fields";
+import { Coordinates, LocationInfo } from "@/types/dataTypes";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { useCallback, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import AddMissionForm from "../addMission";
+import FieldFormPage from "./MapForm";
+import AddBoundaryMAP from "./AddBoundaryMap";
 const TOAST_CONFIG = {
     position: "top-right" as const,
     autoClose: 2000,
@@ -20,7 +20,7 @@ const TOAST_CONFIG = {
     },
 };
 
-const MapFormPage = () => {
+const addFieldPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
@@ -28,23 +28,23 @@ const MapFormPage = () => {
     const [mode, setMode] = useState<string>("idle");
     const [showAddMissionForm, setShowAddMissionForm] = useState<boolean>(false);
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
+    const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const {
         register,
         handleSubmit,
         reset,
-        watch,
         formState: { errors, isValid }
     } = useForm<FormData>({
         mode: 'onChange',
-        defaultValues: {
-            field_name: ''
-        }
     });
-    const fieldName = watch('field_name');
     const { mutateAsync: mutateAddBoundary, isPending } = useMutation({
         mutationKey: ["add-field-boundary"],
         retry: 1,
         mutationFn: async (data: FormData) => {
+            console.log(formCoordinates, "formCoordinates001");
+            if (!formCoordinates.length) {
+                console.log("satiii001", formCoordinates);
+            }
             const payload = {
                 field_name: data.field_name.trim(),
                 field_boundary: formCoordinates,
@@ -58,37 +58,28 @@ const MapFormPage = () => {
         },
         onSuccess: () => {
             toast.success("Field registered successfully!");
-            // handleReset();
-            // setField(false);
+            handleReset();
             setShowAddMissionForm(true);
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || error?.message || "Failed to register field";
-            toast.error(errorMessage);
-            console.error("Mutation error:", error);
-        }
+            if (error?.status === 422 || error?.status === 409) {
+                const errorMessages = error?.data?.errors || {};
+                console.log(errorMessages, "errorMessages001");
+                setErrorMessages(errorMessages);
+            }
+        },
     });
 
     const onSubmit = useCallback(async (data: FormData) => {
-        if (!formCoordinates.length) {
-            toast.error("Please draw field boundary on the map");
-            return;
-        }
-
-        if (!fieldAccessPoint) {
-            toast.error("Please set field access point");
-            return;
-        }
-
-        if (!robot_home) {
-            toast.error("Please set robot home point");
-            return;
-        }
-        try {
-            await mutateAddBoundary(data);
-        } catch (error) {
-            console.error("Form submission error:", error);
-        }
+        console.log(data, "fiels001");
+        if (!formCoordinates.length) return toast.error("Please add field boundary");
+        setErrorMessages([]);
+        if (data)
+            try {
+                await mutateAddBoundary(data);
+            } catch (error) {
+                console.error("Form submission error:", error);
+            }
     }, [formCoordinates, fieldAccessPoint, robot_home, mutateAddBoundary]);
 
     const handleReset = useCallback(() => {
@@ -122,19 +113,12 @@ const MapFormPage = () => {
         return locationInfo?.area ? Number(locationInfo.area).toFixed(2) : "0.00";
     }, [locationInfo?.area]);
 
-    const isSubmittable = useMemo(() => {
-        return isValid &&
-            fieldName?.trim() &&
-            formCoordinates.length > 0 &&
-            fieldAccessPoint !== null &&
-            robot_home !== null &&
-            !isPending;
-    }, [isValid, fieldName, formCoordinates.length, fieldAccessPoint, robot_home, isPending]);
+
 
     return (
         <div className="relative w-full h-screen">
             <div className="absolute inset-0 z-0 w-full h-screen">
-                <DrawTools
+                <AddBoundaryMAP
                     setFormCoordinates={setFormCoordinates}
                     setFieldAccessPoint={setFieldAccessPoint}
                     setRobotHome={setRobotHome}
@@ -143,14 +127,26 @@ const MapFormPage = () => {
                     setLocationInfo={setLocationInfo}
                 />
             </div>
-            {!showAddMissionForm ? (
+            {showAddMissionForm ? (
                 <AddMissionForm />
             ) : (
-
-                <FieldFormPage handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} isPending={isPending} errors={errors} displayArea={displayArea} handleAddAccessPoint={handleAddAccessPoint} fieldAccessPoint={fieldAccessPoint} handleRobotHome={handleRobotHome} robot_home={robot_home} isSubmittable={isSubmittable} handleCancel={handleCancel} setAddMissionForm={setShowAddMissionForm} />
+                <FieldFormPage
+                    handleSubmit={handleSubmit}
+                    onSubmit={onSubmit}
+                    register={register}
+                    isPending={isPending}
+                    errors={errors}
+                    displayArea={displayArea}
+                    handleAddAccessPoint={handleAddAccessPoint}
+                    fieldAccessPoint={fieldAccessPoint}
+                    handleRobotHome={handleRobotHome}
+                    robot_home={robot_home}
+                    handleCancel={handleCancel}
+                    setAddMissionForm={setShowAddMissionForm}
+                    errorMessages={errorMessages} />
             )}
         </div>
     );
 }
 
-export default MapFormPage;
+export default addFieldPage;

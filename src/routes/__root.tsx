@@ -6,9 +6,9 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router'
-import { QueryClientProvider, QueryClient} from '@tanstack/react-query'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import appCss from "../styles/app.css?url"
-
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();
 
@@ -27,7 +27,7 @@ export const Route = createRootRoute({
       },
 
     ],
-      links: [
+    links: [
       {
         rel: "stylesheet",
         href: appCss,
@@ -42,6 +42,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <RootDocument>
         <Outlet />
+        <Toaster richColors closeButton position="top-center" />
       </RootDocument>
     </QueryClientProvider>
   )
@@ -61,3 +62,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     </html>
   )
 }
+
+
+
+
+
+
+
+

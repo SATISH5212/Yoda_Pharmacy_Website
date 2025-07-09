@@ -2,6 +2,7 @@ import { Coordinates } from "@/types/dataTypes";
 import { FieldErrors, SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 export interface FormData {
     field_name: string;
+
 }
 
 export interface iFieldQueryParams {
@@ -41,9 +42,9 @@ export interface IFieldFormPageProps {
     fieldAccessPoint: Coordinates | null;
     handleRobotHome: () => void;
     robot_home: Coordinates | null;
-    isSubmittable: boolean | string;
     handleCancel: () => void;
     setAddMissionForm: React.Dispatch<React.SetStateAction<boolean>>
+    errorMessages: any
 }
 
 
@@ -57,4 +58,14 @@ export interface FieldData {
 
 export interface IViewFieldPageProps {
     fieldData?: FieldData;
+}
+
+
+export interface PolygonOptions {
+    fillColor: string;
+    strokeColor: string;
+    strokeWeight: number;
+    clickable: boolean;
+    editable: boolean;
+    draggable: boolean;
 }

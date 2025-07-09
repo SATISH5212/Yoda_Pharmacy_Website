@@ -10,14 +10,17 @@ const FieldsPage = () => {
         searchParams.get("search_string") || ""
     );
 
+    const [status, setStatus] = useState<string>(
+        searchParams.get("status") || ""
+    )
     return (
-        <div className='ml-1 overflow-y-hidden h-[100vh] px-4'>
-            <div className="flex items-center justify-end bg-gray-100 rounded  h-9 w-full space-x-2 mb-2">
-                <select className="border border-gray-300 text-xs font-small tracking-tight rounded  h-6 w-35 items-center focus:outline-none ">
-                    <option >Active </option>
-                    <option> Pending</option>
-                    <option>Select Location</option>
-                    <option>Select Location</option>
+        <div className='ml-1 overflow-hidden h-[92vh] px-4'>
+            <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
+                <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none" onChange={(e) => setStatus(e.target.value)}>
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
                 </select>
 
                 <div className="flex relative h-6 items-center border border-gray-300 rounded">
@@ -52,8 +55,11 @@ const FieldsPage = () => {
                 </div>
 
             </div>
+            <div>
 
-            <FieldsTable searchString={searchString} searchParams={searchParams} />
+                <FieldsTable searchString={searchString} searchParams={searchParams} status={status} />
+            </div>
+
         </div>
 
 
