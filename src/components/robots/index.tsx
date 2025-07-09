@@ -6,11 +6,16 @@ import { useNavigate, useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import Pagination from '../core/Pagination';
 import AllRobotsCards from './AllRobotsCards';
+import { Search } from 'lucide-react';
 
 const AllRobotsPage = () => {
     const navigate = useNavigate();
     const router = useRouter();
     const searchParams = new URLSearchParams(location.search);
+    // const [robot_type, setRobotType] = useState<string>( searchParams.get("robot_type") || "" );
+     const [searchString, setSearchString] = useState<string>(searchParams.get("search_string") || "" );
+    const [debounceSearchString, setDebounceSearchString] = useState<string>(searchParams.get("search_string") || "");
+    
     const [pagination, setPagination] = useState<{
         page: number;
         page_size: number;
@@ -22,13 +27,14 @@ const AllRobotsPage = () => {
         order_by: searchParams.get("order_by") || null,
         order_type: searchParams.get("order_type") || null,
     });
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebounceSearchString(searchString);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchString]);
 
-    const [searchString, setSearchString] = useState<string>(
-        searchParams.get("search_string") || ""
-    );
-    const [debounceSearchString, setDebounceSearchString] = useState<string>(
-        searchParams.get("search_string") || ""
-    );
+    
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
@@ -131,30 +137,54 @@ const AllRobotsPage = () => {
             search_string: debounceSearchString,
         });
     };
-
+    
     return (
         <div className="flex flex-col h-screen">
-            <div className=" flex  justify-between bg-gray-200 rounded p-2 sm:p-3 md:p-4 mb-2 flex-shrink-0 h-10 mx-2 mt-1">
+           
+            <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
+                <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none">
+                    <option value="">All RoboT Types</option>
+                    <option value="active">DEMETER_MINI</option>
+                    <option value="pending">DEMETER_MAXI</option>
+                    <option value="completed">Seeder-XR5</option>
+                    <option value="completed">HarvBot-Mega</option>
+                </select>
 
-                <div className=" flex items-center gap-1 ">
-                    <span className="text-sm">Total Robots :</span>
-                    <span className="text-sm">{data.pagination_info.total_records}</span>
+                <div className="flex relative h-6 items-center border border-gray-300 rounded">
+                    <span
+                        className="h-70% w-10 text-center text-gray-500 pointer-events-none flex items-center justify-center"
+                    >
+                        <Search size={14}/>
+                    </span>
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        className="text-xs font-small tracking-tight rounded  h-6 w-35 focus:outline-none"
+                        value={searchString}
+                        onChange={(e) => {
+                            setSearchString(e.target.value);
+                        }}
+                    />
+
                 </div>
-                <div className="flex items-center">
+                <div className=" flex w-25 justify-center -ml-2.5 ">
+
                     <button
-                        className=" bg-green-600 border rounded text-sm px-2 py-1 text-white"
+                        type="button"
+                        className=" flex justify-center items-center rounded bg-[#0ed78d] text-white text-sm  font-medium hover:bg-[#0cc87f] h-6 w-20"
                         onClick={() =>
                             navigate({
                                 to: "/add-robot",
-                            })}
+                            })
+                        }
                     >
-                        + New Robot
+                        <span className="text-xs font-small tracking-tight">+ New Robot</span>
                     </button>
                 </div>
-
             </div>
+
             <div className="flex-1 min-h-0 mb-2 mx-2">
-                <AllRobotsCards robots={allRobotsData?.data.records} />
+                <AllRobotsCards robots={allRobotsData?.data.records} searchString={searchString} searchParams={searchParams}  />
             </div>
             <div className="border-t border-gray-200 pt-2 sm:pt-3 md:pt-4 flex-shrink-0">
                 <Pagination

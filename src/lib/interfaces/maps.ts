@@ -28,6 +28,7 @@ export interface iFieldQueryParams {
     email?: string;
     include_inprogress?: boolean;
     type_status?: string;
+    robot_type?: string;
 }
 
 
