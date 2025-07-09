@@ -5,7 +5,7 @@ import { FC } from 'react';
 
 const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
   const naviagate = useNavigate();
-  const { robots, searchString, searchParams } = props;
+  const { robots, searchString} = props;
 
   if (!robots) {
     return <div className="text-center text-gray-500">Loading...</div>;

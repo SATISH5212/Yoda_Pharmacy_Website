@@ -12,10 +12,10 @@ const AllRobotsPage = () => {
     const navigate = useNavigate();
     const router = useRouter();
     const searchParams = new URLSearchParams(location.search);
-    // const [robot_type, setRobotType] = useState<string>( searchParams.get("robot_type") || "" );
-     const [searchString, setSearchString] = useState<string>(searchParams.get("search_string") || "" );
+    const [robotType, setRobotType] = useState<string>(searchParams.get("search_string") || "");
+    const [searchString, setSearchString] = useState<string>(searchParams.get("search_string") || "");
     const [debounceSearchString, setDebounceSearchString] = useState<string>(searchParams.get("search_string") || "");
-    
+
     const [pagination, setPagination] = useState<{
         page: number;
         page_size: number;
@@ -28,13 +28,16 @@ const AllRobotsPage = () => {
         order_type: searchParams.get("order_type") || null,
     });
     useEffect(() => {
+        if (robotType) {
+            return setDebounceSearchString(robotType)
+        }
         const timer = setTimeout(() => {
             setDebounceSearchString(searchString);
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [searchString]);
+        }, 1000);
 
-    
+        return () => clearTimeout(timer);
+    }, [searchString, robotType]);
+
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
@@ -137,24 +140,24 @@ const AllRobotsPage = () => {
             search_string: debounceSearchString,
         });
     };
-    
+
     return (
         <div className="flex flex-col h-screen">
-           
+
             <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
-                <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none">
+                <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none" onChange={(e) => setRobotType(e.target.value)}>
                     <option value="">All RoboT Types</option>
-                    <option value="active">DEMETER_MINI</option>
-                    <option value="pending">DEMETER_MAXI</option>
-                    <option value="completed">Seeder-XR5</option>
-                    <option value="completed">HarvBot-Mega</option>
+                    <option value="DEMETER_MINI">DEMETER_MINI</option>
+                    <option value="DEMETER_MAXI">DEMETER_MAXI</option>
+                    <option value="Seeder-XR5">Seeder-XR5</option>
+                    <option value="HarvBot-Mega">HarvBot-Mega</option>
                 </select>
 
                 <div className="flex relative h-6 items-center border border-gray-300 rounded">
                     <span
                         className="h-70% w-10 text-center text-gray-500 pointer-events-none flex items-center justify-center"
                     >
-                        <Search size={14}/>
+                        <Search size={14} />
                     </span>
                     <input
                         type="text"
@@ -184,7 +187,7 @@ const AllRobotsPage = () => {
             </div>
 
             <div className="flex-1 min-h-0 mb-2 mx-2">
-                <AllRobotsCards robots={allRobotsData?.data.records} searchString={searchString} searchParams={searchParams}  />
+                <AllRobotsCards robots={allRobotsData?.data.records} searchString={searchString} />
             </div>
             <div className="border-t border-gray-200 pt-2 sm:pt-3 md:pt-4 flex-shrink-0">
                 <Pagination
