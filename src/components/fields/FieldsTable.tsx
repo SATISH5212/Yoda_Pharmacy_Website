@@ -6,15 +6,12 @@ import { allFieldsColumns } from "./AllFieldsColumns";
 import { iFieldQueryParams } from "@/lib/interfaces/maps";
 import { useState, useEffect, FC } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { IFieldsTablePageProps } from "@/lib/interfaces/fields";
 
-export interface IFieldsTablePageProps {
-    searchString: string
-    setSearchString: React.Dispatch<React.SetStateAction<string>>
-    searchParams: URLSearchParams
-}
+
 
 const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
-    const { searchString, setSearchString, searchParams } = props
+    const { searchString, searchParams, status } = props
     const router = useRouter();
 
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
@@ -36,7 +33,6 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         const timer = setTimeout(() => {
             setDebounceSearchString(searchString);
         }, 500);
-
         return () => clearTimeout(timer);
     }, [searchString]);
     useEffect(() => {
@@ -60,7 +56,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         refetch,
         isLoading
     } = useQuery({
-        queryKey: ["all-fieldsData", pagination, debounceSearchString],
+        queryKey: ["all-fieldsData", pagination, debounceSearchString, status],
         queryFn: async () => {
             let queryParams: iFieldQueryParams = {
                 page: pagination.page,
@@ -68,6 +64,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
                 order_by: pagination.order_by || undefined,
                 order_type: pagination.order_type || undefined,
                 search_string: debounceSearchString || undefined,
+                field_status: status,
             };
             const cleanParams = Object.fromEntries(
                 Object.entries(queryParams).filter(([_, value]) =>
@@ -75,7 +72,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
                 )
             );
             router.navigate({
-                to: "/fields",
+                to: "/all-fields",
                 search: cleanParams,
                 replace: true,
             });
@@ -109,7 +106,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
             )
         );
         router.navigate({
-            to: "/fields",
+            to: "/all-fields",
             search: cleanParams,
             replace: true,
         });
@@ -117,20 +114,19 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
     const data = allFieldsData?.data?.records?.map((field: FieldResponse) => ({
         ...field,
-        field_area: field.field_area || "2.4",
-        field_status: field.field_status === "pending" ? "Active" : field.field_status,
     })) || [];
 
     return (
-        <TanStackTable
-            columns={allFieldsColumns}
-            data={data}
-            paginationDetails={allFieldsData?.data?.pagination_info || {}}
-            loading={isLoading}
-            heightClass="h-[400px]"
-            removeSortingForColumnIds={[]}
-            getData={getData}
-        />
+        <div >
+            <TanStackTable
+                columns={allFieldsColumns}
+                data={data}
+                paginationDetails={allFieldsData?.data?.pagination_info || {}}
+                loading={isLoading}
+                removeSortingForColumnIds={["id", "field_area", "missions", "action"]}
+                getData={getData}
+            />
+        </div>
     );
 };
 

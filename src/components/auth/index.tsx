@@ -28,7 +28,6 @@ export function LoginPage() {
             password: "",
         },
     });
-
     const { mutateAsync: mutateLogin, isPending: isPendingLogin } = useMutation({
         mutationKey: ["login-user"],
         retry: false,
@@ -41,11 +40,13 @@ export function LoginPage() {
             const message = response?.data?.message;
             toast.success(message);
             const accessToken = response?.data?.data?.access_token;
+            const refreshToken = response?.data?.data?.refresh_token;
             Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
+            Cookies.set("refreshToken", refreshToken, { secure: true, sameSite: "strict" });
             localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
             localStorage.setItem("authToken", accessToken);
             navigate({
-                to: `/fields`,
+                to: `/all-fields`,
             });
         },
 

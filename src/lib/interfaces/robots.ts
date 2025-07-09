@@ -1,3 +1,5 @@
+import { RobotConfig } from "@/types/dataTypes"
+
 export interface RobotFormData {
     robot_uuid: string
     robot_name: string
@@ -9,4 +11,8 @@ export interface RobotFormData {
     ip_address: string
     mac_address: string
     robot_model: string
+}
+
+export interface IAllRobotsCardsProps {
+    robots: RobotConfig[]
 }

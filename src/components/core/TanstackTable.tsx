@@ -105,12 +105,13 @@ const TanStackTable: FC<pageProps> = ({
     };
 
     return (
-        <div className="w-full rounded-md shadow-sm">
+        <div className="w-full rounded-lg shadow-sm border border-gray-200 bg-white">
             <div
-                className={`w-full relative bg-white ${heightClass || "h-96"} ram overflow-y-hidden`}
+                className="w-1832px relative bg-white overflow-hidden"
                 style={{
                     display: "flex",
                     flexDirection: "column",
+                    height: "944px",
                 }}
             >
                 {!data.length && !loading ? (
@@ -122,21 +123,20 @@ const TanStackTable: FC<pageProps> = ({
                                 className="w-[300px] h-auto mx-auto"
                             />
                             <p className="text-[20px] text-zinc-800 font-normal mt-4">
-                                {" "}
                                 {noDataLabel ? noDataLabel : "No data available"}
                             </p>
                         </div>
                     </div>
                 ) : (
                     <div className="w-full h-full flex flex-col">
-                        <div className="w-full overflow-auto custom-scrollbar">
-                            {" "}
-                            <table className="w-full border-collapse bg-white min-w-full table-fixed">
-                                <thead className="bg-white border-b">
+
+                        <div className="flex-1 overflow-auto custom-scrollbar">
+                            <table className="w-full border-collapse bg-white min-w-full">
+                                <thead className="bg-gray-100 sticky top-0 z-10">
                                     {table?.getHeaderGroups().map((headerGroup) => (
                                         <tr
                                             key={headerGroup.id + `-${new Date().getTime()}`}
-                                            className="border-b"
+                                            className="border-b border-gray-200"
                                         >
                                             {headerGroup.headers.map(
                                                 (header: Header<any, unknown>, index: number) => {
@@ -145,12 +145,10 @@ const TanStackTable: FC<pageProps> = ({
                                                             <th
                                                                 key={index + `-${new Date().getTime()}`}
                                                                 colSpan={header.colSpan}
-                                                                className="bg-white text-left px-3 py-3 text-sm font-medium text-gray-900 sticky top-0 z-10"
+                                                                className="bg-gray-500 text-left px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900 border-b border-gray-200"
                                                                 style={{
                                                                     minWidth: getWidth(header.id),
                                                                     width: getWidth(header.id),
-                                                                    position: "sticky",
-                                                                    top: 0,
                                                                 }}
                                                             >
                                                                 {header.isPlaceholder ? null : (
@@ -231,12 +229,10 @@ const TanStackTable: FC<pageProps> = ({
                                                             <th
                                                                 key={index + `-${new Date().getTime()}`}
                                                                 colSpan={header.colSpan}
-                                                                className="!bg-primary-200 text-left px-4 py-3 text-sm font-medium text-gray-900 sticky top-0 z-10"
+                                                                className="bg-gray-50 text-left px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900 border-b border-gray-200"
                                                                 style={{
                                                                     minWidth: getWidth(header.id),
                                                                     width: getWidth(header.id),
-                                                                    position: "sticky",
-                                                                    top: 0,
                                                                 }}
                                                             >
                                                                 {header.isPlaceholder ? null : (
@@ -265,17 +261,16 @@ const TanStackTable: FC<pageProps> = ({
                                         </tr>
                                     ))}
                                 </thead>
-
-                                <tbody className={`divide-y divide-gray-200`}>
+                                <tbody className="divide-y divide-gray-100 bg-white">
                                     {data?.length ? (
-                                        table?.getRowModel().rows.map((row) => (
+                                        table?.getRowModel().rows.map((row, rowIndex) => (
                                             <tr
                                                 key={row.id + `-${new Date().getTime()}`}
-                                                className="bg-white hover:bg-primary-200/20 transition-colors duration-200"
+                                                className="hover:bg-gray-50/50 transition-colors duration-200"
                                             >
                                                 {row.getVisibleCells().map((cell) => (
                                                     <td
-                                                        className="px-4 py-1 text-sm text-gray-900 whitespace-nowrap"
+                                                        className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 whitespace-nowrap"
                                                         key={cell.id + `-${new Date().getTime()}`}
                                                     >
                                                         {flexRender(
@@ -290,9 +285,12 @@ const TanStackTable: FC<pageProps> = ({
                                         <tr>
                                             <td
                                                 colSpan={columns?.length}
-                                                className="px-4 py-3 text-sm text-center text-gray-500"
+                                                className="px-6 py-8 text-sm text-center text-gray-500"
                                             >
-                                                Loading...
+                                                <div className="flex justify-center items-center">
+                                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                                                    <span className="ml-2">Loading...</span>
+                                                </div>
                                             </td>
                                         </tr>
                                     ) : null}
@@ -303,7 +301,7 @@ const TanStackTable: FC<pageProps> = ({
                 )}
             </div>
             {data?.length && paginationDetails ? (
-                <div className="border-t border-gray-200">
+                <div className="border-t border-gray-200 bg-white sticky bottom-0 z-10">
                     <Pagination
                         paginationDetails={paginationDetails}
                         capturePageNum={capturePageNum}

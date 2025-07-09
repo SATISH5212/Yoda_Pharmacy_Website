@@ -8,47 +8,56 @@ const FieldsPage = () => {
     const [searchString, setSearchString] = useState<string>(
         searchParams.get("search_string") || ""
     );
-    console.log(searchString, "con001")
 
+    const [status, setStatus] = useState<string>(
+        searchParams.get("status") || ""
+    )
     return (
-        <div className='ml-1'>
-            <div className="flex items-center justify-end bg-gray-100 rounded p-2 mb-2 h-12 w-full space-x-2">
-                <select className="border border-gray-300 text-sm rounded px-2 py-1 focus:outline-none">
-                    <option>Select Location</option>
-                    <option>Select Location</option>
-                    <option>Select Location</option>
-                    <option>Select Location</option>
+        <div className='ml-1 overflow-hidden h-[92vh] px-4'>
+            <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
+                <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none" onChange={(e) => setStatus(e.target.value)}>
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
                 </select>
 
-                <div className="relative">
+                <div className="flex relative h-6 items-center border border-gray-300 rounded">
+                    <span
+                        className="h-70% w-10 text-center text-gray-500 pointer-events-none flex items-center justify-center"
+                    >
+                        🔍
+                    </span>
                     <input
                         type="text"
                         placeholder="Search"
-                        className="border border-gray-300 text-sm rounded px-8 py-1 pl-8 focus:outline-none"
+                        className="text-xs font-small tracking-tight rounded  h-6 w-35 focus:outline-none"
                         onChange={(e) => {
                             setSearchString(e.target.value);
                         }}
                     />
-                    <span className="absolute left-2 top-1.5 text-gray-400">
-                        🔍
-                    </span>
+
+                </div>
+                <div className=" flex w-25 justify-center -ml-2.5 ">
+
+                    <button
+                        type="button"
+                        className=" flex justify-center items-center rounded bg-[#0ed78d] text-white text-sm  font-medium hover:bg-[#0cc87f] h-6 w-20"
+                        onClick={() =>
+                            navigate({
+                                to: "/add-field",
+                            })
+                        }
+                    >
+                        <span className="text-xs font-small tracking-tight">+ New Field</span>
+                    </button>
                 </div>
 
-                <button
-                    type="button"
-                    className="rounded bg-[#0ed78d] text-white text-sm px-4 py-1 font-medium hover:bg-[#0cc87f]"
-                    onClick={() =>
-                        navigate({
-                            to: "/add-field",
-                        })
-                    }
-                >
-                    + New Field
-                </button>
+            </div>
+            <div>
 
+                <FieldsTable searchString={searchString} searchParams={searchParams} status={status} />
             </div>
 
-            <FieldsTable searchString={searchString} setSearchString={setSearchString} searchParams={searchParams} />
         </div>
 
 
