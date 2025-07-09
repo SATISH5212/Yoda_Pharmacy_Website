@@ -17,7 +17,6 @@ const FieldsPage = () => {
             <div className="flex items-center justify-end bg-gray-100 rounded h-10 w-full space-x-2 mb-2">
                 <select className="border border-gray-300 text-xs tracking-tight rounded h-6 w-36 focus:outline-none" onChange={(e) => setStatus(e.target.value)}>
                     <option value="">All Status</option>
-                    <option value="active">Active</option>
                     <option value="pending">Pending</option>
                     <option value="completed">Completed</option>
                 </select>

@@ -3,25 +3,29 @@ import { Settings } from 'lucide-react';
 import { Joystick } from 'lucide-react';
 import { Bot } from 'lucide-react';
 import { Sprout } from 'lucide-react';
-// import { LogOut } from 'lucide-react';
 
-
-export function Sidebar() {
+const Sidebar = () => {
     return (
-        <div className=" pt-8 w-12 flex flex-col items-center border-r-1">
-            <Link to="/all-fields" className="[&.active]:bg-[#0ed78d] mb-8 hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
-                <Sprout size={20} strokeWidth={2} />
-            </Link>
-            <Link to="/all-robots" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
-                <Bot size={20} strokeWidth={2} />
-            </Link>
-            <Link to="/teleop" className="[&.active]:bg-[#0ed78d] mb-8  hover:bg-green-200 rounded-lg h-8 w-8 flex items-center justify-center">
-                <Joystick size={20} strokeWidth={2} />
-            </Link>
-            <Link to="/teleop" className="[&.active]:bg-[#0ed78d]  hover:bg-green-200  rounded-lg h-8 w-8 flex items-center justify-center">
-                <Settings size={20} strokeWidth={2} />
-            </Link>
+        <div className="flex flex-col flex flex-col items-center border-r-1 gap-80px mt-2">
+            <img src="/src/components/svg/logo.svg" alt="logo" className="w-15 h-15 mb-14" />
+            <div className="flex flex-col items-center gap-y-6">
+                <Link to="/all-fields" className="[&.active]:bg-[#0ed78d] hover:bg-green-200 rounded-lg h-10 w-10 flex items-center justify-center">
+                    <img src="/src/components/svg/fields/all-fields.svg" alt="field" className="w-[27px] h-[27px]" />
+                </Link>
+                <Link to="/all-robots" className="[&.active]:bg-[#0ed78d] hover:bg-green-200 rounded-lg h-10 w-10 flex items-center justify-center">
+                    <img src="/src/components/svg/robots/all-robots.svg" alt="field" className="w-[24px] h-[24px]" />
+                </Link>
+                <Link to="/teleop" className="[&.active]:bg-[#0ed78d] hover:bg-green-200 rounded-lg h-10 w-10 flex items-center justify-center">
+                    <img src="/src/components/svg/teleoperation/teleoperation.svg" alt="field" className="w-[24px] h-[24px]" />
+                </Link>
+                <Link to="/add-robot" className="[&.active]:bg-[#0ed78d] hover:bg-green-200 rounded-lg h-10 w-10 flex items-center justify-center">
+                    <img src="/src/components/svg/questionIcon.svg" alt="field" className="w-[24px] h-[24px]" />
+                </Link>
+            </div>
+
 
         </div>
     );
 }
+
+export default Sidebar;

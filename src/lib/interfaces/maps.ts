@@ -28,6 +28,7 @@ export interface iFieldQueryParams {
     email?: string;
     include_inprogress?: boolean;
     type_status?: string;
+    field_status?: string
 }
 
 
@@ -45,6 +46,7 @@ export interface IFieldFormPageProps {
     handleCancel: () => void;
     setAddMissionForm: React.Dispatch<React.SetStateAction<boolean>>
     errorMessages: any
+
 }
 
 
