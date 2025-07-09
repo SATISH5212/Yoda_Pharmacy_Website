@@ -66,10 +66,10 @@ export const Navbar = () => {
                             <div className="text-xs text-gray-500 -mt-1"> {userDetails?.user_type ? userDetails?.user_type : "--"}</div>
                         </div>
                         <svg
-                            className=" flex w-6 h-6 text-gray-500"
+                            className=" flex w-5 h-4 text-gray-500 ml-12"
                             fill="none"
                             stroke="currentColor"
-                            strokeWidth="1.5"
+                            strokeWidth="1.5"   
                             viewBox="0 0 24 24"
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />

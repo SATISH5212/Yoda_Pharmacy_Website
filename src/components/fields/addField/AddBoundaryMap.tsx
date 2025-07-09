@@ -139,6 +139,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
             return "Unable to fetch address";
         }
     }, []);
+
     const handleLocationSearch = useCallback(async () => {
         if (!searchString) return;
         try {
@@ -295,13 +296,14 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
 
             <button
                 onClick={handleDelete}
-                className="absolute top-1.5 left-30 bg-white text-black rounded-[2px] shadow px-2 py-1 text-xs cursor-pointer hover:bg-gray-300"
+                title="Delete drawn shapes"
+                className="absolute top-35 left-2.5 bg-white text-black rounded-md shadow px-3 py-2.5 text-xs cursor-pointer hover:bg-gray-300"
                 aria-label="Delete drawn shapes"
             >
-                <Trash2 size={18} />
+                <Trash2 size={22}  />
             </button>
 
-            <div className="absolute top-4 left-1/3 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 w-36 h-10 -mt-2">
+            <div className="absolute top-3 left-90 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 w-36 h-10 -mt-2">
                 <input
                     type="text"
                     placeholder="Search location"
