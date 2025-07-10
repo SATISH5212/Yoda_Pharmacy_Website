@@ -3,13 +3,13 @@ import { Outlet } from "@tanstack/react-router"
 
 const RobotDetals = () => {
     return (
-        <div className='flex flex-row h-[90vh] m-2'>
-            <div className='flex flex-col w-[25%] mx-2 space-y-4'>
+        <div className='flex flex-row h-[93vh] m-2'>
+            <div className='flex flex-col w-[24%] m-2 space-y-4'>
                 <div className="flex  h-[10%] w-[80%] space-x-2" >
                     <div className="flex w-[30%] "><img src="/src/components/svg/robots/robot.svg" alt="robot" /></div>
                     <div className="flex-grow  px-2 py-1 space-y-2 mt-2">
                         <div className="flex justify-between">
-                            <span className="flex justify-start space-x-2 ">
+                            <span className="flex justify-between space-x-2 ">
                                 <span className="font-medium text-md text-black-200">Spray Guardian</span>
                                 <span className="bg-green-500 rounded-full w-3 h-3 mt-2"></span>
                             </span>
