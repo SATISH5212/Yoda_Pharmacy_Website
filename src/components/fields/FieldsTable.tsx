@@ -120,6 +120,9 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         ...field,
     })) || [];
 
+    console.log("fields table data",data);
+    
+
     return (
         <div >
             <TanStackTable

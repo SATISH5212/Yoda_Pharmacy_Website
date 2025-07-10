@@ -87,20 +87,64 @@ export const allFieldsColumns = [
         },
         width: "100px",
     },
+
     {
+        accessorFn: (row: any) => row.location,
+        id: "location",
         header: () => (
             <span className="text-xs sm:text-sm font-semibold text-gray-900">
-                Missions
+                Location
             </span>
         ),
-        accessorKey: "missions",
-        cell: () => (
-            <span className="text-xs sm:text-sm text-gray-900 font-medium">
-                12
-            </span>
-        ),
+        accessorKey: "location",
+        cell: (info: any) => {
+            const fullLocation = info.getValue() || "-";
+            const parts = fullLocation.split(",").map((p : string)=> p.trim());
+            const firstTwo = parts.slice(0, 2).join(", ");
+            const showDots = parts.length > 2;
+
+            const groupedParts: string[]= [];
+            for (let i = 0; i < parts.length; i += 2) {
+                groupedParts.push(parts.slice(i, i + 2).join(", "));
+            }
+
+            return (
+                <span
+                    className="text-xs sm:text-sm text-gray-600 truncate inline-block max-w-[150px] cursor-pointer"
+                    title={showDots ? groupedParts.join("\n") : ""}
+                >
+                    {firstTwo}
+                    {showDots && "..."}
+                </span>
+            );
+        },
+
+        // cell: (info: any) => {
+        //     const fullLocation = info.getValue() || "-";
+        //     const parts = fullLocation.split(",").map((p: string) => p.trim());
+
+        //     const groupedParts: string[] = [];
+        //     for (let i = 0; i < parts.length; i += 2) {
+        //         groupedParts.push(parts.slice(i, i + 2).join(", "));
+        //     }
+
+        //     return (
+        //         <div
+        //             className="text-xs sm:text-sm text-gray-600 max-w-[200px] overflow-hidden"
+        //             title={fullLocation}
+        //         >
+        //             {groupedParts.map((line, index) => (
+        //                 <div key={index} className="truncate">
+        //                     {line}
+        //                 </div>
+        //             ))}
+        //         </div>
+        //     );
+        // },
+
         width: "80px",
     },
+
     {
         header: () => (
             <span className="text-xs sm:text-sm font-semibold text-gray-900">
