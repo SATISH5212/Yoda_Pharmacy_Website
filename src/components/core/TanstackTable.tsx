@@ -8,7 +8,7 @@ import {
     getSortedRowModel,
     Header,
     SortingState,
-    useReactTable
+    useReactTable,
 } from "@tanstack/react-table";
 import { FC, useState } from "react";
 import SortAscIcon from "../icons/table/sort-asc";
@@ -22,7 +22,6 @@ const TanStackTable: FC<pageProps> = ({
     getData,
     paginationDetails,
     removeSortingForColumnIds,
-    heightClass,
     noDataLabel,
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -31,9 +30,7 @@ const TanStackTable: FC<pageProps> = ({
     const table = useReactTable({
         columns,
         data: data?.length ? data : [],
-        state: {
-            sorting,
-        },
+        state: { sorting },
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -45,30 +42,25 @@ const TanStackTable: FC<pageProps> = ({
 
     const capturePageNum = (value: number) => {
         getData({
-            ...searchParams,
-            page_size: searchParams.get("page_size")
-                ? +(searchParams.get("page_size") as string)
-                : 25,
             page: value,
-            order_by: searchParams.get("order_by"),
-            order_type: searchParams.get("order_type"),
+            page_size: Number(searchParams.get("page_size")) || 10,
+            order_by: searchParams.get("order_by") || undefined,
+            order_type: searchParams.get("order_type") || undefined,
         });
     };
 
     const captureRowPerItems = (value: number) => {
         getData({
-            ...searchParams,
-            page_size: value,
             page: 1,
-            order_by: searchParams.get("order_by"),
-            order_type: searchParams.get("order_type"),
-            //search_string:searchParams.get("search_string"),
+            page_size: value,
+            order_by: searchParams.get("order_by") || undefined,
+            order_type: searchParams.get("order_type") || undefined,
         });
     };
 
     const getWidth = (id: string) => {
         const widthObj = columns.find((col) => col.id === id);
-        return widthObj ? widthObj?.width || widthObj?.size || "100px" : "100px";
+        return widthObj ? widthObj?.width || widthObj?.size || "auto" : "auto";
     };
 
     const sortAndGetData = (header: Header<any, unknown>) => {
@@ -104,203 +96,95 @@ const TanStackTable: FC<pageProps> = ({
     };
 
     return (
-        <div className="w-full rounded-lg shadow-sm border border-gray-200 bg-white">
-            <div
-                className="w-1832px relative bg-white overflow-hidden"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "944px",
-                }}
-            >
+        <div className="w-full rounded-lg shadow-sm border border-gray-200 bg-white flex flex-col">
+            <div className="flex-1 overflow-auto">
                 {!data.length && !loading ? (
-                    <div className="flex justify-center items-center w-full h-full">
+                    <div className="flex justify-center items-center min-h-[400px] p-4">
                         <div className="flex flex-col justify-center items-center text-center">
                             <img
-                                src={"/images/core/no-data.jpg"}
+                                src="/images/core/no-data.jpg"
                                 alt="No Data"
-                                className="w-[300px] h-auto mx-auto"
+                                className="max-w-[200px] sm:max-w-[300px] h-auto mx-auto"
                             />
-                            <p className="text-[20px] text-zinc-800 font-normal mt-4">
-                                {noDataLabel ? noDataLabel : "No data available"}
+                            <p className="text-lg text-gray-600 font-normal mt-4">
+                                {noDataLabel || "No data available"}
                             </p>
                         </div>
                     </div>
                 ) : (
-                    <div className="w-full h-full flex flex-col">
-
-                        <div className="flex-1 overflow-auto custom-scrollbar">
-                            <table className="w-full border-collapse bg-white min-w-full">
-                                <thead className="bg-gray-100 sticky top-0 z-10">
-                                    {table?.getHeaderGroups().map((headerGroup) => (
-                                        <tr
-                                            key={headerGroup.id + `-${new Date().getTime()}`}
-                                            className="border-b border-gray-200"
-                                        >
-                                            {headerGroup.headers.map(
-                                                (header: Header<any, unknown>, index: number) => {
-                                                    if (location.pathname.includes("/dashboard")) {
-                                                        return (
-                                                            <th
-                                                                key={index + `-${new Date().getTime()}`}
-                                                                colSpan={header.colSpan}
-                                                                className="bg-gray-500 text-left px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900 border-b border-gray-200"
-                                                                style={{
-                                                                    minWidth: getWidth(header.id),
-                                                                    width: getWidth(header.id),
-                                                                }}
-                                                            >
-                                                                {header.isPlaceholder ? null : (
-                                                                    <div
-                                                                        {...{
-                                                                            className: header.column.getCanSort()
-                                                                                ? "cursor-pointer select-none"
-                                                                                : "",
-                                                                            onClick:
-                                                                                header.column.getToggleSortingHandler(),
-                                                                        }}
-                                                                        className="flex items-center gap-2"
-                                                                    >
-                                                                        {flexRender(
-                                                                            header.column.columnDef.header,
-                                                                            header.getContext()
-                                                                        )}
-                                                                        {{
-                                                                            asc: (
-                                                                                <img
-                                                                                    src={
-                                                                                        "/images/dashboard/table/sort-asc.svg"
-                                                                                    }
-                                                                                    height={20}
-                                                                                    width={20}
-                                                                                    alt="Asc"
-                                                                                    className={
-                                                                                        removeSortingForColumnIds?.includes(
-                                                                                            header.id
-                                                                                        ) || header.colSpan == 2
-                                                                                            ? "hidden"
-                                                                                            : ""
-                                                                                    }
-                                                                                />
-                                                                            ),
-                                                                            desc: (
-                                                                                <img
-                                                                                    src={
-                                                                                        "/images/dashboard/table/sort-desc.svg"
-                                                                                    }
-                                                                                    height={20}
-                                                                                    width={20}
-                                                                                    alt="Desc"
-                                                                                    className={
-                                                                                        removeSortingForColumnIds?.includes(
-                                                                                            header.id
-                                                                                        ) || header.colSpan == 2
-                                                                                            ? "hidden"
-                                                                                            : ""
-                                                                                    }
-                                                                                />
-                                                                            ),
-                                                                        }[
-                                                                            header.column.getIsSorted() as string
-                                                                        ] ?? (
-                                                                                <img
-                                                                                    src={
-                                                                                        "/images/dashboard/table/sort-norm.svg"
-                                                                                    }
-                                                                                    height={15}
-                                                                                    width={15}
-                                                                                    alt="No Sort"
-                                                                                    className={
-                                                                                        removeSortingForColumnIds?.includes(
-                                                                                            header.id
-                                                                                        ) || header.colSpan == 2
-                                                                                            ? "hidden"
-                                                                                            : ""
-                                                                                    }
-                                                                                />
-                                                                            )}
-                                                                    </div>
-                                                                )}
-                                                            </th>
-                                                        );
-                                                    } else {
-                                                        return (
-                                                            <th
-                                                                key={index + `-${new Date().getTime()}`}
-                                                                colSpan={header.colSpan}
-                                                                className="bg-gray-50 text-left px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900 border-b border-gray-200"
-                                                                style={{
-                                                                    minWidth: getWidth(header.id),
-                                                                    width: getWidth(header.id),
-                                                                }}
-                                                            >
-                                                                {header.isPlaceholder ? null : (
-                                                                    <div
-                                                                        onClick={() => sortAndGetData(header)}
-                                                                        className="flex items-center gap-2 cursor-pointer"
-                                                                    >
-                                                                        {flexRender(
-                                                                            header.column.columnDef.header,
-                                                                            header.getContext()
-                                                                        )}
-                                                                        <SortItems
-                                                                            header={header}
-                                                                            removeSortingForColumnIds={
-                                                                                removeSortingForColumnIds
-                                                                            }
-                                                                            getData={getData}
-                                                                        />
-                                                                    </div>
-                                                                )}
-                                                            </th>
-                                                        );
-                                                    }
-                                                }
-                                            )}
-                                        </tr>
-                                    ))}
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 bg-white">
-                                    {data?.length ? (
-                                        table?.getRowModel().rows.map((row, rowIndex) => (
-                                            <tr
-                                                key={row.id + `-${new Date().getTime()}`}
-                                                className="hover:bg-gray-50/50 transition-colors duration-200"
+                    <div className="w-full">
+                        <table className="w-full border-collapse bg-white">
+                            <thead className="bg-gray-100 sticky top-0 z-10">
+                                {table?.getHeaderGroups().map((headerGroup) => (
+                                    <tr
+                                        key={headerGroup.id + `-${new Date().getTime()}`}
+                                        className="border-b border-gray-200"
+                                    >
+                                        {headerGroup.headers.map((header: Header<any, unknown>, index: number) => (
+                                            <th
+                                                key={index + `-${new Date().getTime()}`}
+                                                colSpan={header.colSpan}
+                                                className="bg-gray-100 text-left px-4 py-3 text-sm font-semibold text-gray-900 border-b border-gray-200"
+                                                style={{
+                                                    minWidth: getWidth(header.id),
+                                                    width: getWidth(header.id),
+                                                }}
                                             >
-                                                {row.getVisibleCells().map((cell) => (
-                                                    <td
-                                                        className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 whitespace-nowrap"
-                                                        key={cell.id + `-${new Date().getTime()}`}
+                                                {header.isPlaceholder ? null : (
+                                                    <div
+                                                        onClick={() => sortAndGetData(header)}
+                                                        className="flex items-center gap-2 cursor-pointer"
                                                     >
-                                                        {flexRender(
-                                                            cell.column.columnDef.cell,
-                                                            cell.getContext()
-                                                        )}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))
-                                    ) : loading ? (
-                                        <tr>
-                                            <td
-                                                colSpan={columns?.length}
-                                                className="px-6 py-8 text-sm text-center text-gray-500"
-                                            >
-                                                <div className="flex justify-center items-center">
-                                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                                                    <span className="ml-2">Loading...</span>
-                                                </div>
-                                            </td>
+                                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                                        <SortItems
+                                                            header={header}
+                                                            removeSortingForColumnIds={removeSortingForColumnIds}
+                                                            getData={getData}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </thead>
+                            <tbody className="divide-y divide-gray-100 bg-white">
+                                {data?.length ? (
+                                    table?.getRowModel().rows.map((row) => (
+                                        <tr
+                                            key={row.id + `-${new Date().getTime()}`}
+                                            className="hover:bg-gray-50 transition-colors duration-200"
+                                        >
+                                            {row.getVisibleCells().map((cell) => (
+                                                <td
+                                                    className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap"
+                                                    key={cell.id + `-${new Date().getTime()}`}
+                                                >
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </td>
+                                            ))}
                                         </tr>
-                                    ) : null}
-                                </tbody>
-                            </table>
-                        </div>
+                                    ))
+                                ) : loading ? (
+                                    <tr>
+                                        <td
+                                            colSpan={columns?.length}
+                                            className="px-4 py-8 text-sm text-center text-gray-500"
+                                        >
+                                            <div className="flex justify-center items-center">
+                                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                                                <span className="ml-2">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : null}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
             {data?.length && paginationDetails ? (
-                <div className="border-t border-gray-200 bg-white sticky bottom-0 z-10">
+                <div className="border-t border-gray-200 bg-white sticky bottom-0 z-10 p-4">
                     <Pagination
                         paginationDetails={paginationDetails}
                         capturePageNum={capturePageNum}
@@ -323,7 +207,6 @@ const SortItems = ({
 }) => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location?.search);
-
     const sortBy = searchParams.get("order_by");
     const sortDirection = searchParams.get("order_type");
 
@@ -335,9 +218,9 @@ const SortItems = ({
     const isDescending = sortBy === header.id && sortDirection === "desc";
 
     return (
-        <div className="flex items-center flex-col">
+        <div className="flex items-center flex-col gap-1">
             <div
-                className={`[&_svg]:size-2 ${isAscending ? "text-primary-600 [&_svg]:size-2 " : ""}`}
+                className={`[&_svg]:size-4 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
@@ -349,19 +232,18 @@ const SortItems = ({
                         newSearchParams.set("order_by", header.id);
                         newSearchParams.set("order_type", "asc");
                     }
-
                     getData({
-                        ...Object.fromEntries(newSearchParams.entries()),
-                        page: searchParams.get("page") || 1,
-                        page_size: searchParams.get("page_size") || 25,
+                        page: Number(searchParams.get("page")) || 1,
+                        page_size: Number(searchParams.get("page_size")) || 10,
+                        order_by: isAscending ? "" : header.id,
+                        order_type: isAscending ? "" : "asc",
                     });
                 }}
             >
                 <SortAscIcon />
             </div>
-
             <div
-                className={`[&_svg]:size-2 ${isDescending ? "text-primary-600 [&_svg]:size-2 " : ""}`}
+                className={`[&_svg]:size-4 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
@@ -375,9 +257,10 @@ const SortItems = ({
                     }
 
                     getData({
-                        ...Object.fromEntries(newSearchParams.entries()),
-                        page: searchParams.get("page") || 1,
-                        page_size: searchParams.get("page_size") || 25,
+                        page: Number(searchParams.get("page")) || 1,
+                        page_size: Number(searchParams.get("page_size")) || 10,
+                        order_by: isDescending ? "" : header.id,
+                        order_type: isDescending ? "" : "desc",
                     });
                 }}
             >
@@ -386,4 +269,5 @@ const SortItems = ({
         </div>
     );
 };
+
 export default TanStackTable;
