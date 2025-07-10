@@ -9,18 +9,13 @@ import { useRouter } from "@tanstack/react-router";
 import { IFieldsTablePageProps } from "@/lib/interfaces/fields";
 
 
-
 const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
     const { searchString, searchParams, status } = props
     const router = useRouter();
-
-    const [debounceSearchString, setDebounceSearchString] = useState<string>(
-        searchParams.get("search_string") || ""
-    );
-
+    const [debounceSearchString, setDebounceSearchString] = useState<string>(searchParams.get("search_string") || "");
     const [pagination, setPagination] = useState<{
-        page: number | string;
-        page_size: number | string;
+        page: number;
+        page_size: number;
         order_by: string | null;
         order_type: string | null;
     }>({
@@ -29,12 +24,14 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         order_by: searchParams.get("order_by") || null,
         order_type: searchParams.get("order_type") || null,
     });
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebounceSearchString(searchString);
         }, 500);
         return () => clearTimeout(timer);
     }, [searchString]);
+
     useEffect(() => {
         const currentSearchParams = new URLSearchParams(location.search);
         setPagination({
@@ -53,7 +50,6 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
     const {
         data: allFieldsData,
-        refetch,
         isLoading
     } = useQuery({
         queryKey: ["all-fieldsData", pagination, debounceSearchString, status],
@@ -86,25 +82,33 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         refetchOnWindowFocus: false,
         staleTime: 0,
         enabled: true,
+        retry: false,
+        refetchInterval: false,
+        refetchOnMount: false,
     });
 
     const getData = (params: any) => {
         setPagination({
-            page: params.page || 1,
-            page_size: params.page_size || 10,
+            page: Number(params.page) || 1,
+            page_size: Number(params.page_size) || 10,
             order_by: params.order_by || null,
             order_type: params.order_type || null,
         });
 
         const allParams = {
-            ...params,
-            ...(debounceSearchString && { search_string: debounceSearchString })
+            page: Number(params.page) || 1,
+            page_size: Number(params.page_size) || 10,
+            order_by: params.order_by || undefined,
+            order_type: params.order_type || undefined,
+            ...(debounceSearchString && { search_string: debounceSearchString }),
         };
+
         const cleanParams = Object.fromEntries(
-            Object.entries(allParams).filter(([_, value]) =>
-                value !== undefined && value !== null && value !== ''
+            Object.entries(allParams).filter(
+                ([_, value]) => value !== undefined && value !== null && value !== ""
             )
         );
+
         router.navigate({
             to: "/all-fields",
             search: cleanParams,

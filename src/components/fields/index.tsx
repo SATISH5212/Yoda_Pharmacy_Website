@@ -3,7 +3,7 @@ import FieldsTable from "./FieldsTable";
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-const FieldsPage = () => {
+const AllFieldsPage = () => {
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const [searchString, setSearchString] = useState<string>(
@@ -66,4 +66,4 @@ const FieldsPage = () => {
     )
 }
 
-export default FieldsPage;
+export default AllFieldsPage;

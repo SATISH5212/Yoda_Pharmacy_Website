@@ -84,10 +84,10 @@ const TanStackTable: FC<pageProps> = ({
         let orderType = "asc";
 
         if (searchParams.get("order_by")?.startsWith(header.id)) {
-            if (searchParams.get("order_by") == `${header.id}`) {
-                if (searchParams.get("order_type") == "asc") {
+            if (searchParams.get("order_by") === header.id) {
+                if (searchParams.get("order_type") === "asc") {
                     orderType = "desc";
-                    orderBy = `${header.id}`;
+                    orderBy = header.id;
                 } else {
                     orderBy = "";
                     orderType = "";
@@ -96,9 +96,8 @@ const TanStackTable: FC<pageProps> = ({
         }
 
         getData({
-            ...searchParams,
-            page: searchParams.get("page") || 1,
-            page_size: searchParams.get("page_size") || 25,
+            page: Number(searchParams.get("page")) || 1,
+            page_size: Number(searchParams.get("page_size")) || 10,
             order_by: orderBy,
             order_type: orderType,
         });
