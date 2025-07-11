@@ -1,4 +1,4 @@
-const ConfigMissionPage=() => {
+const ConfigMissionPage = () => {
     return (
         <div>ConfigMissionPage</div>
     )

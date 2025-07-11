@@ -6,7 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import AddMissionForm from "../addMission";
+import AddMissionForm from "../../missions/addMission";
 import FieldFormPage from "./MapForm";
 import AddBoundaryMAP from "./AddBoundaryMap";
 const TOAST_CONFIG = {

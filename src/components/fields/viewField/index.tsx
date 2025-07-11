@@ -12,12 +12,13 @@ import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
 import { getSingleFieldAPI } from "@/lib/services/fields";
 import { useQuery } from "@tanstack/react-query";
 import {
+    useLocation,
     useParams
 } from "@tanstack/react-router";
 import { IViewFieldPageProps } from "@/lib/interfaces/maps";
 import samplePath from "./samplePath";
 import { Waypoint } from "../viewPath";
-import AddMissionForm from "../addMission";
+import AddMissionForm from "../../missions/addMission";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
@@ -29,7 +30,7 @@ const DEFAULT_CENTER = {
     lat: 17.469856405071194,
     lng: 78.59649084252246,
 };
-const DEFAULT_ZOOM = 30;
+const DEFAULT_ZOOM = 16;
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
@@ -41,10 +42,11 @@ export type Coordinates = {
 
 const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const { field_id } = useParams({ strict: false });
+    const location = useLocation()
+
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [calculatedArea, setCalculatedArea] = useState<string>("");
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER);
-    const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
 
     const {
         data: viewFieldData,
@@ -204,7 +206,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                         />
                     )}
 
-                    {pathForFeildAccessPoint.length > 0 && (
+                        {pathForFeildAccessPoint.length > 0 && (
                         <Polyline
                             path={pathForFeildAccessPoint}
                             options={homeToFieldOptions}
@@ -261,7 +263,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     )}
                 </GoogleMap>
             </LoadScript>
-            {/* <div><AddMissionForm viewFieldData={viewFieldData} /></div> */}
+            {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
+
         </div>
     );
 };
