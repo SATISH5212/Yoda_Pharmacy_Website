@@ -1,6 +1,6 @@
 import { capitalize } from "@/lib/helpers/CaptalizeFirstLetter";
 import { Link, useRouter } from "@tanstack/react-router";
-import { Eye, Waypoints } from "lucide-react";
+import { Edit, Eye, Waypoints } from "lucide-react";
 import { Button } from "../ui/button";
 const getAllFieldsColumns = () => {
     const router = useRouter()
@@ -138,7 +138,7 @@ const getAllFieldsColumns = () => {
                             to="/fields/$field_id"
                             params={{ field_id }}
                             className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
-                            title="View Details"
+                            title="View Field"
                         >
                             <Eye size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
@@ -146,18 +146,27 @@ const getAllFieldsColumns = () => {
                             to="/fields/$field_id/viewField"
                             params={{ field_id }}
                             className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
-                            title="View Field"
+                            title="Edit Field"
                         >
-                            <Waypoints size={14} className="text-gray-600 group-hover:text-blue-600" />
+                            <Edit size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
                         <Button
                             className="flex items-center justify-center w-fill h-8 rounded-full  text-black font-bold bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
-                            title="Configure Mission for this Field"
+                            title="Configure Mission"
                             onClick={() => {
                                 router.navigate({ to: `/fields/${field_id}/config-mission` });
                             }}
                         >
                             Create Mission
+                        </Button>
+                        <Button
+                            className="flex items-center justify-center w-fill h-8 rounded-full  text-black font-bold bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
+                            title="Add Robot"
+                            onClick={() => {
+                                router.navigate({ to: `/fields/${field_id}/config-robot` });
+                            }}
+                        >
+                            Add Robot
                         </Button>
                     </div>
                 );

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 
 interface IDropDownPoperProps {
-    data: any[];
+    data: any[] | string[] ;
     onSelect?: (robot: any | null) => void;
     type: string
     isLoading: boolean
@@ -20,7 +20,13 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSelectRobot = (robotId: string) => {
-        const selected = data.find((robot) => robot.id.toString() === robotId);
+        const selected = data.find((item) => {
+            if (typeof item === "object") {
+                return item.id.toString() === robotId;
+            } else {
+                return item === robotId;
+            }
+        });
         setSelectedField(selected || null);
         onSelect?.(selected || null);
         setOpen(false);
@@ -46,10 +52,9 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                     >
                         <span className="w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
                             {type === "robots" ? (
-
-                                `${selectedField ? selectedField.robot_name : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.robot_name : selectedField) : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
                             ) : (
-                                `${selectedField ? selectedField.field_name : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
                             )}
                         </span>
                         {selectedField && (
@@ -79,18 +84,18 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                             <CommandList>
                                 <CommandEmpty>No {type === "robots" ? "Robots" : "Fields"} found.</CommandEmpty>
                                 <CommandGroup>
-                                    {data?.map((item) => (
+                                    {data?.map((item, index) => (
                                         <CommandItem
-                                            key={item.id}
-                                            value={item.id.toString()}
+                                            key={typeof item === "object" ? item.id : index}
+                                            value={typeof item === "object" ? item.id.toString() : item}
                                             onSelect={handleSelectRobot}
                                             className="cursor-pointer"
                                         >
-                                            <span className="truncate">{type === "robots" ? item.robot_name : item.field_name}</span>
+                                            <span className="truncate">{typeof item === "object" ? (type === "robots" ? item.robot_name : item.field_name) : item}</span>
                                             <Check
                                                 className={cn(
                                                     "ml-2 h-4 w-4",
-                                                    selectedField?.id === item.id ? "opacity-100" : "opacity-0"
+                                                    selectedField === (typeof item === "object" ? item.id : item) ? "opacity-100" : "opacity-0"
                                                 )}
                                             />
                                         </CommandItem>

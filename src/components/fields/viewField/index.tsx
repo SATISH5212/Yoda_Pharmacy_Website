@@ -18,19 +18,19 @@ import {
 import { IViewFieldPageProps } from "@/lib/interfaces/maps";
 import samplePath from "./samplePath";
 import { Waypoint } from "../viewPath";
-import AddMissionForm from "../../missions/addMission";
+import AddMissionForm from "../../missions/configMission";
+import AddRobot from "@/components/robots/addRobot";
+import AddRobotForm from "@/components/robots/configRobot";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
 };
-
 const DEFAULT_CENTER = {
-    // lat: 17.385, lng: 78.4867
-    lat: 17.469856405071194,
-    lng: 78.59649084252246,
+    lat: samplePath.mission.RobotHome.lat,
+    lng: samplePath.mission.RobotHome.lng
 };
-const DEFAULT_ZOOM = 16;
+const DEFAULT_ZOOM = 30;
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
@@ -82,7 +82,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
     useEffect(() => {
         if (viewFieldData?.data?.field_boundary.length > 0) {
-            setMapCenter(viewFieldData?.data?.centroid);
+            // setMapCenter(viewFieldData?.data?.centroid);
             setCalculatedArea(viewFieldData?.data?.field_area);
             const bounds = calculateBounds(viewFieldData?.data?.field_boundary);
             const latDiff = bounds.north - bounds.south;
@@ -153,6 +153,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         if (!robotHome) return coordinates;
 
         samplePath.mission?.RobotPath.forEach((segment: Waypoint[]) => {
+            console.log(segment, "seggg001");
             segment.forEach((waypoint) => {
                 const { lat, lng } = covertXYToLatLng(
                     robotHome.lat,
@@ -163,6 +164,43 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 coordinates.push({ lat, lng });
             });
         });
+
+        return coordinates;
+    }, [covertXYToLatLng]);
+
+    const pathForRobotHome = useMemo(() => {
+        const coordinates: Coordinates[] = [];
+        const robotHome = samplePath.mission?.RobotHome;
+
+        if (!robotHome) return coordinates;
+        samplePath.mission?.GoToHome[1]
+        console.log(samplePath.mission?.GoToHome[6], samplePath.mission?.GoToHome?.length, "seggg004");
+        // samplePath.mission?.GoToHome?.forEach((segment: any[]) => {
+        //     console.log(segment, "seggg002");
+        //     segment.forEach((segment2: Waypoint[]) => {
+        //         console.log(segment2, "seggg003");
+        //         segment2.forEach((waypoint) => {
+        //             const { lat, lng } = covertXYToLatLng(
+        //                 robotHome.lat,
+        //                 robotHome.lng,
+        //                 waypoint.x,
+        //                 waypoint.y
+        //             );
+        //             coordinates.push({ lat, lng });
+        //         });
+        //     })
+        // });
+        samplePath.mission?.GoToHome[samplePath.mission?.GoToHome?.length - 1].forEach((waypoint) => {
+            waypoint.forEach((waypoint) => {
+                const { lat, lng } = covertXYToLatLng(
+                    robotHome.lat,
+                    robotHome.lng,
+                    waypoint.x,
+                    waypoint.y
+                );
+                coordinates.push({ lat, lng });
+            })
+        })
 
         return coordinates;
     }, [covertXYToLatLng]);
@@ -180,7 +218,12 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         strokeWeight: 3,
         geodesic: true,
     };
-
+    const robotPathToHomeOptions = {
+        strokeColor: '#bb9217ff',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        geodesic: true,
+    };
     return (
         <div className="relative w-full h-screen">
             {isLoading && (
@@ -206,7 +249,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                         />
                     )}
 
-                        {pathForFeildAccessPoint.length > 0 && (
+                    {pathForFeildAccessPoint.length > 0 && (
                         <Polyline
                             path={pathForFeildAccessPoint}
                             options={homeToFieldOptions}
@@ -219,6 +262,13 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                             options={robotPathOptions}
                         />
                     )}
+                    {pathForRobotHome.length > 0 && (
+                        <Polyline
+                            path={pathForRobotHome}
+                            options={robotPathToHomeOptions}
+                        />
+                    )}
+
                     <Marker
                         position={samplePath.mission.RobotHome}
                         title="Robot Home"
@@ -264,6 +314,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 </GoogleMap>
             </LoadScript>
             {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
+            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} /></div>}
 
         </div>
     );

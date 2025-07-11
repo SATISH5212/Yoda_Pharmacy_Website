@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus, Router } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRobotsAPI } from "@/lib/services/robots";
 import { getAllFieldsAPI } from "@/lib/services/fields";
 import DropDownPoper from "@/components/core/DropDownPoper";
 import { Input } from "@/components/ui/input";
 import { downloadJSONFromObject } from "@/lib/helpers/downloadJSONFromObject";
+import { useNavigate } from "@tanstack/react-router";
 export interface IAddMissionFormProps {
     viewFieldData: any
 }
@@ -18,6 +19,7 @@ export interface FieldRowsSettings {
 }
 const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
     const { viewFieldData } = props
+    const navigate = useNavigate();
     const [robotsDropdown, setRobotsDropdown] = useState([])
     const [fieldRowsSettings, setFieldRowsSettings] = useState<FieldRowsSettings>({
         RowSpacing: 0,
@@ -67,10 +69,11 @@ const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
         };
         console.log(finalPathObject, "finalPathObject");
         downloadJSONFromObject(finalPathObject, `field_${fieldId}.json`);
+        navigate({ to: "/" })
     };
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4 ">
-            <h2 className="text-lg font-semibold">Register Fields</h2>
+            <h2 className="text-lg font-semibold">Configure Mission</h2>
             <div className="flex justify-between items-center">
                 <Input placeholder="Field Name" value={viewFieldData?.data?.field_name} disabled className="text-md font-bold text-black" />
                 <button className="ml-2 text-green-600 text-sm flex items-center">
@@ -91,6 +94,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
                     <span>📍 100%</span>
                 </div>
             </div> */}
+            {/* <DropDownPoper data={robotsDropdown} type="robots" isLoading={isLoadingRobots} /> */}
 
 
             <div className="flex gap-2">
