@@ -6,9 +6,7 @@ import { Search } from "lucide-react";
 const AllFieldsPage = () => {
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
-    const [searchString, setSearchString] = useState<string>(
-        searchParams.get("search_string") || ""
-    );
+    const [searchString, setSearchString] = useState<string>(searchParams.get("search_string") || "");
     const [status, setStatus] = useState<string>(searchParams.get("status") || "");
 
     return (

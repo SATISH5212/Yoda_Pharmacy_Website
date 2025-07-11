@@ -17,6 +17,7 @@ import {
 import { IViewFieldPageProps } from "@/lib/interfaces/maps";
 import samplePath from "./samplePath";
 import { Waypoint } from "../viewPath";
+import AddMissionForm from "../addMission";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
@@ -260,6 +261,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     )}
                 </GoogleMap>
             </LoadScript>
+            {/* <div><AddMissionForm viewFieldData={viewFieldData} /></div> */}
         </div>
     );
 };

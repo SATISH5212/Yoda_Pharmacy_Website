@@ -1,15 +1,16 @@
 import { getAllFieldsAPI } from "@/lib/services/fields";
 import { FieldResponse } from "@/types/dataTypes";
 import { useQuery } from "@tanstack/react-query";
-import { allFieldsColumns } from "./AllFieldsColumns";
 import { iFieldQueryParams } from "@/lib/interfaces/maps";
-import { useState, useEffect, FC } from "react";
+import { useState, useEffect, FC, use } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { IFieldsTablePageProps } from "@/lib/interfaces/fields";
 import TanStackTable from "../core/TanstackTable";
+import { useViewAllFieldsColumns } from "./AllFieldsColumns";
 
 const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
     const { searchString, searchParams, status } = props;
+    const [allFieldsColumns] = useViewAllFieldsColumns();
     const router = useRouter();
     const [debounceSearchString, setDebounceSearchString] = useState<string>(
         searchParams.get("search_string") || ""
@@ -122,8 +123,8 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         ...field,
     })) || [];
 
-    console.log("fields table data",data);
-    
+    console.log("fields table data", data);
+
 
     return (
         <div className="flex-1">
