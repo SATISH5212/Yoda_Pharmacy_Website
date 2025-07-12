@@ -21,6 +21,7 @@ import { Waypoint } from "../viewPath";
 import AddMissionForm from "../../missions/configMission";
 import AddRobot from "@/components/robots/addRobot";
 import AddRobotForm from "@/components/robots/configRobot";
+import { CordinatesToLocation } from "@/lib/helpers/latLongToLocation";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
@@ -43,6 +44,7 @@ export type Coordinates = {
 const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const { field_id } = useParams({ strict: false });
     const location = useLocation()
+    const [showMissionPath, setShowMissionPath] = useState(false);
 
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [calculatedArea, setCalculatedArea] = useState<string>("");
@@ -110,7 +112,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const handlePolygonClick = useCallback(() => {
         setShowInfoWindow(prev => !prev);
     }, []);
-
     const covertXYToLatLng = useCallback((homeLat: number, homeLon: number, x: number, y: number) => {
         const METERS_PER_DEGREE_LAT = 110540;
         const METERS_PER_DEGREE_LON = 111320;
@@ -248,26 +249,32 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                             onClick={handlePolygonClick}
                         />
                     )}
+                    {showMissionPath && pathForFeildAccessPoint && (
+                        <>
+                            {
+                                pathForFeildAccessPoint.length > 0 && (
+                                    <Polyline
+                                        path={pathForFeildAccessPoint}
+                                        options={homeToFieldOptions}
+                                    />
+                                )
+                            }
 
-                    {pathForFeildAccessPoint.length > 0 && (
-                        <Polyline
-                            path={pathForFeildAccessPoint}
-                            options={homeToFieldOptions}
-                        />
+                            {pathForRobotMove.length > 0 && (
+                                <Polyline
+                                    path={pathForRobotMove}
+                                    options={robotPathOptions}
+                                />
+                            )}
+                            {pathForRobotHome.length > 0 && (
+                                <Polyline
+                                    path={pathForRobotHome}
+                                    options={robotPathToHomeOptions}
+                                />
+                            )}
+                        </>
                     )}
 
-                    {pathForRobotMove.length > 0 && (
-                        <Polyline
-                            path={pathForRobotMove}
-                            options={robotPathOptions}
-                        />
-                    )}
-                    {pathForRobotHome.length > 0 && (
-                        <Polyline
-                            path={pathForRobotHome}
-                            options={robotPathToHomeOptions}
-                        />
-                    )}
 
                     <Marker
                         position={samplePath.mission.RobotHome}
@@ -314,7 +321,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 </GoogleMap>
             </LoadScript>
             {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
-            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} /></div>}
+            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} setShowMissionPath={setShowMissionPath} /></div>}
 
         </div>
     );

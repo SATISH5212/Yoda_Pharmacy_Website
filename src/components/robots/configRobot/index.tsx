@@ -9,6 +9,7 @@ import { downloadJSONFromObject } from "@/lib/helpers/downloadJSONFromObject";
 import { useNavigate } from "@tanstack/react-router";
 export interface IAddMissionFormProps {
     viewFieldData: any
+    setShowMissionPath: React.Dispatch<React.SetStateAction<boolean>>
 }
 export interface FieldRowsSettings {
     RowSpacing: number,
@@ -18,7 +19,7 @@ export interface FieldRowsSettings {
 
 }
 const ConfigRobotForm: FC<IAddMissionFormProps> = (props) => {
-    const { viewFieldData } = props
+    const { viewFieldData, setShowMissionPath } = props
     const navigate = useNavigate();
     const [robotsDropdown, setRobotsDropdown] = useState<string[] | undefined>()
     const robotType = ["DEMETER_MINI", "DEMETER_MAXI"]
@@ -51,27 +52,7 @@ const ConfigRobotForm: FC<IAddMissionFormProps> = (props) => {
         enabled: true,
     });
     const handleFetchEstimations = () => {
-        const { field_access_point, robot_home, field_boundary, field_name, id: fieldId, } = viewFieldData.data
-        const finalPathObject = {
-            "field": {
-                "CityID": 0,
-                "LocationID": 0,
-                "FieldID": fieldId,
-                "FieldName": field_name,
-                "RobotHome": robot_home,
-                "FieldAccessPoint": field_access_point,
-                "FieldBoundary": field_boundary,
-            },
-            "FieldRowsSettings": {
-                "RowSpacing": fieldRowsSettings.RowSpacing,
-                "HeadLandWidth": fieldRowsSettings.HeadLandWidth,
-                "RowPattern": fieldRowsSettings.RowPattern,
-                "StepSize": fieldRowsSettings.StepSize
-            }
-        };
-        console.log(finalPathObject, "finalPathObject");
-        downloadJSONFromObject(finalPathObject, `field_${fieldId}.json`);
-        navigate({ to: "/" })
+        setShowMissionPath(true)
     };
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4 ">

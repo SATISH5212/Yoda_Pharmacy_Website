@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 
 interface IDropDownPoperProps {
-    data: any[] | string[] ;
+    data: any[] | string[];
     onSelect?: (robot: any | null) => void;
     type: string
     isLoading: boolean
@@ -52,9 +52,11 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                     >
                         <span className="w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
                             {type === "robots" ? (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.robot_name : selectedField) : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.robot_name : selectedField) : "Select Robot"}`
+                            ) : type === "rowPattren" ? (
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.pattren_type : selectedField) : "Select Pattren Type"}`
                             ) : (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : `${type === "robots" ? "Select Robot" : "Select Field"}`}`
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : "Select Field"}`
                             )}
                         </span>
                         {selectedField && (
@@ -76,7 +78,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                     <PopoverContent className="w-[200px] p-0 font-product-sans text-sm">
                         <Command>
                             <CommandInput
-                                placeholder={`Search ${type === "robots" ? "Robots" : "Fields"}`}
+                                placeholder={`Search ${type === "robots" ? "Robots" : type === "rowPattren" ? "Pattren Types" : "Fields"}`}
                                 value={searchTerm}
                                 onValueChange={setSearchTerm}
                                 className="h-9"
