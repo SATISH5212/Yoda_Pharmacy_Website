@@ -12,8 +12,8 @@ const RobotDetals = () => {
                     <div className="flex-grow px-2 py-1 space-y-2 mt-2">
                         <div className="flex justify-between">
                             <div className="flex space-x-2">
-                                <span className="font-medium text-md text-black">Spray Guardian</span>
-                                <span className="bg-green-500 rounded-full w-3 h-3 mt-2"></span>
+                                    <span className="font-medium text-md text-black">Spray Guardian</span>
+                                    <span className="bg-green-500 rounded-full w-3 h-3 mt-2"></span>
                             </div>
                             <span className="bg-black rounded-md h-5 text-white px-3 text-sm">Active</span>
                         </div>
