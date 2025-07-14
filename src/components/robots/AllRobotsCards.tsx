@@ -8,7 +8,7 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
   const { robots, searchString, } = props;
 
   if (!robots) {
-    return <div>No robots available</div>;
+    return <div className="text-center text-gray-500 mt-50">No robots available</div>;
   }
 
   const filteredRobots = searchString
@@ -19,7 +19,7 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
 
   if (filteredRobots.length === 0) {
     return (
-      <div className="text-center text-gray-500">
+      <div className="text-center text-gray-500 mt-50">
         No robots found for "{searchString}"
       </div>
     );

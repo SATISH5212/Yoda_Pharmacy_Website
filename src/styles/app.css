@@ -136,24 +136,22 @@ body,
   justify-content: center;
   align-items: center;
   gap: 12px;
-  padding: 10px;
+  padding: 5px;
   margin-left: 10px !important;
 }
 
 /* Increase size of drawing tool icons */
 .gmnoprint>div {
-  transform: scale(1.4);
+  transform: scale(1.5);
   transform-origin: center;
   background-color: #e0f2fe !important;
-  border-radius: 50%;
+  border-radius: 50% !important;
 }
 
 
 
 .gmnoprint {
-  /* background: linear-gradient(135deg, #ffffff, #f7f9fb);
-   */
-  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+  background: linear-gradient(135deg, #ffffff, #f7f9fb);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
