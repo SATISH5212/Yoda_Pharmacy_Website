@@ -4,7 +4,7 @@ import { Coordinates } from "@/lib/interfaces/fields";
 import { PolygonOptions } from "@/lib/interfaces/maps";
 import { DrawToolsProps } from "@/types/dataTypes";
 import {
-    DrawingManager,
+    DrawingManager, 
     GoogleMap,
     LoadScript,
     Marker,
@@ -120,7 +120,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
             if (path.length < 3) return;
             setPolygonPath(path);
             setFormCoordinates(path);
-            toast.success("stop the drawing option to edit the boundary!");
+            toast.success("stop the drawing mode if you want to edit the boundary!");
             drawnShapeRef.current = overlay;
             const locationInfo = await calculateAreaAndLocation(path);
             if (locationInfo) {
@@ -161,13 +161,15 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
             lng: latLng.lng(),
         }));
         setPolygonPath(newPath);
+        console.log("Edited polygon path:", polygonPath);
+        
     }, []);
 
     // Function to save edited boundary
     const handleSaveEdit = useCallback(async () => {
         try {
             setFormCoordinates(polygonPath);
-            console.log("Saving edited boundary with path:", polygonPath);
+            console.log("Saving edited boundary:", polygonPath);
 
             const locationInfo = await calculateAreaAndLocation(polygonPath);
             if (locationInfo) {
@@ -307,7 +309,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                     {polygonPath.length === 0 && !isEditingBoundary && (
                         <div className="absolute top-[55px] left-[55px] z-[9999] pointer-events-none  animate-bounce-left">
                             <div className="flex items-center gap-2">
-                                <span className="animate-bounce-left"><MoveLeft className="text-white" /></span>
+                                <span className="animate-pulse"><MoveLeft className="text-white" /></span>
                                 <span className="bg-white text-black text-[11px] px-3 py-[3px] rounded-md shadow-md font-medium border border-gray-300">
                                     Draw the boundary
                                 </span>
@@ -323,11 +325,11 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                             onLoad={(polygon) => {
                                 editablePolygonRef.current = polygon;
                             }}
-                            // onMouseUp={() => {
-                            //     if (isEditingBoundary && editablePolygonRef.current) {
-                            //         handlePolygonEdit(editablePolygonRef.current);
-                            //     }
-                            // }}
+                            onMouseUp={() => {
+                                if (isEditingBoundary && editablePolygonRef.current) {
+                                    handlePolygonEdit(editablePolygonRef.current);
+                                }
+                            }}
                             onDragEnd={() => {
                                 if (isEditingBoundary && editablePolygonRef.current) {
                                     handlePolygonEdit(editablePolygonRef.current);
