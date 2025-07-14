@@ -65,7 +65,7 @@ const RobotMissionInfoPage = () => {
                     </TabsList>
                     <TabsContent value="mission-details" className="flex-grow p-2 rounded shadow-sm">
                         <div className="flex flex-col">
-                            <div className="flex items-center text-sm font-semibold  gap-2"><img src="/src/components/svg/robots/robotMissionInfo/assignedRobotsIcon.svg" alt="multi-users" className="w-[13px] h-[13px]" />Assigned Robots (2)</div>
+                            <div className="flex items-center   text-sm font-semibold  gap-2"><img src="/src/components/svg/robots/robotMissionInfo/assignedRobotsIcon.svg" alt="multi-users" className="w-[13px] h-[13px]" />Assigned Robots (2)</div>
                             <div className="flex justify-between p-2 gap-4 ">
                                 <span className="flex justify-between items-center w-full border rounded-md pb-2 pt-1">
                                     <span className="flex items-start gap-1 px-2  ">
@@ -89,20 +89,137 @@ const RobotMissionInfoPage = () => {
                                 </span>
                             </div>
                         </div>
-                        <div>2</div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-                    </TabsContent>
-                    <TabsContent value="timeline" className="mt-2 p-4 bg-white rounded shadow-sm">
+
+                        <div className="flex gap-3 justify-between mb-2 h-15">
+                            <span className="flex-col text-sm w-1/5 border-1 rounded-sm">
+                                <div className="flex-col w-fill bg-[#EDEDED] rounded-t-sm  items-center h-[55%] space-x-1 pl-2  pt-1.5" >
+                                    <span className="text-sm font-semibold">18L</span>
+                                    <span className=" text-xs text-[#4F4F4F]">(EST 20L)</span>
+                                </div>
+                                <div className="flex flex-col items-center pt-1" >
+                                    <div className="flex text-xs text-[#4F4F4F]     ">
+                                        Fuel Used
+                                    </div>
+                                </div>
+
+                            </span>
+                            <span className="flex-col text-sm w-1/5 border-1 rounded-sm">
+                                <div className="flex-col w-fill bg-[#EDEDED] rounded-t-sm  items-center h-[55%] space-x-1 pl-2  pt-1.5" >
+                                    <span className="text-sm font-semibold">18L</span>
+                                    <span className=" text-xs text-[#4F4F4F]">(EST 20L)</span>
+                                </div>
+                                <div className="flex flex-col items-center pt-1" >
+                                    <div className="flex text-xs text-[#4F4F4F]     ">
+                                        Fuel Used
+                                    </div>
+                                </div>
+
+                            </span>
+                            <span className="flex-col text-sm w-1/5 border-1 rounded-sm">
+                                <div className="flex-col w-fill bg-[#EDEDED] rounded-t-sm  items-center h-[55%] space-x-1 pl-2  pt-1.5" >
+                                    <span className="text-sm font-semibold">18L</span>
+                                    <span className=" text-xs text-[#4F4F4F]">(EST 20L)</span>
+                                </div>
+                                <div className="flex flex-col items-center pt-1" >
+                                    <div className="flex text-xs text-[#4F4F4F]     ">
+                                        Fuel Used
+                                    </div>
+                                </div>
+
+                            </span>
+                            <span className="flex-col text-sm w-1/5 border-1 rounded-sm">
+                                <div className="flex-col w-fill bg-[#EDEDED] rounded-t-sm  items-center h-[55%] space-x-1 pl-2  pt-1.5" >
+                                    <span className="text-sm font-semibold">18L</span>
+                                    <span className=" text-xs text-[#4F4F4F]">(EST 20L)</span>
+                                </div>
+                                <div className="flex flex-col items-center pt-1" >
+                                    <div className="flex text-xs text-[#4F4F4F]     ">
+                                        Fuel Used
+                                    </div>
+                                </div>
+
+                            </span>
+                            <span className="flex-col text-sm w-1/5 border-1 rounded-sm">
+                                <div className="flex-col w-fill bg-[#EDEDED] rounded-t-sm  items-center h-[55%] space-x-1 pl-2  pt-1.5" >
+                                    <span className="text-sm font-semibold">18L</span>
+                                    <span className=" text-xs text-[#4F4F4F]">(EST 20L)</span>
+                                </div>
+                                <div className="flex flex-col items-center pt-1" >
+                                    <div className="flex text-xs text-[#4F4F4F]     ">
+                                        Fuel Used
+                                    </div>
+                                </div>
+
+                            </span>
+                        </div>
+                        <div className="flex justify-between gap-4 h-[180px]  ">
+                            <span className="flex border rounded-md p-2 w-1/2 items-center justify-center">live stream</span>
+                            <span className="flex border rounded-md p-2 w-1/2 items-center justify-center" >Video</span>
+                        </div>
+                        <div className="mt-3 space-y-2">
+                            <div className="font-semibold text-sm">Quality Performance</div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#717182]" >Crop Loss Rate</span>
+
+
+                                <span className="flex items-center gap-4">
+                                    1.3%
+                                    <span className="flex  text-[#00763C] rounded-md items-center bg-[#CCFFD5] h-5 py-2 pr-2">
+                                        <img src="/src/components/svg/robots/robotTimer.svg" alt="robot" className="w-[13px] h-[13px] mr-1 ml-3" /> Outstanding</span>
+
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#717182]" >Contamination Level</span>
+
+
+                                <span className="flex items-center gap-4">
+                                    0.2%
+                                    <span className="flex  text-[#00763C] rounded-md items-center bg-[#CCFFD5] h-5 py-2 pr-2">
+                                        <img src="/src/components/svg/robots/robotTimer.svg" alt="robot" className="w-[13px] h-[13px] mr-1 ml-3" /> Minimal</span>
+
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#717182]" >Harvest Quality Grade</span>
+
+
+                                <span className="flex items-center gap-4">
+                                    A+
+                                    <span className="flex  text-[#00763C] rounded-md items-center bg-[#CCFFD5] h-5 py-2 pr-2">
+                                        <img src="/src/components/svg/robots/robotTimer.svg" alt="robot" className="w-[13px] h-[13px] mr-1 ml-3" /> Premium Quality</span>
+
+                                </span>
+                            </div>
+                        </div>
+                        <div className="mt-3 space-y-2 bg-[#EFFDF4] text-xs p-3 rounded-md">
+                            <div className="font-semibold tracking-wider text-sm"> Performance vs Targets</div>
+
+                            <div className="flex justify-between  space-x-20 text-[#717182]">
+                                <span className="flex grow justify-between ">
+                                    <span>Yeild Target:</span>
+                                    <span>8.0 t/ha</span>
+                                </span>
+                                <span className="flex grow justify-between ">
+                                    <span> Time Target:</span>
+                                    <span>9.0 hours</span>
+                                </span>
+                            </div>
+                            <div className="flex justify-between  space-x-20 text-[#00763C]">
+                                <span className="flex grow justify-between ">
+                                    <span>Actual Yeild:</span>
+                                    <span>8.2 t/ha</span>
+                                </span>
+                                <span className="flex grow justify-between ">
+                                    <span> Actual Time :</span>
+                                    <span>8h 45 min</span>
+                                </span>
+                            </div>
+                        </div>
+
 
                     </TabsContent>
-                    <TabsContent value="analytics" className="mt-2 p-4 bg-white rounded shadow-sm">
 
-                    </TabsContent>
-                    <TabsContent value="alerts" className="mt-2 p-4 bg-white rounded shadow-sm">
-
-                    </TabsContent>
                 </Tabs>
             </div>
         </div>

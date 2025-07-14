@@ -6,9 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import AddMissionForm from "../../missions/configMission";
-import FieldFormPage from "./MapForm";
 import AddBoundaryMAP from "./AddBoundaryMap";
+import FieldFormPage from "./MapForm";
 const TOAST_CONFIG = {
     position: "top-right" as const,
     autoClose: 2000,
@@ -26,7 +25,6 @@ const addFieldPage = () => {
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
     const [robotHome, setRobotHome] = useState<Coordinates>(null);
     const [mode, setMode] = useState<string>("idle");
-    const [showAddMissionForm, setShowAddMissionForm] = useState<boolean>(false);
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const {
@@ -55,7 +53,6 @@ const addFieldPage = () => {
         onSuccess: () => {
             toast.success("Field registered successfully!");
             handleReset();
-            setShowAddMissionForm(true);
         },
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
@@ -134,7 +131,6 @@ const addFieldPage = () => {
                 handleRobotHome={handleRobotHome}
                 robotHome={robotHome}
                 handleCancel={handleCancel}
-                setAddMissionForm={setShowAddMissionForm}
                 errorMessages={errorMessages} />
         </div>
     );
