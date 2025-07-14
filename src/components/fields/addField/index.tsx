@@ -56,6 +56,9 @@ const addFieldPage = () => {
             toast.success("Field registered successfully!");
             handleReset();
             setShowAddMissionForm(true);
+            navigate({
+                to: `/all-fields`,
+        })
         },
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
