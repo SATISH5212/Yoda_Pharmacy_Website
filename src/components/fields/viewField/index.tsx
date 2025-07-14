@@ -84,7 +84,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
     useEffect(() => {
         if (viewFieldData?.data?.field_boundary.length > 0) {
-            // setMapCenter(viewFieldData?.data?.centroid);
+            setMapCenter(viewFieldData?.data?.centroid);
             setCalculatedArea(viewFieldData?.data?.field_area);
             const bounds = calculateBounds(viewFieldData?.data?.field_boundary);
             const latDiff = bounds.north - bounds.south;

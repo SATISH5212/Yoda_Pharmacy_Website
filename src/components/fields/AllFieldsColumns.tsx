@@ -42,7 +42,7 @@ const getAllFieldsColumns = () => {
             accessorKey: "field_area",
             cell: (value: any) => (
                 <span className="text-xs sm:text-sm text-gray-600">
-                    {value.getValue()} hectares
+                    {value.getValue()} Acres
                 </span>
             ),
             width: "150px",
@@ -124,7 +124,7 @@ const getAllFieldsColumns = () => {
 
         {
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900">
+                <span className="flex grow text-xs sm:text-sm font-semibold text-gray-900 justify-center">
                     Actions
                 </span>
             ),
@@ -143,7 +143,7 @@ const getAllFieldsColumns = () => {
                             <Eye size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
                         <Link
-                            to="/fields/$field_id/viewField"
+                            to="/fields/$field_id/edit"
                             params={{ field_id }}
                             className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
                             title="Edit Field"

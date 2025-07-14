@@ -287,6 +287,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                             }}
                         />
                     )}
+
                     {accessPoint && (
                         <Marker
                             position={accessPoint}
