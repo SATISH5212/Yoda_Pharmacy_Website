@@ -11,8 +11,7 @@ import {
     Polygon,
     InfoWindow,
 } from "@react-google-maps/api";
-import { polygon } from "@turf/turf";
-import { Trash2, Check, X, MoveLeft, Edit } from "lucide-react";
+import { Trash2, Check, X, MoveLeft, Edit, Undo } from "lucide-react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 
 import { toast } from "sonner";
@@ -50,12 +49,10 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const [mapOptions, setMapOptions] = useState<google.maps.MapOptions | undefined>(undefined);
     const [showdeleteButton, setShowDeleteButton] = useState<boolean>(true);
     const drawingManagerRef = useRef<google.maps.drawing.DrawingManager | null>(null);
-
-    // New state for edit mode
+    const [polygonHistory, setPolygonHistory] = useState<Coordinates[][]>([]);
     const [isEditingBoundary, setIsEditingBoundary] = useState(false);
     const [originalPolygonPath, setOriginalPolygonPath] = useState<Coordinates[]>([]);
     const editablePolygonRef = useRef<google.maps.Polygon | null>(null);
-
 
     const { calculateAreaAndLocation } = usePolygonCalculations();
 
@@ -80,7 +77,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const drawingManagerOptions = useMemo(() => {
         if (!googleInstance) return {};
         return {
-            drawingControl: !isEditingBoundary, // Hide drawing controls when editing
+            drawingControl: !isEditingBoundary,
             drawingControlOptions: {
                 position: googleInstance.maps.ControlPosition.TOP_LEFT,
                 drawingModes: [
@@ -120,10 +117,14 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         try {
             const path = extractPathFromOverlay(overlay);
             if (path.length < 3) return;
+
+
             setPolygonPath(path);
             setFormCoordinates(path);
+
             toast.success("Now you can add Field access point and Robot home");
             drawnShapeRef.current = overlay;
+
             const locationInfo = await calculateAreaAndLocation(path);
             if (locationInfo) {
                 setLocationInfo(locationInfo);
@@ -140,34 +141,32 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         } catch (error) {
             console.error("Error in handlePolygonComplete:", error);
         }
-    }, [extractPathFromOverlay, calculateAreaAndLocation, setFormCoordinates, setLocationInfo]);
+    }, [extractPathFromOverlay, calculateAreaAndLocation, setFormCoordinates, setLocationInfo, polygonPath]);
 
-    // New function to handle edit mode
     const handleEditBoundary = useCallback(() => {
         if (polygonPath.length === 0) {
             toast.error("No boundary to edit. Please draw a boundary first.");
             return;
         }
-
+        setPolygonHistory((prev) => [...prev, polygonPath]);
         setOriginalPolygonPath([...polygonPath]);
         setIsEditingBoundary(true);
         setShowDeleteButton(false);
         toast.info("Edit mode enabled. You can now modify the boundary by dragging the vertices.");
     }, [polygonPath]);
 
-    // Function to handle polygon path changes during editing
     const handlePolygonEdit = useCallback((polygon: google.maps.Polygon) => {
+        setPolygonHistory((prevHistory) => [...prevHistory, polygonPath]);
         const path = polygon.getPath();
         const newPath = path.getArray().map((latLng) => ({
             lat: latLng.lat(),
             lng: latLng.lng(),
         }));
+
         setPolygonPath(newPath);
-        console.log("Edited polygon path:", polygonPath);
+        console.log("Edited polygon path:", newPath);
+    }, [polygonPath]);
 
-    }, []);
-
-    // Function to save edited boundary
     const handleSaveEdit = useCallback(async () => {
         try {
             setFormCoordinates(polygonPath);
@@ -186,7 +185,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         }
     }, [polygonPath, calculateAreaAndLocation, setFormCoordinates, setLocationInfo]);
 
-    // Function to cancel edit mode
     const handleCancelEdit = useCallback(() => {
         setPolygonPath(originalPolygonPath);
         setIsEditingBoundary(false);
@@ -233,7 +231,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         async (event: google.maps.MapMouseEvent) => {
             if (!event.latLng) return;
 
-            // Don't handle clicks when in edit mode
             if (isEditingBoundary) return;
 
             const point: Coordinates = {
@@ -259,8 +256,9 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     );
 
     const handleDelete = useCallback(() => {
-        if (isEditingBoundary) {
-            toast.error("Cannot delete while editing. Please save or cancel edit first.");
+
+        if (polygonPath.length === 0) {
+            toast.error("No boundary to delete.");
             return;
         }
 
@@ -273,12 +271,42 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         setLocationInfo(null);
         setSearchMarker(null);
         setMarkerAddress("");
+        setPolygonHistory([]);
 
         if (drawnShapeRef.current) {
             drawnShapeRef.current.setMap(null);
             drawnShapeRef.current = null;
         }
-    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo, setRobotHome, isEditingBoundary]);
+
+    }, [setFormCoordinates, setFieldAccessPoint, setLocationInfo, setRobotHome, isEditingBoundary, polygonPath]);
+
+    const handleUndo = useCallback(async () => {
+        if (polygonHistory.length < 2) {
+            toast.info("Nothing to undo");
+            return;
+        }
+
+        const previousPath = polygonHistory[polygonHistory.length - 1];
+
+        setPolygonHistory((prev) => prev.slice(0, -1));
+        setPolygonPath(previousPath);
+        setFormCoordinates(previousPath);
+
+        if (previousPath.length > 0) {
+            try {
+                const locationInfo = await calculateAreaAndLocation(previousPath);
+                if (locationInfo) {
+                    setLocationInfo(locationInfo);
+                }
+            } catch (error) {
+                console.error("Error calculating location info during undo:", error);
+            }
+        } else {
+            setLocationInfo(null);
+        }
+
+        toast.success("Undo successful!");
+    }, [polygonHistory, setFormCoordinates, calculateAreaAndLocation, setLocationInfo]);
 
     const handleGoogleMapsLoad = useCallback(() => {
         setGoogleInstance(window.google);
@@ -293,6 +321,8 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         }
         setMapOptions(options);
     }, []);
+
+    const canUndo = polygonHistory.length > 1;
 
     return (
         <div className="relative">
@@ -309,7 +339,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                     options={mapOptions}
                 >
                     {polygonPath.length === 0 && !isEditingBoundary && (
-                        <div className="absolute top-[55px] left-[55px] z-[9999] pointer-events-none  animate-bounce-left">
+                        <div className="absolute top-[55px] left-[55px] z-[9999] pointer-events-none animate-bounce-left">
                             <div className="flex items-center gap-2">
                                 <span className="animate-pulse"><MoveLeft className="text-white" /></span>
                                 <span className="bg-white text-black text-[11px] px-3 py-[3px] rounded-md shadow-md font-medium border border-gray-300">
@@ -407,7 +437,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                             }}
                             options={drawingManagerOptions}
                             onLoad={(drawingManager) => {
-                                drawingManagerRef.current = drawingManager; 
+                                drawingManagerRef.current = drawingManager;
                             }}
                         />
                     )}
@@ -419,16 +449,14 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                     <button
                         onClick={handleDelete}
                         title="Delete drawn shapes"
-                        className="absolute top-31 bg-white text-black rounded-md shadow px-2.5 py-2.5 text-xs cursor-pointer hover:bg-gray-300"
+                        className="absolute top-31 bg-white text-black rounded-md shadow px-2.5 py-2.5 text-xs cursor-pointer hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-label="Delete drawn shapes"
                         disabled={isEditingBoundary}
                     >
                         <Trash2 size={22} />
                     </button>
-
                 )}
 
-                {/* Edit boundary button */}
                 {polygonPath.length > 0 && !isEditingBoundary && (
                     <button
                         onClick={handleEditBoundary}
@@ -440,9 +468,22 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                     </button>
                 )}
 
-                {/* Save and Cancel buttons when editing */}
                 {isEditingBoundary && (
+                    <button
+                        onClick={handleUndo}
+                        title={`Undo last change${canUndo ? ` (${polygonHistory.length - 1} actions available)` : ''}`}
+                        className={`absolute top-125 rounded-md shadow px-2.5 py-2.5 text-xs cursor-pointer transition-colors ${canUndo
+                            ? 'bg-white text-black hover:bg-gray-300'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                        aria-label="Undo last polygon update"
+                        disabled={!canUndo}
+                    >
+                        <Undo size={22} />
+                    </button>
+                )}
 
+                {isEditingBoundary && (
                     <>
                         <button
                             onClick={() => {
@@ -452,7 +493,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                             title="Save changes"
                             className="bg-green-500 text-white rounded-md shadow px-2.5 py-2.5 text-xs cursor-pointer hover:bg-green-600"
                             aria-label="Save boundary changes"
-
                         >
                             <Check size={22} />
                         </button>
@@ -464,7 +504,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                             title="Cancel edit"
                             className="bg-red-500 text-white rounded-md shadow px-2.5 py-2.5 text-xs cursor-pointer hover:bg-red-600"
                             aria-label="Cancel boundary edit"
-
                         >
                             <X size={22} />
                         </button>
@@ -472,10 +511,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                 )}
             </div>
 
-
-
-            {/* Search bar */}
-            <div className="absolute top-2.5 left-150 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200  h-10 -mt-2">
+            <div className="absolute top-2.5 left-150 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 h-10 -mt-2">
                 <input
                     type="text"
                     placeholder="Search location"
@@ -495,4 +531,3 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
 };
 
 export default AddBoundaryMAP;
-

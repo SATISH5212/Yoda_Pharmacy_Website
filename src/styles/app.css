@@ -144,14 +144,9 @@ body,
 .gmnoprint>div {
   transform: scale(1.5);
   transform-origin: center;
-  background-color: #e0f2fe !important;
-  border-radius: 50% !important;
+  /* background-color: #e0f2fe !important; */
+  /* border-radius: 50% !important; */
 }
 
 
 
-.gmnoprint {
-  background: linear-gradient(135deg, #ffffff, #f7f9fb);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
