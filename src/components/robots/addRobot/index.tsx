@@ -81,7 +81,7 @@ const AddRobot = () => {
             padding: '20px'
         }}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='flex gap-2 h-61'>
+                <div className='flex gap-2 '>
                     <div className='flex flex-col gap-1 p-3 border-1 rounded-xl w-110'>
                         <div>
                             <label htmlFor="robot_name" className='text-xs text-gray-400'>Robot Name</label><br />
