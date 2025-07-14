@@ -373,9 +373,6 @@ const AllRobotsPage = () => {
         <AllRobotsCards robots={allRobotsData?.data.records} searchString={searchString || robotType} />
     );
 
-    console.log("robot cards", robotCards);
-
-
     return (
         <div className="overflow-hidden h-[92vh]">
             <div className="flex items-center justify-between bg-gray-100 border-b h-12 w-full space-x-2 mb-2 pr-4">

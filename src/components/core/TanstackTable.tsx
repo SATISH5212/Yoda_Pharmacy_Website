@@ -218,9 +218,9 @@ const SortItems = ({
     const isDescending = sortBy === header.id && sortDirection === "desc";
 
     return (
-        <div className="flex items-center flex-col gap-1">
+        <div className="flex items-center flex-col ">
             <div
-                className={`[&_svg]:size-4 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
+                className={`[&_svg]:size-3 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
@@ -243,7 +243,7 @@ const SortItems = ({
                 <SortAscIcon />
             </div>
             <div
-                className={`[&_svg]:size-4 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
+                className={`[&_svg]:size-3 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);

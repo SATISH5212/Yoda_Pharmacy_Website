@@ -154,7 +154,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         if (!robotHome) return coordinates;
 
         samplePath.mission?.RobotPath.forEach((segment: Waypoint[]) => {
-            console.log(segment, "seggg001");
             segment.forEach((waypoint) => {
                 const { lat, lng } = covertXYToLatLng(
                     robotHome.lat,
@@ -175,11 +174,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
 
         if (!robotHome) return coordinates;
         samplePath.mission?.GoToHome[1]
-        console.log(samplePath.mission?.GoToHome[6], samplePath.mission?.GoToHome?.length, "seggg004");
         // samplePath.mission?.GoToHome?.forEach((segment: any[]) => {
-        //     console.log(segment, "seggg002");
         //     segment.forEach((segment2: Waypoint[]) => {
-        //         console.log(segment2, "seggg003");
+
         //         segment2.forEach((waypoint) => {
         //             const { lat, lng } = covertXYToLatLng(
         //                 robotHome.lat,

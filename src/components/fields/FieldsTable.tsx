@@ -123,8 +123,6 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
         ...field,
     })) || [];
 
-    console.log("fields table data", data);
-
 
     return (
         <div className="flex-1">
