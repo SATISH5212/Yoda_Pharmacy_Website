@@ -53,6 +53,9 @@ const addFieldPage = () => {
         onSuccess: () => {
             toast.success("Field registered successfully!");
             handleReset();
+            navigate({
+                to: `/all-fields`,
+            })
         },
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
