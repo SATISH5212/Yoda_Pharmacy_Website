@@ -30,11 +30,11 @@ export const Navbar = () => {
     }, []);
 
     return (
-        <div className="flex justify-between items-center border-b px-4 h-14 w-full">
+        <div className="flex justify-between items-center border-b px-4 h-12 w-full">
             <div className="text-sm font-semibold ml-4 mt-2">
                 {currentPath?.charAt(0).toUpperCase() + currentPath?.slice(1)}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center  gap-4">
                 <div className="p-1 rounded-full border border-gray-200 hover:bg-gray-100 cursor-pointer">
                     <Search size={16} strokeWidth={1.5} />
                 </div>
@@ -46,9 +46,9 @@ export const Navbar = () => {
                 <div className="p-1 rounded-full border border-gray-200 hover:bg-gray-100 cursor-pointer">
                     <Mail size={16} strokeWidth={1.5} />
                 </div>
-                <div className="relative w-44 h-10">
+                <div className="relative w-44 h-10 mt-2">
                     <div
-                        className="flex items-center gap-2 px-2 py-1 border border-gray-200 rounded-2xl hover:bg-gray-100 cursor-pointer"
+                        className="flex items-center gap-2 px-2 border border-gray-200 rounded-2xl hover:bg-gray-100 cursor-pointer"
                         onMouseEnter={() => setIsProfileMenuOpen(true)}
                         onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                         onMouseLeave={() => setIsProfileMenuOpen(false)}

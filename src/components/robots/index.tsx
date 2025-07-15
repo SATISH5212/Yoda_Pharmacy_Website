@@ -407,17 +407,17 @@ const AllRobotsPage = () => {
                             }}
                         />
                     </div>
-                    <div className="flex justify-center h-6.5 w-30">
+                    <div className="flex justify-center h-6.5 w-24">
                         <button
                             type="button"
-                            className="flex justify-center items-center rounded bg-[#05A155] text-white font-medium hover:bg-[#0cc87f] cursor-pointer h-full w-full"
+                            className="flex justify-center items-center rounded bg-[#05A155] text-white  hover:bg-[#0cc87f] cursor-pointer h-full w-full"
                             onClick={() =>
                                 navigate({
                                     to: "/add-robot",
                                 })
                             }
                         >
-                            <span className="text-sm font-semibold tracking-tight">+ New Robot</span>
+                            <span className="text-sm font-normal tracking-tight">+ New Robot</span>
                         </button>
                     </div>
                 </div>

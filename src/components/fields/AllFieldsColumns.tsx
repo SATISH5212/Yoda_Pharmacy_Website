@@ -16,7 +16,7 @@ const getAllFieldsColumns = () => {
             ),
             accessorKey: "id",
             cell: (value: any) => (
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-semibold text-gray-900">
                     {value.row.index + 1}
                 </span>
             ),
@@ -65,7 +65,7 @@ const getAllFieldsColumns = () => {
                 const dateString = value.cell.getValue();
                 const date = new Date(dateString);
                 return (
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm ">
                         {date.toLocaleString('en-IN', {
                             timeZone: 'Asia/Kolkata',
                             day: '2-digit',
@@ -171,14 +171,14 @@ const getAllFieldsColumns = () => {
                             <Edit size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
                         <Button
-                            className="text-xs font-bold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
+                            className="text-xs font-semibold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
                             title="Configure Mission"
                             onClick={() => router.navigate({ to: `/fields/${field_id}/config-mission` })}
                         >
                             Create Mission
                         </Button>
                         <Button
-                            className="text-xs font-bold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
+                            className="text-xs font-semibold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
                             title="Add Robot"
                             onClick={() => router.navigate({ to: `/fields/${field_id}/config-robot` })}
                         >

@@ -109,7 +109,7 @@ const Pagination = ({
         return pageNumbers;
     };
     return (
-        <ShadCNPagination className="flex justify-between px-2 py-1 shadow-inner items-center">
+        <ShadCNPagination className="flex justify-between px-2  shadow-inner    items-center">
             <PaginationContent
                 className="px-1 py-0 flex gap-2"
                 key={"pagination-1" + `-${new Date().getTime()}`}

@@ -10,7 +10,7 @@ const AllFieldsPage = () => {
     const [status, setStatus] = useState<string>(searchParams.get("status") || "");
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50"> 
+        <div className="flex flex-col min-h-screen "> 
              <div className="flex items-center justify-end bg-gray-100 border-b h-10 w-full space-x-2 pr-4">
                   <select
                         className="border  border-gray-300 text-xs tracking-tight rounded h-6.5 w-44 pl-1 hover:border-gray-400 hover:cursor-pointer focus:outline-none "
@@ -36,7 +36,7 @@ const AllFieldsPage = () => {
                             }}
                         />
                     </div>
-                    <div className="flex justify-center h-6.5 w-30">
+                    <div className="flex justify-center h-6.5 w-22">
                         <button
                             type="button"
                             className="flex justify-center items-center rounded bg-[#05A155] text-white  hover:bg-[#0cc87f] cursor-pointer h-full w-full"
@@ -46,11 +46,11 @@ const AllFieldsPage = () => {
                                 })
                             }
                         >
-                            <span className="text-sm font-medium tracking-tight">+ New Field</span>
+                            <span className="text-sm font-normal tracking-tight">+ New Field</span>
                         </button>
                     </div>
                 </div>
-            <div className="p-4 flex-1">
+            <div className="p-2 flex-1 bg-white ">
                 <FieldsTable searchString={searchString} searchParams={searchParams} status={status} />
             </div>
         </div>
