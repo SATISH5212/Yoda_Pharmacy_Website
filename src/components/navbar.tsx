@@ -31,7 +31,7 @@ export const Navbar = () => {
 
     return (
         <div className="flex justify-between items-center border-b px-4 h-14 w-full">
-            <div className="text-md font-semibold ml-4 mt-2">
+            <div className="text-sm font-semibold ml-4 mt-2">
                 {currentPath?.charAt(0).toUpperCase() + currentPath?.slice(1)}
             </div>
             <div className="flex items-center gap-4">

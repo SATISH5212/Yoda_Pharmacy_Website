@@ -199,9 +199,9 @@ const Pagination = ({
                                         e.preventDefault();
                                         handlePageChange(pageNumber);
                                     }}
-                                    className={`w-[30px] h-[30px] font-normal hover:no-underline ${pageNumber === currentPage
-                                        ? "bg-[#F0F1F6] text-black rounded-full w-[30px] h-[30px]"
-                                        : "bg-transperant text-black"
+                                    className={`w-[25px] h-[25px] font-normal hover:no-underline ${pageNumber === currentPage
+                                        ? "bg-black text-white rounded-full "
+                                        : "bg-transperant text-black rounded-full border"
                                         }`}
                                 >
                                     {pageNumber}

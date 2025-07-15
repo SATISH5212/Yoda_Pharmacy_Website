@@ -96,7 +96,7 @@ const TanStackTable: FC<pageProps> = ({
     };
 
     return (
-        <div className="w-full rounded-lg shadow-sm border border-gray-200 bg-white flex flex-col">
+        <div className="w-full rounded-lg shadow-sm  border-gray-200 bg-white flex flex-col">
             <div className="flex-1 overflow-auto">
                 {!data.length && !loading ? (
                     <div className="flex justify-center items-center min-h-[400px] p-4">

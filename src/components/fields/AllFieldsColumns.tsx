@@ -79,17 +79,33 @@ const getAllFieldsColumns = () => {
         },
         {
             header: () => (
-                <span className="text-sm font-semibold text-gray-800">
-                    Status
-                </span>
+                <span className="text-sm font-semibold text-gray-800">Status</span>
             ),
             accessorKey: "field_status",
             cell: (value: any) => {
-                const status = value.getValue();
+                const status = (value.getValue() || "").toLowerCase();
+
+                const statusStyles =
+                    status === "pending"
+                        ? {
+                            bg: "bg-orange-100",
+                            text: "text-orange-800",
+                            dot: "bg-orange-500",
+                        }
+                        : {
+                            bg: "bg-green-100",
+                            text: "text-green-800",
+                            dot: "bg-green-600",
+                        };
+
                 return (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-1.5"></span>
-                        {capitalize(status || "")}
+                    <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${statusStyles.bg} ${statusStyles.text}`}
+                    >
+                        <span
+                            className={`w-1.5 h-1.5 rounded-full mr-1.5 ${statusStyles.dot}`}
+                        ></span>
+                        {capitalize(status)}
                     </span>
                 );
             },
@@ -116,7 +132,7 @@ const getAllFieldsColumns = () => {
 
                 return (
                     <span
-                        className="text-sm text-gray-700 truncate inline-block max-w-[150px] cursor-pointer"
+                        className="text-[13px] text-gray-700 truncate inline-block max-w-[150px] cursor-pointer"
                         title={showDots ? groupedParts.join("\n") : ""}
                     >
                         {firstTwo}
@@ -137,7 +153,7 @@ const getAllFieldsColumns = () => {
                 const row = info.row.original;
                 const field_id = row.id as string;
                 return (
-                    <div className="flex justify-center gap-3 flex-wrap">
+                    <div className="flex justify-center items-center gap-3 flex-wrap">
                         <Link
                             to="/fields/$field_id"
                             params={{ field_id }}
