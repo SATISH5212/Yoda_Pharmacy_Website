@@ -32,7 +32,7 @@ const RobotMissionInfoPage = () => {
             </div>
             <div className="flex-row">
                 <Tabs value={activeTab} onValueChange={handleTabChange} defaultValue="mission-details">
-                    <TabsList className="flex-shrink-0  rounded-md bg-[#D6D6D6] p-0 h-[23px] border-1 rounded-xs gap-3">
+                    <TabsList className="flex-shrink-0  rounded-md bg-[#D6D6D6] p-0 h-[23px] border-1  gap-3">
 
                         <TabsTrigger
                             value="mission-details"

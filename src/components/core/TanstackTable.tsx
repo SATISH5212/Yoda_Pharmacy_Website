@@ -124,7 +124,7 @@ const TanStackTable: FC<pageProps> = ({
                                             <th
                                                 key={index + `-${new Date().getTime()}`}
                                                 colSpan={header.colSpan}
-                                                className="bg-gray-100 text-left px-4 py-3 text-sm font-semibold text-gray-900 border-b border-gray-200"
+                                                className="bg-gray-100 text-xs px-4 py-1.5 font-semibold text-gray-900 border-b border-gray-200"
                                                 style={{
                                                     minWidth: getWidth(header.id),
                                                     width: getWidth(header.id),
@@ -157,7 +157,7 @@ const TanStackTable: FC<pageProps> = ({
                                         >
                                             {row.getVisibleCells().map((cell) => (
                                                 <td
-                                                    className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap"
+                                                    className="px-4 py-2 text-xs text-gray-900 whitespace-nowrap"
                                                     key={cell.id + `-${new Date().getTime()}`}
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -220,7 +220,7 @@ const SortItems = ({
     return (
         <div className="flex items-center flex-col ">
             <div
-                className={`[&_svg]:size-3 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
+                className={`[&_svg]:size-2 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
@@ -243,7 +243,7 @@ const SortItems = ({
                 <SortAscIcon />
             </div>
             <div
-                className={`[&_svg]:size-3 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
+                className={`[&_svg]:size-2 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
