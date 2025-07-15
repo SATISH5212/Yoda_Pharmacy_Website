@@ -479,7 +479,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                 )}
             </div>
 
-            <div className="absolute top-2.5 left-65 transform -translate-x-1/2 w-[400px] p-2 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 h-10 -mt-2">
+            <div className="absolute top-2.5 left-65 transform -translate-x-1/2 w-[350px] px-1 bg-white rounded-sm shadow-lg flex items-center gap-3 border border-gray-200 h-9 -mt-2">
                 <input
                     type="text"
                     placeholder="Search location"

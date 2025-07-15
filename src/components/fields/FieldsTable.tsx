@@ -125,7 +125,7 @@ const FieldsTable: FC<IFieldsTablePageProps> = (props) => {
 
 
     return (
-        <div className="flex-1 border rounded-2xl p-2">
+        <div className="flex-1 border rounded-2xl px-2 pt-2 pb-1">
             <TanStackTable
                 columns={allFieldsColumns}
                 data={data}
