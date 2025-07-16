@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { FieldRowsSettings, IAddMissionFormProps } from "@/lib/interfaces/missions";
 import { addFieldMissionAPI } from "@/lib/services/missions";
 import { useMutation } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
 import { FC, useState } from "react";
 import { toast } from "sonner";
 const ROW_PATTERN_OPTIONS = [
@@ -14,14 +15,17 @@ const ROW_PATTERN_OPTIONS = [
 ];
 
 const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
+    const { field_id } = useParams({ strict: false });
+    console.log(field_id, "field_id", typeof field_id);
     const [settings, setSettings] = useState<FieldRowsSettings>({ RowPattern: "" });
     const [angle, setAngle] = useState<number | null>(null);
     const [showAngleInput, setShowAngleInput] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [missionName, setMissionName] = useState<string>("");
 
     const { mutateAsync: createMission, isPending } = useMutation({
         mutationKey: ["add-field-mission"],
-        mutationFn: (payload: any) => addFieldMissionAPI(payload),
+        mutationFn: (payload: any) => addFieldMissionAPI(field_id as string, payload),
         retry: false,
         onSuccess: () => toast.success("Mission registered successfully!"),
         onError: (error: any) => {
@@ -67,9 +71,10 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             FieldRowsSettings: {
                 ...settings,
                 RowPattern: settings.RowPattern === "Angle@<theta>" && angle !== null
-                    ? `Angle@${angle}`
+                    ? `Angle@${angle}deg`
                     : settings.RowPattern
-            }
+            },
+            mission_name: missionName
         };
     };
 
@@ -88,6 +93,14 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
                     value={viewFieldData?.data?.field_name}
                     disabled
                     className="text-md font-bold text-black"
+                />
+            </div>
+            <div className="flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-600">Mission Name</label>
+                <Input
+                    value={missionName}
+                    className="text-md font-bold text-black"
+                    onChange={(e) => setMissionName(e.target.value)}
                 />
             </div>
 

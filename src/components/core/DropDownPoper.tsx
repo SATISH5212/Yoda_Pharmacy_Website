@@ -38,8 +38,6 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
         onSelect?.(null);
         setSearchTerm("");
     };
-
-    console.log(selectedField, "selectedField", onSelect, "onSelect")
     return (
         <div className="w-[200px]">
 

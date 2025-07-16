@@ -19,7 +19,6 @@ export const Navbar = () => {
     const handleNavigation = () => {
         router.navigate({ to: "/" });
         Cookies.remove("token");
-        localStorage.removeItem("authToken");
         localStorage.remove("userCredentials");
         setIsProfileMenuOpen(false);
     };
@@ -69,7 +68,7 @@ export const Navbar = () => {
                             className=" flex w-5 h-4 text-gray-500 ml-12"
                             fill="none"
                             stroke="currentColor"
-                            strokeWidth="1.5"   
+                            strokeWidth="1.5"
                             viewBox="0 0 24 24"
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
