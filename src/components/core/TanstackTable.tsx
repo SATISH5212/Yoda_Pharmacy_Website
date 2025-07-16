@@ -97,7 +97,7 @@ const TanStackTable: FC<pageProps> = ({
 
     return (
         <div className="w-full flex flex-col">
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 ">
                 {!data.length && !loading ? (
                     <div className="flex justify-center items-center min-h-[400px] p-4">
                         <div className="flex flex-col justify-center items-center text-center">
@@ -111,8 +111,8 @@ const TanStackTable: FC<pageProps> = ({
                             </p>
                         </div>
                     </div>
-                ) : (
-                    <div className="w-full">
+                ) : ( 
+                    <div className="w-full max-h-[500px] overflow-auto pb-10">
                         <table className="w-full">
                             <thead className="sticky top-0 z-10 ">
                                 {table?.getHeaderGroups().map((headerGroup) => (
@@ -124,7 +124,7 @@ const TanStackTable: FC<pageProps> = ({
                                             <th
                                                 key={index + `-${new Date().getTime()}`}
                                                 colSpan={header.colSpan}
-                                                className={`bg-gray-100 text-xs px-4 py-1 font-semibold text-gray-900  ${index === 0 ? 'rounded-l-sm' : ''
+                                                className={`bg-gray-100 text-xs px-4 py-1 font-semibold text-gray-900 ${index === 0 ? 'rounded-l-sm' : ''
                                                     } ${index === headerGroup.headers.length - 1 ? 'rounded-r-sm' : ''
                                                     }`}
                                                 style={{
