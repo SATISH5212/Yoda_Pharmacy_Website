@@ -21,7 +21,7 @@ const Sidebar = () => {
                 <Link to="/add-robot" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
                     <img src="/src/components/svg/questionIcon.svg" alt="field" className="w-[24px] h-[24px]" />
                 </Link>
-            </div>  
+            </div>      
         </div>
     );
 }

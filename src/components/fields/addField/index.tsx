@@ -27,6 +27,8 @@ const addFieldPage = () => {
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+
     const {
         register,
         handleSubmit,
@@ -107,6 +109,18 @@ const addFieldPage = () => {
         return locationInfo?.area ? Number(locationInfo.area).toFixed(2) : "0.00";
     }, [locationInfo?.area]);
 
+    const handleDeleteAccessPoint = useCallback(() => {
+        setFieldAccessPoint(null);
+        setMode("delete_access_point");
+        toast.success("Field Access Point removed", TOAST_CONFIG);
+    }, []);
+
+    const handleDeleteRobotHome = useCallback(() => {
+        setRobotHome(null);
+        setMode("delete_robot_home");
+        toast.success("Robot Home Point removed", TOAST_CONFIG);
+        setTimeout(() => setMode("idle"), 100);
+    }, []);
 
 
     return (
@@ -119,6 +133,9 @@ const addFieldPage = () => {
                     mode={mode}
                     setMode={setMode}
                     setLocationInfo={setLocationInfo}
+                    fieldAccessPoint={fieldAccessPoint}
+                    robotHome={robotHome}
+
                 />
             </div>
 
@@ -134,7 +151,10 @@ const addFieldPage = () => {
                 handleRobotHome={handleRobotHome}
                 robotHome={robotHome}
                 handleCancel={handleCancel}
-                errorMessages={errorMessages} />
+                errorMessages={errorMessages}
+                handleDeleteAccessPoint={handleDeleteAccessPoint}
+                handleDeleteRobotHome={handleDeleteRobotHome}
+            />
         </div>
     );
 }

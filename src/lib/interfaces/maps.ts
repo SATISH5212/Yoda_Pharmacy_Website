@@ -45,7 +45,8 @@ export interface IFieldFormPageProps {
     robotHome: Coordinates | null;
     handleCancel: () => void;
     errorMessages: any
-
+    handleDeleteAccessPoint?: () => void;
+    handleDeleteRobotHome?: () => void;
 }
 
 

@@ -14,7 +14,7 @@ import {
     Polygon,
 } from "@react-google-maps/api";
 import { Trash2, Check, X, MoveLeft, Edit, Undo } from "lucide-react";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { toast } from "sonner";
 
@@ -38,6 +38,8 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         setLocationInfo,
         mode,
         setMode,
+        fieldAccessPoint,
+        robotHome,
     } = props;
     const [polygonPath, setPolygonPath] = useState<Coordinates[]>([]);
     const [accessPoint, setAccessPoint] = useState<Coordinates | undefined>();
@@ -218,6 +220,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                 const address = await CordinatesToLocation(point.lat, point.lng);
                 setMarkerAddress(address);
             }
+            
         },
         [mode, setFieldAccessPoint, setMode, setRobotHome, isEditingBoundary]
     );
@@ -226,7 +229,6 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
 
         if (polygonPath.length === 0) {
             toast.error("No boundary to delete.");
-            return;
         }
         setPolygonPath([]);
         setFormCoordinates([]);
@@ -291,6 +293,21 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
     const handleLocationSearch = (searchString: string) => {
         searchStringToLocation(searchString, setMapCenter, setSearchMarker, setMarkerAddress)
     }
+
+    
+
+   useEffect(() => {   
+    if(mode === "delete_access_point" && !fieldAccessPoint) {
+        setAccessPoint(undefined);
+        setMode("idle");
+    }
+    if(mode === "delete_robot_home" && !robotHome) {
+        setRobotPoint(null);
+        setMode("idle");
+    }
+   }, [mode]);
+   
+
     const canUndo = polygonHistory.length > 1;
 
     return (
@@ -338,7 +355,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                         />
                     )}
 
-                    {accessPoint && (
+                    {accessPoint &&  (
                         <Marker
                             position={accessPoint}
                             icon={{
