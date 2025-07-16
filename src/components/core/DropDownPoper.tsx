@@ -11,6 +11,7 @@ interface IDropDownPoperProps {
     onSelect?: (robot: any | null) => void;
     type: string
     isLoading: boolean
+    value?: string
 }
 
 const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
@@ -18,7 +19,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
     const [open, setOpen] = useState(false);
     const [selectedField, setSelectedField] = useState<any | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
-      const handleSelectRobot = (robotId: string) => {
+    const handleSelectRobot = (robotId: string) => {
         const selected = data.find((item) => {
             if (typeof item === "object") {
                 return item.id.toString() === robotId;
@@ -38,6 +39,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
         setSearchTerm("");
     };
 
+    console.log(selectedField, "selectedField", onSelect, "onSelect")
     return (
         <div className="w-[200px]">
 

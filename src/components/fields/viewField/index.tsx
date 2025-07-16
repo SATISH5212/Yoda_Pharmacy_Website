@@ -318,7 +318,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 </GoogleMap>
             </LoadScript>
             {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
-            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} setShowMissionPath={setShowMissionPath} /></div>}
+            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} /></div>}
 
         </div>
     );

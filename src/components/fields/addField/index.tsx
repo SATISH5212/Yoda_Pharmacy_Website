@@ -60,6 +60,7 @@ const addFieldPage = () => {
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 const errorMessages = error?.data?.errors || {};
+                console.log(errorMessages, "errorMessages001")
                 setErrorMessages(errorMessages);
             }
         },
