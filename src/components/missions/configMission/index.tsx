@@ -16,7 +16,6 @@ const ROW_PATTERN_OPTIONS = [
 
 const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
     const { field_id } = useParams({ strict: false });
-    console.log(field_id, "field_id", typeof field_id);
     const [settings, setSettings] = useState<FieldRowsSettings>({ RowPattern: "" });
     const [angle, setAngle] = useState<number | null>(null);
     const [showAngleInput, setShowAngleInput] = useState(false);
@@ -88,11 +87,11 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             <h2 className="text-lg font-semibold">Configure Mission</h2>
 
             <div className="flex justify-between items-center">
-                <label className="text-sm font-semibold text-gray-600">Field Name</label>
+                <label className="flex grow text-sm font-semibold text-gray-600">Field Name</label>
                 <Input
                     value={viewFieldData?.data?.field_name}
                     disabled
-                    className="text-md font-bold text-black"
+                    className="fle text-md font-bold text-black"
                 />
             </div>
             <div className="flex justify-between items-center">
@@ -137,7 +136,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
 
             <DropDownPoper
                 data={ROW_PATTERN_OPTIONS}
-                type="rowPattern"
+                type="rowPattren"
                 value={settings.RowPattern}
                 onSelect={handleRowPatternChange}
                 isLoading={false}

@@ -81,7 +81,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
             west: Math.min(...lngs)
         };
     }, []);
-
     useEffect(() => {
         if (viewFieldData?.data?.field_boundary.length > 0) {
             setMapCenter(viewFieldData?.data?.centroid);
