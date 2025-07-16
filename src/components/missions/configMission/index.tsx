@@ -46,7 +46,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
     };
 
     const validateForm = () => {
-        if (settings.RowPattern === "Angle@<theta>" && angle === null) {
+        if (settings.RowPattern === "Angle@<theta>" && (angle === null || angle === undefined)) {
             setErrors(prev => ({
                 ...prev,
                 rowPattrenAngle: "Please enter an angle value for the row pattern"
@@ -59,14 +59,15 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
     const buildPayload = () => {
         const { field_access_point, robot_home, field_boundary, field_name, id: fieldId } = viewFieldData.data;
         return {
-            field: {
-                CityID: 0,
-                LocationID: 0,
-                FieldID: fieldId,
-                FieldName: field_name,
-                RobotHome: robot_home,
-                FieldAccessPoint: field_access_point,
-                FieldBoundary: field_boundary,
+            mission_name: missionName,
+            Field: {
+                "CityID": 0,
+                "LocationID": 0,
+                "FieldID": 10,
+                "FieldName": field_name,
+                "RobotHome": robot_home,
+                "FieldAccessPoint": field_access_point,
+                "FieldBoundary": field_boundary,
             },
             FieldRowsSettings: {
                 ...settings,
@@ -74,7 +75,6 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
                     ? `Angle@${angle}deg`
                     : settings.RowPattern
             },
-            mission_name: missionName
         };
     };
 
