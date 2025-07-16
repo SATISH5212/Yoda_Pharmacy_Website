@@ -31,7 +31,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 setErrors(error?.data?.errors || {});
-                console.error("Validation Errors:", error?.data?.errors);
+                console.log("Validation Errors:", error?.data?.errors);
             }
         },
     });
@@ -78,6 +78,14 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
         };
     };
 
+
+    const clearFieldError = (field: string) => {
+        setErrors((prev: any) => ({
+            ...prev,
+            [field]: null,
+        }));
+    };
+
     const handleSubmit = () => {
         if (!validateForm()) return;
         createMission(buildPayload());
@@ -87,21 +95,33 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4">
             <h2 className="text-lg font-semibold">Configure Mission</h2>
 
-            <div className="flex justify-between items-center">
-                <label className="text-sm font-semibold text-gray-600">Field Name</label>
+            <div className="flex justify-center items-center gap-9">
+                <label className="text-sm font-semibold text-gray-600 w-1/3">Field Name</label>
                 <Input
                     value={viewFieldData?.data?.field_name}
                     disabled
                     className="text-md font-bold text-black"
                 />
             </div>
-            <div className="flex justify-between items-center">
-                <label className="text-sm font-semibold text-gray-600">Mission Name</label>
-                <Input
-                    value={missionName}
-                    className="text-md font-bold text-black"
-                    onChange={(e) => setMissionName(e.target.value)}
-                />
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center">
+                    <label className="text-sm font-semibold text-gray-600 w-1/2">Mission Name</label>
+                    <Input
+                        value={missionName}
+                        className="text-md font-bold text-black"
+                        onChange={(e) => {
+                            setMissionName(e.target.value)
+                            clearFieldError("mission_name");
+                        }}
+                    />
+                </div>
+                <div className="ml-29">
+                    {
+                        errors.mission_name && (
+                            <p className=" text-red-500 text-xs">{errors.mission_name}</p>
+                        )
+                    }
+                </div>
             </div>
 
             <div className="flex gap-2">
@@ -111,51 +131,75 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
                         type="number"
                         placeholder="Row Spacing"
                         value={settings.RowSpacing ?? ""}
-                        onChange={(e) => handleInputChange("RowSpacing", parseFloat(e.target.value))}
+                        onChange={(e) => {
+                            handleInputChange("RowSpacing", parseFloat(e.target.value))
+                            clearFieldError("RowSpacing");
+                        }}
                     />
+                    <span className="text-red-500 text-xs h-4">
+                        {errors.RowSpacing}
+                    </span>
                 </div>
+
                 <div className="w-1/2">
                     <label className="text-sm font-semibold text-gray-600">Head Land Width</label>
                     <Input
                         type="number"
                         placeholder="Head Land Width"
                         value={settings.HeadLandWidth ?? ""}
-                        onChange={(e) => handleInputChange("HeadLandWidth", parseFloat(e.target.value))}
+                        onChange={(e) => {
+                            handleInputChange("HeadLandWidth", parseFloat(e.target.value))
+                            clearFieldError("HeadLandWidth");
+                        }}
                     />
+                    <span className="text-red-500 text-xs h-2">
+                        {errors.HeadLandWidth}
+                    </span>
                 </div>
             </div>
 
-            <div className="w-1/2">
-                <label className="text-sm font-semibold text-gray-600">Step Size</label>
-                <Input
-                    type="number"
-                    placeholder="Step Size"
-                    value={settings.StepSize ?? ""}
-                    onChange={(e) => handleInputChange("StepSize", parseFloat(e.target.value))}
-                />
-            </div>
-
-            <DropDownPoper
-                data={ROW_PATTERN_OPTIONS}
-                type="rowPattern"
-                value={settings.RowPattern}
-                onSelect={handleRowPatternChange}
-                isLoading={false}
-            />
-
-            {showAngleInput && (
+            <div className="flex gap-2">
                 <div className="w-1/2">
-                    <label className="text-sm font-semibold text-gray-600">Row Pattern Angle</label>
+                    <label className="text-sm font-semibold text-gray-600">Step Size</label>
                     <Input
                         type="number"
-                        placeholder="Enter Angle in degrees"
-                        onChange={(e) => setAngle(parseFloat(e.target.value))}
+                        placeholder="Step Size"
+                        value={settings.StepSize ?? ""}
+                        onChange={(e) => {
+                            handleInputChange("StepSize", parseFloat(e.target.value))
+                            clearFieldError("StepSize");
+                        }}
                     />
-                    {errors.rowPattrenAngle && (
-                        <span className="text-red-500 text-xs">{errors.rowPattrenAngle}</span>
+                    <span className="text-red-500 text-xs h-4">
+                        {errors.StepSize}
+                    </span>
+                </div>
+                <div className="w-1/2">
+                    <label className="text-sm font-semibold text-gray-600">Row Pattern</label>
+                    <DropDownPoper
+                        data={ROW_PATTERN_OPTIONS}
+                        type="rowPattern"
+                        value={settings.RowPattern}
+                        onSelect={handleRowPatternChange}
+                        isLoading={false}
+                    />
+                    <span className="text-red-500 text-xs ">
+                        {errors.RowPattern}
+                    </span>
+
+                    {showAngleInput && (
+                        <div className="w-full mt-2">
+                            <label className="text-sm font-semibold text-gray-600 ">Row Pattern Angle</label>
+                            <Input
+                                type="number"
+                                placeholder="Enter Angle in degrees"
+                                onChange={(e) => { setAngle(parseFloat(e.target.value)) }}
+                            />
+                        </div>
                     )}
                 </div>
-            )}
+
+            </div>
 
             <button
                 className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full"

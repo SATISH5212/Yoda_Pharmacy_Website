@@ -39,7 +39,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
         setSearchTerm("");
     };
     return (
-        <div className="w-[200px]">
+        <div className="w-[170px]">
 
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
@@ -47,7 +47,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="relative w-full h-[35px] justify-between rounded-md border text-sm font-normal text-[#00000099] hover:bg-white"
+                        className="relative w-full h-[40px] justify-between rounded-md border text-sm font-normal text-[#00000099] hover:bg-white"
                     >
                         <span className="w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
                             {type === "robots" ? (
@@ -55,7 +55,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                             ) : type === "rowPattren" ? (
                                 `${selectedField ? (typeof selectedField === "object" ? selectedField.pattren_type : selectedField) : "Select Pattren Type"}`
                             ) : (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : "Select Field"}`
+                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : "Row Pattern"}`
                             )}
                         </span>
                         {selectedField && (
@@ -66,7 +66,8 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                                     handleClearSelection()
 
                                 }}
-                            >X
+                            >
+                            <X className="h-4 w-4 " />
                             </span>
                         )}
                         <ChevronsUpDown className="absolute right-2 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-primary-600 p-1 text-white" />
