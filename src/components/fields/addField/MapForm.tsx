@@ -2,7 +2,7 @@ import { IFieldFormPageProps } from "@/lib/interfaces/maps";
 import { FC } from "react";
 
 const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
-    const { handleSubmit, onSubmit, register, displayArea, isPending, handleAddAccessPoint, fieldAccessPoint, handleRobotHome, robotHome, handleCancel, errorMessages } = props
+    const { handleSubmit, onSubmit, register, displayArea, isPending, handleAddAccessPoint, fieldAccessPoint, handleRobotHome, robotHome, handleCancel, errorMessages, handleDeleteAccessPoint, handleDeleteRobotHome } = props
     return (
         <div className="absolute z-10  right-4 bg-white shadow-2xl rounded-2xl h-[96vh] w-[26vw] -mr-2 my-4">
             <form
@@ -52,6 +52,16 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                             >
                                 {fieldAccessPoint ? "✓ Set" : "+ Add"}
                             </button>
+                            {fieldAccessPoint && (
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteAccessPoint}
+                                    className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200"
+                                    title="Delete Access Point"
+                                >
+                                     Remove
+                                </button>
+                            )}
                             {errorMessages.field_access_point && (
                                 <span className='text-red-500 text-[10px] mt-1'>{errorMessages.field_access_point}</span>
                             )}
@@ -69,6 +79,16 @@ const FieldFormPage: FC<IFieldFormPageProps> = (props) => {
                             >
                                 {robotHome ? "✓ Set" : "+ Add"}
                             </button>
+                            {robotHome && (
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteRobotHome}
+                                    className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200"
+                                    title="Delete Robot Home"
+                                >
+                                     Remove
+                                </button>
+                            )}
                             {errorMessages.robot_home && (
                                 <span className='text-red-500 text-[10px] mt-1'>{errorMessages.robot_home}</span>
                             )}

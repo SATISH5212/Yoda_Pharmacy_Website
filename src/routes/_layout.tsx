@@ -7,14 +7,20 @@ export const Route = createFileRoute('/_layout')({
 
 function Body() {
   return (
-    <div className='flex'>
-      <div className='flex w-[70px] bg-gray-200 justify-center h-screen'><Sidebar /></div>
-      <div className='flex flex-col w-full'>
-        <div><Navbar /></div>
-        <div><Outlet /></div>
+    <div className="flex h-screen overflow-hidden">
+      <div className="w-[70px] bg-gray-200 flex justify-center">
+        <Sidebar />
       </div>
+      <div className="flex flex-col w-full">
+        <div className="shrink-0">
+          <Navbar />
+        </div>
+        <div className="flex-1">
+          <Outlet />
+        </div>
+      </div>
+    </div>
 
-    </div >
 
   )
 }

@@ -5,43 +5,93 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 
-
 interface IDropDownPoperProps {
     data: any[] | string[];
-    onSelect?: (robot: any | null) => void;
-    type: string
-    isLoading: boolean
+    onSelect?: (item: any | null) => void;
+    type: 'robots' | 'missions' | 'fields' | 'rowPattren';
+    isLoading: boolean;
+    value?: string;
 }
 
 const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
     const { data, onSelect, type, isLoading } = props;
+
     const [open, setOpen] = useState(false);
     const [selectedField, setSelectedField] = useState<any | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
 
-    const handleSelectRobot = (robotId: string) => {
-        const selected = data.find((item) => {
-            if (typeof item === "object") {
-                return item.id.toString() === robotId;
-            } else {
-                return item === robotId;
+    const getTypeConfig = (type: 'robots' | 'missions' | 'fields' | 'rowPattren') => {
+        const configs: Record<'robots' | 'missions' | 'fields' | 'rowPattren', {
+            placeholder: string;
+            searchPlaceholder: string;
+            emptyMessage: string;
+            displayKey: string;
+            label: string;
+        }> = {
+            robots: {
+                placeholder: "Select Robot",
+                searchPlaceholder: "Search Robots",
+                emptyMessage: "No Robots found",
+                displayKey: "robot_name",
+                label: "Robot"
+            },
+            missions: {
+                placeholder: "Select Mission",
+                searchPlaceholder: "Search Missions",
+                emptyMessage: "No Missions found",
+                displayKey: "mission_name",
+                label: "Mission"
+            },
+            fields: {
+                placeholder: "Select Field",
+                searchPlaceholder: "Search Fields",
+                emptyMessage: "No Fields found",
+                displayKey: "field_name",
+                label: "Field"
+            },
+            rowPattren: {
+                placeholder: "Select Pattern Type",
+                searchPlaceholder: "Search Pattern Types",
+                emptyMessage: "No Pattern Types found",
+                displayKey: "pattren_type",
+                label: "Pattern Type"
             }
+        };
+        return configs[type];
+    };
+
+    const config = getTypeConfig(type);
+
+    const getDisplayValue = (item: any) => {
+        if (typeof item === "string") {
+            return item;
+        }
+        return item[config.displayKey] || item.name || item.toString();
+    };
+
+    const getItemId = (item: any) => {
+        if (typeof item === "string") {
+            return item;
+        }
+        return item.id?.toString() || item[config.displayKey] || item;
+    };
+
+    const handleSelectItem = (itemId: string) => {
+        const selected = data.find((item) => {
+            return getItemId(item) === itemId;
         });
+
         setSelectedField(selected || null);
         onSelect?.(selected || null);
         setOpen(false);
-        setSearchTerm("");
     };
 
     const handleClearSelection = () => {
         setSelectedField(null);
         onSelect?.(null);
-        setSearchTerm("");
     };
 
     return (
         <div className="w-[200px]">
-
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
@@ -51,57 +101,56 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                         className="relative w-full h-[35px] justify-between rounded-md border text-sm font-normal text-[#00000099] hover:bg-white"
                     >
                         <span className="w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
-                            {type === "robots" ? (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.robot_name : selectedField) : "Select Robot"}`
-                            ) : type === "rowPattren" ? (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.pattren_type : selectedField) : "Select Pattren Type"}`
-                            ) : (
-                                `${selectedField ? (typeof selectedField === "object" ? selectedField.field_name : selectedField) : "Select Field"}`
-                            )}
+                            {selectedField ? getDisplayValue(selectedField) : config.placeholder}
                         </span>
                         {selectedField && (
-                            <span
-                                className="absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 cursor-pointer"
+                            <X
+                                className="absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 cursor-pointer hover:bg-gray-100 rounded"
                                 onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleClearSelection()
-
+                                    e.stopPropagation();
+                                    handleClearSelection();
                                 }}
-                            >X
-                            </span>
+                            />
                         )}
                         <ChevronsUpDown className="absolute right-2 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-primary-600 p-1 text-white" />
                     </Button>
                 </PopoverTrigger>
-                {isLoading ? <div>Loading...</div> : (
-
+                {isLoading ? (
+                    <div className="w-[200px] p-4 text-center text-sm text-gray-500">
+                        Loading...
+                    </div>
+                ) : (
                     <PopoverContent className="w-[200px] p-0 font-product-sans text-sm">
                         <Command>
                             <CommandInput
-                                placeholder={`Search ${type === "robots" ? "Robots" : type === "rowPattren" ? "Pattren Types" : "Fields"}`}
-                                value={searchTerm}
-                                onValueChange={setSearchTerm}
+                                placeholder={config.searchPlaceholder}
                                 className="h-9"
                             />
                             <CommandList>
-                                <CommandEmpty>No {type === "robots" ? "Robots" : "Fields"} found.</CommandEmpty>
+                                <CommandEmpty>{config.emptyMessage}</CommandEmpty>
                                 <CommandGroup>
-                                    {data?.map((item, index) => (
-                                        <CommandItem
-                                            key={typeof item === "object" ? item.id : index}
-                                            value={typeof item === "object" ? item.id.toString() : item}
-                                            onSelect={handleSelectRobot}
-                                            className="cursor-pointer"
-                                        >
-                                            <span className="truncate">{typeof item === "object" ? (type === "robots" ? item.robot_name : item.field_name) : item}</span>
-                                            <Check
-                                                className={cn(
-                                                    "ml-2 h-4 w-4",
-                                                    selectedField === (typeof item === "object" ? item.id : item) ? "opacity-100" : "opacity-0"
-                                                )}
-                                            />
-                                        </CommandItem>
-                                    ))}
+                                    {data?.map((item, index) => {
+                                        const itemId = getItemId(item);
+                                        const displayValue = getDisplayValue(item);
+                                        const isSelected = selectedField && getItemId(selectedField) === itemId;
+
+                                        return (
+                                            <CommandItem
+                                                key={itemId || index}
+                                                value={displayValue}
+                                                onSelect={() => handleSelectItem(itemId)}
+                                                className="cursor-pointer"
+                                            >
+                                                <span className="truncate">{displayValue}</span>
+                                                <Check
+                                                    className={cn(
+                                                        "ml-2 h-4 w-4",
+                                                        isSelected ? "opacity-100" : "opacity-0"
+                                                    )}
+                                                />
+                                            </CommandItem>
+                                        );
+                                    })}
                                 </CommandGroup>
                             </CommandList>
                         </Command>

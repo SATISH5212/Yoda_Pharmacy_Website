@@ -57,6 +57,8 @@ export interface DrawToolsProps {
     mode: string;
     setMode: React.Dispatch<React.SetStateAction<string>>;
     setLocationInfo: React.Dispatch<React.SetStateAction<LocationInfo>>;
+    fieldAccessPoint: Coordinates;
+    robotHome: Coordinates;
 }
 
 export interface AddRobotProps {

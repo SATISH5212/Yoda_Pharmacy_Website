@@ -88,7 +88,7 @@ const PaginationNext = ({
     <span className="font-normal text-[15px]">Next</span>
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
-);
+);  
 PaginationNext.displayName = "PaginationNext";
 
 const PaginationEllipsis = ({

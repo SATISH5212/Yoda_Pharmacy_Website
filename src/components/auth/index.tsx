@@ -44,7 +44,6 @@ export function LoginPage() {
             Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
             Cookies.set("refreshToken", refreshToken, { secure: true, sameSite: "strict" });
             localStorage.setItem("userCredentials", JSON.stringify(response?.data?.data?.user));
-            localStorage.setItem("authToken", accessToken);
             navigate({
                 to: `/all-fields`,
             });

@@ -96,8 +96,8 @@ const TanStackTable: FC<pageProps> = ({
     };
 
     return (
-        <div className="w-full rounded-lg shadow-sm border border-gray-200 bg-white flex flex-col">
-            <div className="flex-1 overflow-auto">
+        <div className="w-full flex flex-col">
+            <div className="flex-1 ">
                 {!data.length && !loading ? (
                     <div className="flex justify-center items-center min-h-[400px] p-4">
                         <div className="flex flex-col justify-center items-center text-center">
@@ -111,20 +111,22 @@ const TanStackTable: FC<pageProps> = ({
                             </p>
                         </div>
                     </div>
-                ) : (
-                    <div className="w-full">
-                        <table className="w-full border-collapse bg-white">
-                            <thead className="bg-gray-100 sticky top-0 z-10">
+                ) : ( 
+                    <div className="w-full max-h-[500px] overflow-auto pb-10">
+                        <table className="w-full">
+                            <thead className="sticky top-0 z-10 ">
                                 {table?.getHeaderGroups().map((headerGroup) => (
                                     <tr
                                         key={headerGroup.id + `-${new Date().getTime()}`}
-                                        className="border-b border-gray-200"
+                                        className=""
                                     >
                                         {headerGroup.headers.map((header: Header<any, unknown>, index: number) => (
                                             <th
                                                 key={index + `-${new Date().getTime()}`}
                                                 colSpan={header.colSpan}
-                                                className="bg-gray-100 text-left px-4 py-3 text-sm font-semibold text-gray-900 border-b border-gray-200"
+                                                className={`bg-gray-100 text-xs px-4 py-1 font-semibold text-gray-900 ${index === 0 ? 'rounded-l-sm' : ''
+                                                    } ${index === headerGroup.headers.length - 1 ? 'rounded-r-sm' : ''
+                                                    }`}
                                                 style={{
                                                     minWidth: getWidth(header.id),
                                                     width: getWidth(header.id),
@@ -148,7 +150,7 @@ const TanStackTable: FC<pageProps> = ({
                                     </tr>
                                 ))}
                             </thead>
-                            <tbody className="divide-y divide-gray-100 bg-white">
+                            <tbody className="divide-y">
                                 {data?.length ? (
                                     table?.getRowModel().rows.map((row) => (
                                         <tr
@@ -157,7 +159,7 @@ const TanStackTable: FC<pageProps> = ({
                                         >
                                             {row.getVisibleCells().map((cell) => (
                                                 <td
-                                                    className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap"
+                                                    className="px-4 py-1.5 text-xs text-gray-900 whitespace-nowrap"
                                                     key={cell.id + `-${new Date().getTime()}`}
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -184,7 +186,7 @@ const TanStackTable: FC<pageProps> = ({
                 )}
             </div>
             {data?.length && paginationDetails ? (
-                <div className="border-t border-gray-200 bg-white sticky bottom-0 z-10 p-4">
+                <div className="sticky bottom-0 z-10 bg-white">
                     <Pagination
                         paginationDetails={paginationDetails}
                         capturePageNum={capturePageNum}
@@ -218,9 +220,9 @@ const SortItems = ({
     const isDescending = sortBy === header.id && sortDirection === "desc";
 
     return (
-        <div className="flex items-center flex-col gap-1">
+        <div className="flex items-center flex-col ">
             <div
-                className={`[&_svg]:size-4 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
+                className={`[&_svg]:size-2 ${isAscending ? "text-blue-600" : "text-gray-500"} cursor-pointer`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);
@@ -243,7 +245,7 @@ const SortItems = ({
                 <SortAscIcon />
             </div>
             <div
-                className={`[&_svg]:size-4 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
+                className={`[&_svg]:size-2 ${isDescending ? "text-blue-600" : "text-gray-500"}`}
                 onClick={(e) => {
                     e.stopPropagation();
                     const newSearchParams = new URLSearchParams(searchParams);

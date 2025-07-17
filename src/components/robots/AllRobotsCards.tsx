@@ -40,7 +40,7 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
           <div className='flex flex-row justify-between'>
             <div className="flex">
               <span className='flex items-center mr-2 bg-green-400 w-3.5 h-3.5 rounded-full mt-1'></span>
-              <span className='font-DM sans text-md text- #4F4F4F-400 tracking-wider'>{robot.robot_name}</span>
+              <span className='font-DM sans text-sm font-bold text- #4F4F4F-400 tracking-wider'>{robot.robot_name}</span>
             </div>
             <div className='flex items-center gap-x-2' >
               <span className=''><img src="/src/components/svg/robots/robotNotifications.svg" alt="Robot" className="w-5 h-5" /></span>

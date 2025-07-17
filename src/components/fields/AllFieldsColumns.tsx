@@ -1,32 +1,39 @@
+
 import { capitalize } from "@/lib/helpers/CaptalizeFirstLetter";
 import { Link, useRouter } from "@tanstack/react-router";
-import { Edit, Eye, Waypoints } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { Button } from "../ui/button";
+
 const getAllFieldsColumns = () => {
-    const router = useRouter()
+    const router = useRouter();
     const allFieldsColumns = [
         {
-            header: "S No",
+            id: "id",
+            header: () => (
+                <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+                    S.No
+                </span>
+            ),
             accessorKey: "id",
             cell: (value: any) => (
-                <span className="text-xs sm:text-sm font-medium text-gray-900">
+                <span className="text-sm font-semibold text-gray-900">
                     {value.row.index + 1}
                 </span>
             ),
             width: "10px",
         },
         {
-            accessorFn: (row: any) => row.field_name,
             id: "field_name",
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900 whitespace-nowrap">
+                <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
                     Field Name
                 </span>
             ),
+            accessorKey: "field_name",
             cell: (info: any) => {
                 const value = info.getValue() || "-";
                 return (
-                    <span className="text-xs sm:text-sm text-gray-900 font-medium">
+                    <span className="text-sm font-semibold text-gray-800">
                         {value}
                     </span>
                 );
@@ -35,21 +42,21 @@ const getAllFieldsColumns = () => {
         },
         {
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900 whitespace-nowrap">
+                <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
                     Geographical Area
                 </span>
             ),
             accessorKey: "field_area",
             cell: (value: any) => (
-                <span className="text-xs sm:text-sm text-gray-600">
-                    {value.getValue()} hectares
+                <span className="text-sm text-gray-700">
+                    {value.getValue()} Acres
                 </span>
             ),
             width: "150px",
         },
         {
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900 whitespace-nowrap">
+                <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
                     Created On
                 </span>
             ),
@@ -58,7 +65,7 @@ const getAllFieldsColumns = () => {
                 const dateString = value.cell.getValue();
                 const date = new Date(dateString);
                 return (
-                    <span className="text-xs sm:text-sm text-gray-600">
+                    <span className="text-sm ">
                         {date.toLocaleString('en-IN', {
                             timeZone: 'Asia/Kolkata',
                             day: '2-digit',
@@ -72,28 +79,42 @@ const getAllFieldsColumns = () => {
         },
         {
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900">
-                    Status
-                </span>
+                <span className="text-sm font-semibold text-gray-800">Status</span>
             ),
             accessorKey: "field_status",
             cell: (value: any) => {
-                const status = value.getValue();
+                const status = (value.getValue() || "").toLowerCase();
+
+                const statusStyles =
+                    status === "pending"
+                        ? {
+                            bg: "bg-orange-100",
+                            text: "text-orange-800",
+                            dot: "bg-orange-500",
+                        }
+                        : {
+                            bg: "bg-green-100",
+                            text: "text-green-800",
+                            dot: "bg-green-600",
+                        };
+
                 return (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-1.5"></span>
-                        {capitalize(status || "")}
+                    <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${statusStyles.bg} ${statusStyles.text}`}
+                    >
+                        <span
+                            className={`w-1.5 h-1.5 rounded-full mr-1.5 ${statusStyles.dot}`}
+                        ></span>
+                        {capitalize(status)}
                     </span>
                 );
             },
             width: "100px",
         },
-
         {
-            accessorFn: (row: any) => row.location,
             id: "location",
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-gray-800">
                     Location
                 </span>
             ),
@@ -111,20 +132,19 @@ const getAllFieldsColumns = () => {
 
                 return (
                     <span
-                        className="text-xs sm:text-sm text-gray-600 truncate inline-block max-w-[150px] cursor-pointer"
+                        className="text-[13px] text-gray-700 truncate inline-block max-w-[150px] cursor-pointer"
                         title={showDots ? groupedParts.join("\n") : ""}
                     >
                         {firstTwo}
-                        {showDots && "..."}
+                        {showDots && "…"}
                     </span>
                 );
             },
             width: "80px",
         },
-
         {
             header: () => (
-                <span className="text-xs sm:text-sm font-semibold text-gray-900">
+                <span className="flex grow text-sm font-semibold text-gray-800 justify-center">
                     Actions
                 </span>
             ),
@@ -133,38 +153,34 @@ const getAllFieldsColumns = () => {
                 const row = info.row.original;
                 const field_id = row.id as string;
                 return (
-                    <div className="flex justify-center gap-3">
+                    <div className="flex justify-center items-center gap-3 flex-wrap">
                         <Link
                             to="/fields/$field_id"
                             params={{ field_id }}
-                            className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
+                            className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
                             title="View Field"
                         >
                             <Eye size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
                         <Link
-                            to="/fields/$field_id/viewField"
+                            to="/fields/$field_id/edit"
                             params={{ field_id }}
-                            className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
+                            className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
                             title="Edit Field"
                         >
                             <Edit size={14} className="text-gray-600 group-hover:text-blue-600" />
                         </Link>
                         <Button
-                            className="flex items-center justify-center w-fill h-8 rounded-full  text-black font-bold bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
+                            className="text-xs font-semibold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
                             title="Configure Mission"
-                            onClick={() => {
-                                router.navigate({ to: `/fields/${field_id}/config-mission` });
-                            }}
+                            onClick={() => router.navigate({ to: `/fields/${field_id}/config-mission` })}
                         >
                             Create Mission
                         </Button>
                         <Button
-                            className="flex items-center justify-center w-fill h-8 rounded-full  text-black font-bold bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
+                            className="text-xs font-semibold bg-gray-100 hover:bg-blue-100 text-black h-7 rounded-full"
                             title="Add Robot"
-                            onClick={() => {
-                                router.navigate({ to: `/fields/${field_id}/config-robot` });
-                            }}
+                            onClick={() => router.navigate({ to: `/fields/${field_id}/config-robot` })}
                         >
                             Add Robot
                         </Button>
@@ -174,8 +190,9 @@ const getAllFieldsColumns = () => {
             width: "100px",
         },
     ];
-    return [allFieldsColumns]
-}
+    return [allFieldsColumns];
+};
+
 export const useViewAllFieldsColumns = () => {
     return getAllFieldsColumns();
 };

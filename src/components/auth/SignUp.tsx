@@ -37,9 +37,6 @@ export function Register() {
         onSuccess: (response) => {
             const message = response?.data?.message;
             toast.success(message);
-            // const accessToken = response?.data?.data?.access_token;
-            // Cookies.set("token", accessToken, { secure: true, sameSite: "strict" });
-            // localStorage.setItem("authToken", accessToken);
             navigate({
                 to: `/all-fields`,
             });
