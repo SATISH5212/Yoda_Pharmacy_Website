@@ -19,3 +19,11 @@ export const getAllRobotsAPI = async (queryParams?: iFieldQueryParams) => {
         throw err;
     }
 };
+export const getFieldPathEstimationsAPI = async (missionId: string, robotType: string) => {
+    try {
+        const response = await $fetch.get(`/mission/${missionId}/robot/${robotType}`);
+        return response;
+    } catch (err) {
+        throw err;
+    }
+}

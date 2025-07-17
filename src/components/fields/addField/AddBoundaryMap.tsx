@@ -14,7 +14,7 @@ import {
     Polygon,
 } from "@react-google-maps/api";
 import { Trash2, Check, X, MoveLeft, Edit, Undo } from "lucide-react";
-import React, { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { toast } from "sonner";
 
@@ -220,7 +220,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                 const address = await CordinatesToLocation(point.lat, point.lng);
                 setMarkerAddress(address);
             }
-            
+
         },
         [mode, setFieldAccessPoint, setMode, setRobotHome, isEditingBoundary]
     );
@@ -294,19 +294,19 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         searchStringToLocation(searchString, setMapCenter, setSearchMarker, setMarkerAddress)
     }
 
-    
 
-   useEffect(() => {   
-    if(mode === "delete_access_point" && !fieldAccessPoint) {
-        setAccessPoint(undefined);
-        setMode("idle");
-    }
-    if(mode === "delete_robot_home" && !robotHome) {
-        setRobotPoint(null);
-        setMode("idle");
-    }
-   }, [mode]);
-   
+
+    useEffect(() => {
+        if (mode === "delete_access_point" && !fieldAccessPoint) {
+            setAccessPoint(undefined);
+            setMode("idle");
+        }
+        if (mode === "delete_robot_home" && !robotHome) {
+            setRobotPoint(null);
+            setMode("idle");
+        }
+    }, [mode]);
+
 
     const canUndo = polygonHistory.length > 1;
 
@@ -355,7 +355,7 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
                         />
                     )}
 
-                    {accessPoint &&  (
+                    {accessPoint && (
                         <Marker
                             position={accessPoint}
                             icon={{
