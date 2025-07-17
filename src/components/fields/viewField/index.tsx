@@ -187,7 +187,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = () => {
         const robotHome = fetchEstimationsData?.mission?.RobotHome;
         if (!robotHome) return coordinates;
 
-        const lastSegment = fetchEstimationsData?.mission?.GoToHome?.[fetchEstimationsData?.mission?.GoToHome?.length - 22];
+        const lastSegment = fetchEstimationsData?.mission?.GoToHome?.[fetchEstimationsData?.mission?.GoToHome?.length - 1];
         if (!lastSegment) return coordinates;
 
         lastSegment.forEach((waypointGroup: any) => {
