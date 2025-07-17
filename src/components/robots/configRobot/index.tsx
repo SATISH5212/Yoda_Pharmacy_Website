@@ -75,16 +75,9 @@ const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
 
 
     const handleSelectRobot = (selectedRobot: string) => {
-        // if (selectedRobot == "DEMETER_MINI") {
-        //     setRobotType(0)
-        // } else {
-        //     setRobotType(1)
-        // }
         setRobotType(selectedRobot)
-
     }
     const handleFetchEstimations = async () => {
-
         await fetchEstimations()
 
     };
