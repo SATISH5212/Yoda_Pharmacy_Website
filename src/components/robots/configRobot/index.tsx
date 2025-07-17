@@ -1,84 +1,60 @@
 import DropDownPoper from "@/components/core/DropDownPoper";
 import { Input } from "@/components/ui/input";
-import { FieldRowsSettings, IAddMissionFormProps, IAddRobotFormProps } from "@/lib/interfaces/missions";
+import { FieldRowsSettings, IAddRobotFormProps } from "@/lib/interfaces/missions";
 import { getFieldPathEstimationsAPI } from "@/lib/services/robots";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { FC, use, useState } from "react";
-import yaml from "js-yaml";
+import { useMutation } from "@tanstack/react-query";
+import { FC, useState } from "react";
 
 
 const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
-    const { viewFieldData, setFetchEstimationsData, setPathGeneratored, } = props;
+    const { viewFieldData, setFetchEstimationsData, setPathGeneratored, robotType, setRobotType } = props;
     const [fetchEstimationLoading, setFetchEstimationLoading] = useState(false);
+
     const robotTypes = ["DEMETER_MINI", "DEMETER_MAXI"];
     const [selectedMissionId, setSelectedMissionId] = useState<number>();
-    const [robotType, setRobotType] = useState<number>();
     const [fieldRowsSettings, setFieldRowsSettings] = useState<FieldRowsSettings>({
         RowSpacing: undefined,
         HeadLandWidth: undefined,
         RowPattern: "",
         StepSize: undefined,
     });
-    // const {
-    //     data: estimationsPathData,
-    //     refetch: refetchEstimations,
-    // } = useQuery({
-    //     queryKey: ["fetch-estimations"],
-    //     queryFn: async () => {
-    //         if (!selectedMissionId || !robotType) return
-    //         const response = await getFieldPathEstimationsAPI(selectedMissionId.toString(), robotType.toString());
-    //         console.log(response, "linkkkk")
-
-    //         throw new Error("Failed to fetch estimations");
-    //     },
-    //     enabled: false,
-    // })
-
-
     const { mutate: fetchEstimations } = useMutation({
         mutationFn: async () => {
+
+
+            if (selectedMissionId === undefined || robotType === "") return;
             setFetchEstimationLoading(true)
-            console.log("fetchingestimations00101", selectedMissionId, robotType);
+            const payload = {
 
-            if (selectedMissionId === null || selectedMissionId === undefined || robotType === null || robotType === undefined) return;
+                "mission_id": selectedMissionId,
+                "robot_type": robotType
+            }
             const response = await getFieldPathEstimationsAPI(
-                selectedMissionId.toString(),
-                robotType.toString()
+                payload
             );
-
             const s3Url = response?.data?.data?.download_url;
-            console.log(s3Url,);
-            console.log("satii001");
             const s3Response = await fetch(s3Url);
-            console.log("satii002");
             const jsonData = await s3Response.json();
-            console.log("satii003", jsonData);
             setFetchEstimationsData(jsonData);
             setPathGeneratored(true)
             setFetchEstimationLoading(false)
-
-
-
-
-
             return s3Url;
         },
 
         onSuccess: (parsedData) => {
-            // Handle the converted JSON object here
-            console.log("YAML Data as JSON Object:", parsedData);
-            // Optionally set state, navigate, etc.
+
         },
 
         onError: (err) => {
+            setFetchEstimationLoading(false)
             console.error("Error fetching or parsing YAML:", err);
         },
+
     });
 
 
 
     const handleMissionSelect = (selectedMission: any | null) => {
-        console.log(selectedMission, "fetchingestimations0010111")
         setSelectedMissionId(selectedMission?.id);
         if (selectedMission) {
             setFieldRowsSettings({
@@ -99,16 +75,16 @@ const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
 
 
     const handleSelectRobot = (selectedRobot: string) => {
-        console.log(selectedRobot, "setra")
-        if (selectedRobot == "DEMETER_MINI") {
-            setRobotType(0)
-        } else {
-            setRobotType(1)
-        }
+        // if (selectedRobot == "DEMETER_MINI") {
+        //     setRobotType(0)
+        // } else {
+        //     setRobotType(1)
+        // }
+        setRobotType(selectedRobot)
 
     }
     const handleFetchEstimations = async () => {
-        console.log("fetchingestimations001")
+
         await fetchEstimations()
 
     };

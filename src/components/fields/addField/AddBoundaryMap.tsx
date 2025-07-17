@@ -168,14 +168,12 @@ const AddBoundaryMAP: React.FC<DrawToolsProps> = (props) => {
         }));
 
         setPolygonPath(newPath);
-        console.log("Edited polygon path:", newPath);
-    }, [polygonPath]);
+         }, [polygonPath]);
 
     const handleSaveEdit = useCallback(async () => {
         try {
             setFormCoordinates(polygonPath);
-            console.log("Saving edited boundary:", polygonPath);
-
+          
             const locationInfo = await calculateAreaAndLocation(polygonPath);
             if (locationInfo) {
                 setLocationInfo(locationInfo);

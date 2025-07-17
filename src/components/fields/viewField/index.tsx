@@ -34,14 +34,9 @@ export type Coordinates = {
     lat: number,
     lng: number
 };
-interface FetchEstimationsData {
-    mission: any;
-}
-const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
+const ViewFieldPage: FC<IViewFieldPageProps> = () => {
     const { field_id } = useParams({ strict: false });
     const location = useLocation()
-
-
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [calculatedArea, setCalculatedArea] = useState<string>("");
     const [fetchEstimationsData, setFetchEstimationsData] = useState<any | null>(null);
@@ -50,15 +45,16 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         lat: fetchEstimationsData?.mission?.RobotHome?.lat,
         lng: fetchEstimationsData?.mission?.RobotHome?.lng
     };
+
     const [finalPath, setFinalPath] = useState({})
+    const [robotType, setRobotType] = useState<string>("");
+    console.log(robotType, "robotType")
     useEffect(() => {
-        console.log("fetchEstimationLoadingfetchEstimationLoading", fetchEstimationsData)
         if (fetchEstimationsData) {
             setFinalPath(fetchEstimationsData);
         }
         setMapCenter(viewFieldData?.data?.centroid)
     }, [fetchEstimationsData])
-    console.log("fetchEstimationLoadingfetchEstimationLoading", finalPath)
 
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER)
 
@@ -112,9 +108,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     }, [viewFieldData, calculateBounds]);
 
     const polygonOptions = useMemo(() => ({
-        fillColor: "rgba(144, 238, 144, 0.4)",
+        fillColor: "#0738022b",
         fillOpacity: 0.4,
-        strokeColor: "#228B22",
+        strokeColor: "#10f267ff",
         strokeWeight: 2,
         clickable: true,
         editable: false,
@@ -191,7 +187,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         const robotHome = fetchEstimationsData?.mission?.RobotHome;
         if (!robotHome) return coordinates;
 
-        const lastSegment = fetchEstimationsData?.mission?.GoToHome?.[fetchEstimationsData?.mission?.GoToHome?.length - 1];
+        const lastSegment = fetchEstimationsData?.mission?.GoToHome?.[fetchEstimationsData?.mission?.GoToHome?.length - 22];
         if (!lastSegment) return coordinates;
 
         lastSegment.forEach((waypointGroup: any) => {
@@ -210,20 +206,20 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     }, [covertXYToLatLng, fetchEstimationsData, pathGeneratored]);
 
     const homeToFieldOptions = {
-        strokeColor: '#0d0f82ff',
+        strokeColor: "#FFC107",
         strokeOpacity: 1.0,
         strokeWeight: 3,
         geodesic: true,
     };
 
     const robotPathOptions = {
-        strokeColor: '#061666',
+        strokeColor: robotType === "DEMETER_MINI" ? "#fff6f6ff" : "#4aa4e9ff",
         strokeOpacity: 1.0,
         strokeWeight: 3,
         geodesic: true,
     };
     const robotPathToHomeOptions = {
-        strokeColor: '#bb9217ff',
+        strokeColor: '#6C757D',
         strokeOpacity: 1.0,
         strokeWeight: 3,
         geodesic: true,
@@ -323,7 +319,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 </GoogleMap>
             </LoadScript>
             {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
-            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} setFetchEstimationsData={setFetchEstimationsData} setPathGeneratored={setPathGeneratored} /></div>}
+            {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} setFetchEstimationsData={setFetchEstimationsData} setPathGeneratored={setPathGeneratored} robotType={robotType} setRobotType={setRobotType} /></div>}
         </div>
     );
 };
