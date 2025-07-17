@@ -8,7 +8,8 @@ import yaml from "js-yaml";
 
 
 const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
-    const { viewFieldData, setFetchEstimationsData, setPathGeneratored } = props;
+    const { viewFieldData, setFetchEstimationsData, setPathGeneratored, } = props;
+    const [fetchEstimationLoading, setFetchEstimationLoading] = useState(false);
     const robotTypes = ["DEMETER_MINI", "DEMETER_MAXI"];
     const [selectedMissionId, setSelectedMissionId] = useState<number>();
     const [robotType, setRobotType] = useState<number>();
@@ -36,49 +37,31 @@ const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
 
     const { mutate: fetchEstimations } = useMutation({
         mutationFn: async () => {
+            setFetchEstimationLoading(true)
             console.log("fetchingestimations00101", selectedMissionId, robotType);
 
-            if (!selectedMissionId || !robotType) return;
-
-            // Step 1: Call your API to get the YAML S3 download link
+            if (selectedMissionId === null || selectedMissionId === undefined || robotType === null || robotType === undefined) return;
             const response = await getFieldPathEstimationsAPI(
                 selectedMissionId.toString(),
                 robotType.toString()
             );
 
-            const yamlFileUrl = response?.data?.data?.download_url;
-            console.log(yamlFileUrl, "YAML file URL from API");
+            const s3Url = response?.data?.data?.download_url;
+            console.log(s3Url,);
             console.log("satii001");
-
-            if (!yamlFileUrl) {
-                console.log("satii002");
-                throw new Error("YAML file URL not received");
-            }
-            console.log("satii003");
-            // Step 2: Fetch the actual YAML content from the S3 URL
-            const fileRes = await fetch(yamlFileUrl);
-            console.log("satii004");
-
-            if (!fileRes.ok) {
-                throw new Error(`Failed to fetch YAML file: ${fileRes.status}`);
-            }
-            console.log("satii005");
+            const s3Response = await fetch(s3Url);
+            console.log("satii002");
+            const jsonData = await s3Response.json();
+            console.log("satii003", jsonData);
+            setFetchEstimationsData(jsonData);
+            setPathGeneratored(true)
+            setFetchEstimationLoading(false)
 
 
-            // Step 3: Convert file (Blob) → Text → JSON
-            const blob = await fileRes.blob();
-            console.log(blob, "satii006");
-            const yamlText = await blob.text();
-            console.log(yamlText, "satii007");
-            const parsedData = yaml.load(yamlText);
-            console.log(parsedData, "satii008");
-            setFetchEstimationsData(parsedData);
-            setPathGeneratored(true);
 
 
-            console.log("Parsed YAML → JSON:", parsedData);
 
-            return parsedData; // if you want access in `onSuccess`
+            return s3Url;
         },
 
         onSuccess: (parsedData) => {
@@ -204,7 +187,7 @@ const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
                 className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full hover:cursor-pointer"
                 onClick={handleFetchEstimations}
             >
-                Fetch Estimations
+                {fetchEstimationLoading ? "Fetching Estimations..." : "Fetch Estimations"}
             </button>
         </div>
     );

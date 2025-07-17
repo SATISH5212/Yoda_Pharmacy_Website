@@ -1,3 +1,7 @@
+import AddRobotForm from "@/components/robots/configRobot";
+import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
+import { IViewFieldPageProps } from "@/lib/interfaces/maps";
+import { getSingleFieldAPI } from "@/lib/services/fields";
 import {
     GoogleMap,
     InfoWindow,
@@ -6,29 +10,22 @@ import {
     Polygon,
     Polyline,
 } from "@react-google-maps/api";
-import { MapPin, Square } from "lucide-react";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
-import { getSingleFieldAPI } from "@/lib/services/fields";
 import { useQuery } from "@tanstack/react-query";
 import {
     useLocation,
     useParams
 } from "@tanstack/react-router";
-import { IViewFieldPageProps } from "@/lib/interfaces/maps";
-// import samplePath from "./samplePath";
-import { Waypoint } from "../viewPath";
+import { MapPin, Square } from "lucide-react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import AddMissionForm from "../../missions/configMission";
-import AddRobot from "@/components/robots/addRobot";
-import AddRobotForm from "@/components/robots/configRobot";
-import { CordinatesToLocation } from "@/lib/helpers/latLongToLocation";
+import { Waypoint } from "../viewPath";
 
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
 };
 
-const DEFAULT_ZOOM = 30;
+const DEFAULT_ZOOM = 20;
 const GOOGLE_MAPS_LIBRARIES: ("drawing" | "places" | "geocoding")[] = [
     "places",
     "geocoding",
@@ -38,31 +35,37 @@ export type Coordinates = {
     lng: number
 };
 interface FetchEstimationsData {
-    mission: any; // Replace 'any' with the actual type of the mission property
+    mission: any;
 }
 const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const { field_id } = useParams({ strict: false });
     const location = useLocation()
-    const [showMissionPath, setShowMissionPath] = useState(false);
+
 
     const [showInfoWindow, setShowInfoWindow] = useState(false);
     const [calculatedArea, setCalculatedArea] = useState<string>("");
-    ;
-    const [fetchEstimationsData, setFetchEstimationsData] = useState<FetchEstimationsData | null>(null);
+    const [fetchEstimationsData, setFetchEstimationsData] = useState<any | null>(null);
     const [pathGeneratored, setPathGeneratored] = useState(false)
     const DEFAULT_CENTER = {
-        lat: fetchEstimationsData?.mission.RobotHome.lat,
-        lng: fetchEstimationsData?.mission.RobotHome.lng
+        lat: fetchEstimationsData?.mission?.RobotHome?.lat,
+        lng: fetchEstimationsData?.mission?.RobotHome?.lng
     };
+    const [finalPath, setFinalPath] = useState({})
+    useEffect(() => {
+        console.log("fetchEstimationLoadingfetchEstimationLoading", fetchEstimationsData)
+        if (fetchEstimationsData) {
+            setFinalPath(fetchEstimationsData);
+        }
+        setMapCenter(viewFieldData?.data?.centroid)
+    }, [fetchEstimationsData])
+    console.log("fetchEstimationLoadingfetchEstimationLoading", finalPath)
+
     const [mapCenter, setMapCenter] = useState<Coordinates>(DEFAULT_CENTER)
-    if (pathGeneratored) {
-        console.log(fetchEstimationsData?.mission, "jamm002")
-    }
+
     const {
         data: viewFieldData,
         isLoading,
         isError,
-
     } = useQuery({
         queryKey: ["view-fieldData", field_id],
         queryFn: async () => {
@@ -90,8 +93,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
             west: Math.min(...lngs)
         };
     }, []);
+
     useEffect(() => {
-        if (viewFieldData?.data?.field_boundary.length > 0) {
+        if (viewFieldData?.data?.field_boundary?.length > 0) {
             setMapCenter(viewFieldData?.data?.centroid);
             setCalculatedArea(viewFieldData?.data?.field_area);
             const bounds = calculateBounds(viewFieldData?.data?.field_boundary);
@@ -120,6 +124,7 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     const handlePolygonClick = useCallback(() => {
         setShowInfoWindow(prev => !prev);
     }, []);
+
     const covertXYToLatLng = useCallback((homeLat: number, homeLon: number, x: number, y: number) => {
         const METERS_PER_DEGREE_LAT = 110540;
         const METERS_PER_DEGREE_LON = 111320;
@@ -131,20 +136,19 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
     }, []);
 
     const pathForFeildAccessPoint = useMemo(() => {
-        console.log(fetchEstimationsData, "mmm001")
+        if (!pathGeneratored || !fetchEstimationsData?.mission) return [];
+
         const coordinates: Coordinates[] = [];
         const robotHome = fetchEstimationsData?.mission?.RobotHome;
-        console.log(robotHome, "mmm002")
         if (!robotHome) return coordinates;
-        console.log(robotHome, "mmm003")
+
         coordinates.push({
             lat: robotHome.lat,
             lng: robotHome.lng,
         });
-        fetchEstimationsData?.mission?.GoToField.forEach((segment: Waypoint[]) => {
-            console.log(segment, "mmm004")
+
+        fetchEstimationsData?.mission?.GoToField?.forEach((segment: Waypoint[]) => {
             segment.forEach((waypoint) => {
-                console.log(waypoint, "mmm005")
                 const { lat, lng } = covertXYToLatLng(
                     robotHome.lat,
                     robotHome.lng,
@@ -154,21 +158,18 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                 coordinates.push({ lat, lng });
             });
         });
-        console.log(coordinates, "mmm0060", coordinates.length)
 
         return coordinates;
-    }, [covertXYToLatLng, fetchEstimationsData]);
-
+    }, [covertXYToLatLng, fetchEstimationsData, pathGeneratored]);
 
     const pathForRobotMove = useMemo(() => {
-        console.log(fetchEstimationsData, "fetchEstimationsData")
+        if (!pathGeneratored || !fetchEstimationsData?.mission) return [];
+
         const coordinates: Coordinates[] = [];
         const robotHome = fetchEstimationsData?.mission?.RobotHome;
-
         if (!robotHome) return coordinates;
 
-        fetchEstimationsData?.mission?.RobotPath.forEach((segment: Waypoint[]) => {
-            console.log(segment, "segment001")
+        fetchEstimationsData?.mission?.NavigateRows?.forEach((segment: Waypoint[]) => {
             segment.forEach((waypoint) => {
                 const { lat, lng } = covertXYToLatLng(
                     robotHome.lat,
@@ -181,30 +182,20 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         });
 
         return coordinates;
-    }, [covertXYToLatLng]);
+    }, [covertXYToLatLng, fetchEstimationsData, pathGeneratored]);
 
     const pathForRobotHome = useMemo(() => {
+        if (!pathGeneratored || !fetchEstimationsData?.mission) return [];
+
         const coordinates: Coordinates[] = [];
         const robotHome = fetchEstimationsData?.mission?.RobotHome;
-
         if (!robotHome) return coordinates;
-        fetchEstimationsData?.mission?.GoToHome[1]
-        // fetchEstimationsData?.mission?.GoToHome?.forEach((segment: any[]) => {
-        //     segment.forEach((segment2: Waypoint[]) => {
 
-        //         segment2.forEach((waypoint) => {
-        //             const { lat, lng } = covertXYToLatLng(
-        //                 robotHome.lat,
-        //                 robotHome.lng,
-        //                 waypoint.x,
-        //                 waypoint.y
-        //             );
-        //             coordinates.push({ lat, lng });
-        //         });
-        //     })
-        // });
-        fetchEstimationsData?.mission?.GoToHome[fetchEstimationsData?.mission?.GoToHome?.length - 1].forEach((waypoint: any) => {
-            waypoint.forEach((waypoint: any) => {
+        const lastSegment = fetchEstimationsData?.mission?.GoToHome?.[fetchEstimationsData?.mission?.GoToHome?.length - 1];
+        if (!lastSegment) return coordinates;
+
+        lastSegment.forEach((waypointGroup: any) => {
+            waypointGroup.forEach((waypoint: any) => {
                 const { lat, lng } = covertXYToLatLng(
                     robotHome.lat,
                     robotHome.lng,
@@ -212,11 +203,11 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     waypoint.y
                 );
                 coordinates.push({ lat, lng });
-            })
-        })
+            });
+        });
 
         return coordinates;
-    }, [covertXYToLatLng]);
+    }, [covertXYToLatLng, fetchEstimationsData, pathGeneratored]);
 
     const homeToFieldOptions = {
         strokeColor: '#0d0f82ff',
@@ -237,6 +228,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
         strokeWeight: 3,
         geodesic: true,
     };
+
+    const shouldShowPaths = pathGeneratored && fetchEstimationsData?.mission;
+
     return (
         <div className="relative w-full h-screen">
             {isLoading && (
@@ -254,39 +248,35 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
                     zoom={DEFAULT_ZOOM}
                     mapTypeId="satellite"
                 >
-                    {viewFieldData?.data?.field_boundary.length > 0 && (
+                    {viewFieldData?.data?.field_boundary?.length > 0 && (
                         <Polygon
                             path={viewFieldData?.data?.field_boundary}
                             options={polygonOptions}
                             onClick={handlePolygonClick}
                         />
                     )}
-                    {showMissionPath && pathForFeildAccessPoint && (
-                        <>
-                            {
-                                pathForFeildAccessPoint.length > 0 && (
-                                    <Polyline
-                                        path={pathForFeildAccessPoint}
-                                        options={homeToFieldOptions}
-                                    />
-                                )
-                            }
-
-                            {pathForRobotMove.length > 0 && (
+                    {shouldShowPaths && (
+                        <div>
+                            {pathForFeildAccessPoint?.length > 0 && (
+                                <Polyline
+                                    path={pathForFeildAccessPoint}
+                                    options={homeToFieldOptions}
+                                />
+                            )}
+                            {pathForRobotMove?.length > 0 && (
                                 <Polyline
                                     path={pathForRobotMove}
                                     options={robotPathOptions}
                                 />
                             )}
-                            {pathForRobotHome.length > 0 && (
+                            {pathForRobotHome?.length > 0 && (
                                 <Polyline
                                     path={pathForRobotHome}
                                     options={robotPathToHomeOptions}
                                 />
                             )}
-                        </>
+                        </div>
                     )}
-
 
                     <Marker
                         position={viewFieldData?.data?.robot_home}
@@ -334,7 +324,6 @@ const ViewFieldPage: FC<IViewFieldPageProps> = ({ fieldData }) => {
             </LoadScript>
             {location.pathname.includes('/config-mission') && <div><AddMissionForm viewFieldData={viewFieldData} /></div>}
             {location.pathname.includes('/config-robot') && <div><AddRobotForm viewFieldData={viewFieldData} setFetchEstimationsData={setFetchEstimationsData} setPathGeneratored={setPathGeneratored} /></div>}
-
         </div>
     );
 };
