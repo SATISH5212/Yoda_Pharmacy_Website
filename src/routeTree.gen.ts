@@ -15,7 +15,6 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as AddFieldIndexRouteImport } from './routes/add-field/index'
-import { Route as LayoutTeleopRouteImport } from './routes/_layout/teleop'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutAllRobotsRouteImport } from './routes/_layout/all-robots'
 import { Route as LayoutAllFieldsRouteImport } from './routes/_layout/all-fields'
@@ -53,11 +52,6 @@ const AddFieldIndexRoute = AddFieldIndexRouteImport.update({
   id: '/add-field/',
   path: '/add-field/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutTeleopRoute = LayoutTeleopRouteImport.update({
-  id: '/teleop',
-  path: '/teleop',
-  getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
@@ -145,7 +139,6 @@ export interface FileRoutesByFullPath {
   '/all-fields': typeof LayoutAllFieldsRoute
   '/all-robots': typeof LayoutAllRobotsRoute
   '/settings': typeof LayoutSettingsRoute
-  '/teleop': typeof LayoutTeleopRoute
   '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/add-robot': typeof LayoutAddRobotIndexRoute
@@ -164,7 +157,6 @@ export interface FileRoutesByTo {
   '/all-fields': typeof LayoutAllFieldsRoute
   '/all-robots': typeof LayoutAllRobotsRoute
   '/settings': typeof LayoutSettingsRoute
-  '/teleop': typeof LayoutTeleopRoute
   '/add-field': typeof AddFieldIndexRoute
   '/sign-up': typeof SignUpIndexRoute
   '/add-robot': typeof LayoutAddRobotIndexRoute
@@ -186,7 +178,6 @@ export interface FileRoutesById {
   '/_layout/all-fields': typeof LayoutAllFieldsRoute
   '/_layout/all-robots': typeof LayoutAllRobotsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
-  '/_layout/teleop': typeof LayoutTeleopRoute
   '/add-field/': typeof AddFieldIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
   '/_layout/add-robot/': typeof LayoutAddRobotIndexRoute
@@ -208,7 +199,6 @@ export interface FileRouteTypes {
     | '/all-fields'
     | '/all-robots'
     | '/settings'
-    | '/teleop'
     | '/add-field'
     | '/sign-up'
     | '/add-robot'
@@ -227,7 +217,6 @@ export interface FileRouteTypes {
     | '/all-fields'
     | '/all-robots'
     | '/settings'
-    | '/teleop'
     | '/add-field'
     | '/sign-up'
     | '/add-robot'
@@ -248,7 +237,6 @@ export interface FileRouteTypes {
     | '/_layout/all-fields'
     | '/_layout/all-robots'
     | '/_layout/settings'
-    | '/_layout/teleop'
     | '/add-field/'
     | '/sign-up/'
     | '/_layout/add-robot/'
@@ -305,13 +293,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/add-field'
       preLoaderRoute: typeof AddFieldIndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_layout/teleop': {
-      id: '/_layout/teleop'
-      path: '/teleop'
-      fullPath: '/teleop'
-      preLoaderRoute: typeof LayoutTeleopRouteImport
-      parentRoute: typeof LayoutRoute
     }
     '/_layout/settings': {
       id: '/_layout/settings'
@@ -473,7 +454,6 @@ interface LayoutRouteChildren {
   LayoutAllFieldsRoute: typeof LayoutAllFieldsRoute
   LayoutAllRobotsRoute: typeof LayoutAllRobotsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
-  LayoutTeleopRoute: typeof LayoutTeleopRoute
   LayoutAddRobotIndexRoute: typeof LayoutAddRobotIndexRoute
 }
 
@@ -482,7 +462,6 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAllFieldsRoute: LayoutAllFieldsRoute,
   LayoutAllRobotsRoute: LayoutAllRobotsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
-  LayoutTeleopRoute: LayoutTeleopRoute,
   LayoutAddRobotIndexRoute: LayoutAddRobotIndexRoute,
 }
 
