@@ -78,6 +78,7 @@ const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
         setRobotType(selectedRobot)
     }
     const handleFetchEstimations = async () => {
+        setFetchEstimationsData(null)
         await fetchEstimations()
 
     };

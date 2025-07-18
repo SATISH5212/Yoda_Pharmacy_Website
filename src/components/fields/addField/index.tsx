@@ -1,7 +1,7 @@
 import { FormData } from "@/lib/interfaces/maps";
 import { addFieldBoundaryAPI } from "@/lib/services/fields";
 import { Coordinates, LocationInfo } from "@/types/dataTypes";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import AddBoundaryMAP from "./AddBoundaryMap";
 import FieldFormPage from "./MapForm";
 const addFieldPage = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
     const [fieldAccessPoint, setFieldAccessPoint] = useState<Coordinates>(null);
     const [robotHome, setRobotHome] = useState<Coordinates>(null);
@@ -40,6 +41,9 @@ const addFieldPage = () => {
             return await addFieldBoundaryAPI(payload);
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['all-fieldsData'],
+            })
             toast.success("Field registered successfully!");
             handleReset();
             navigate({

@@ -30,7 +30,6 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 setErrors(error?.data?.errors || {});
-                console.log("Validation Errors:", error?.data?.errors);
             }
         },
     });

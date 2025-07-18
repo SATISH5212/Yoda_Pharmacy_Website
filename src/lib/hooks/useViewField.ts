@@ -134,9 +134,9 @@ export const useViewField = () => {
     };
 
     const robotPathOptions = {
-        strokeColor: robotType === "DEMETER_MINI" ? "#fff6f6ff" : "#4aa4e9ff",
-        strokeOpacity: 1.0,
-        strokeWeight: 3,
+        strokeColor: "#a8a8a8ff",
+        strokeOpacity: 2,
+        strokeWeight: 2,
         geodesic: true,
     };
 
