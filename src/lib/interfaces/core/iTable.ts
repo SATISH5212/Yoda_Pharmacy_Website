@@ -15,14 +15,19 @@ export interface iConfirmDialog {
 }
 
 
-export interface DynamicPaginationProps {
-    paginationDetails: any;
 
-    totalItems?: number;
-    capturePageNum: (value: number) => void;
-    captureRowPerItems: (value: number) => void;
+export interface DynamicPaginationProps {
+    capturePageNum: (page: number) => void;
+    captureRowPerItems: (limit: number) => void;
     initialPage?: number;
     limitOptionsFromProps?: { title: string; value: number }[];
+    paginationDetails: {
+        page?: number;
+        page_size?: number;
+        total_pages?: number;
+        total_records?: number;
+    };
+    data?: any[];
 }
 
 

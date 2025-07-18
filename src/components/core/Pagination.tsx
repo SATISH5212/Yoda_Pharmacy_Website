@@ -25,14 +25,14 @@ const Pagination = ({
     limitOptionsFromProps,
     paginationDetails,
 }: DynamicPaginationProps) => {
-    const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [pageValue, setPageValue] = useState<number>(initialPage);
     const [limitOptions, setLimitOptions] = useState<
         { title: string; value: number }[]
     >([]);
     const [pageNumFocused, setPageNumFocused] = useState(false);
 
-    const totalPages = paginationDetails ? paginationDetails.total_pages : 1;
+    const totalPages = paginationDetails?.total_pages || 1;
+    const currentPage = paginationDetails?.page || initialPage;
     const selectedValue = paginationDetails?.page_size;
 
     useEffect(() => {
@@ -40,17 +40,16 @@ const Pagination = ({
             limitOptionsFromProps?.length
                 ? limitOptionsFromProps
                 : [
+                    { title: "10/page", value: 10 },
                     { title: "25/page", value: 25 },
                     { title: "50/page", value: 50 },
                     { title: "100/page", value: 100 },
-                    { title: "200/page", value: 200 },
                 ]
         );
     }, [limitOptionsFromProps]);
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
             setPageValue(page);
             capturePageNum(page);
         }
@@ -66,13 +65,6 @@ const Pagination = ({
             handlePageChange(page);
         }
     };
-
-    useEffect(() => {
-        if (paginationDetails?.page) {
-            setPageValue(paginationDetails.page);
-            setCurrentPage(paginationDetails.page);
-        }
-    }, [paginationDetails]);
 
     const getPageNumbers = () => {
         const pageNumbers = [];
@@ -108,29 +100,27 @@ const Pagination = ({
 
         return pageNumbers;
     };
+
     return (
-        <ShadCNPagination className="flex justify-between px-2  shadow-inner items-center">
+        <ShadCNPagination className="flex justify-between px-2 shadow-inner items-center">
             <PaginationContent
                 className="px-1 py-0 flex gap-2"
                 key={"pagination-1" + `-${new Date().getTime()}`}
             >
                 <p className="font-normal text-[15px]">
-                    Total {paginationDetails?.total_records ? paginationDetails?.total_records : "0"}
+                    Total {paginationDetails?.total_records || "0"}
                 </p>
                 <Select
                     value={selectedValue?.toString()}
                     onValueChange={handleRowChange}
                 >
                     <SelectTrigger className="w-24 py-0 h-[30px] text-zinc-800">
-                        <SelectValue
-                            placeholder={`Items per page`}
-                            className="font-normal text-sm"
-                        />
+                        <SelectValue placeholder="Items per page" className="font-normal text-sm" />
                     </SelectTrigger>
                     <SelectContent className="w-[120px] bg-white pointer">
                         {limitOptions.map((item, index) => (
                             <SelectItem
-                                value={item.value?.toString()}
+                                value={item.value.toString()}
                                 key={index + `-${new Date().getTime()}`}
                                 className="cursor-pointer font-normal text-sm opacity-90"
                             >
@@ -141,7 +131,7 @@ const Pagination = ({
                 </Select>
             </PaginationContent>
 
-            <div className="flex justify-end items-center">
+            <div className="flex justify-end items-center pr-10">
                 <PaginationContent
                     className="px-1 py-0"
                     key={"pagination-2" + `-${new Date().getTime()}`}
@@ -156,7 +146,7 @@ const Pagination = ({
                             onBlur={() => setPageNumFocused(false)}
                             onChange={(e) => setPageValue(Number(e.target.value))}
                             onKeyDown={onKeyDownInPageChange}
-                            className="h-[30px] w-[40px] m-auto flex items-center text-center py-0 ml-2  focus:outline-none focus:ring-0 text-sm pl-1 pr-0 font-normal bg-gray-200 bg-opacity-80"
+                            className="h-[30px] w-[40px] m-auto flex items-center text-center py-0 ml-2 focus:outline-none focus:ring-0 text-sm pl-1 pr-0 font-normal bg-gray-200 bg-opacity-80"
                             placeholder="Page"
                         />
                     </div>
@@ -200,8 +190,8 @@ const Pagination = ({
                                         handlePageChange(pageNumber);
                                     }}
                                     className={`w-[25px] h-[25px] font-normal hover:no-underline ${pageNumber === currentPage
-                                        ? "bg-black text-white rounded-full "
-                                        : "bg-transperant text-black rounded-full border"
+                                        ? "bg-black text-white rounded-full"
+                                        : "bg-transparent text-black rounded-full border"
                                         }`}
                                 >
                                     {pageNumber}
