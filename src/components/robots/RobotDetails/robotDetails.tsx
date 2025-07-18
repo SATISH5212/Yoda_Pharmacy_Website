@@ -7,7 +7,7 @@ const RobotDetals = () => {
             <div className="hidden lg:flex lg:flex-col lg:w-[24%] m-2 space-y-4 overflow-y-auto">
                 <div className="flex h-[10%] w-[80%] space-x-2">
                     <div className="w-[30%]">
-                        <img src="/public/robots/robot.svg" alt="robot" />
+                        <img src="/public/assets/robots/robot.svg" alt="robot" />
                     </div>
                     <div className="flex-grow px-2 py-1 space-y-2 mt-2">
                         <div className="flex justify-between">
@@ -23,13 +23,13 @@ const RobotDetals = () => {
                 <div className="flex flex-col h-[74%] w-[95%] space-y-6">
                     <div className="flex-grow border border-gray-200 rounded-sm space-y-3 px-3 py-3">
                         <div className="flex gap-2 text-[#4F4F4F] tracking-wide">
-                            <img src="/public/robots/efficiency.svg" alt="efficiency" />
+                            <img src="/public/assets/robots/efficiency.svg" alt="efficiency" />
                             Performance Overview
                         </div>
                         <div className="space-y-1">
                             <div className="flex justify-between text-sm">
                                 <div className="flex gap-2">
-                                    <img src="/public/robots/battery.svg" alt="battery" />
+                                    <img src="/public/assets/robots/battery.svg" alt="battery" />
                                     Battery Level
                                 </div>
                                 <div className="text-[#22A56F]">67%</div>
@@ -39,7 +39,7 @@ const RobotDetals = () => {
                         <div className="space-y-1">
                             <div className="flex justify-between text-sm">
                                 <div className="flex gap-2">
-                                    <img src="/public/robots/robotNetwork.svg" alt="network" className="w-[15px] h-[15px]" />
+                                    <img src="/public/assets/robots/robotNetwork.svg" alt="network" className="w-[15px] h-[15px]" />
                                     Connectivity
                                 </div>
                                 <div>Good</div>
@@ -49,7 +49,7 @@ const RobotDetals = () => {
                         <div className="space-y-1">
                             <div className="flex justify-between text-sm">
                                 <div className="flex gap-2">
-                                    <img src="/public/robots/efficiency.svg" alt="efficiency" />
+                                    <img src="/public/assets/robots/efficiency.svg" alt="efficiency" />
                                     Efficiency
                                 </div>
                                 <div className="text-[#22A56F]">91%</div>
@@ -68,7 +68,7 @@ const RobotDetals = () => {
                                 { label: "Current Status", value: "11-06-2025, 11:34:00 AM", icon: "robotTimer" },
                             ].map((item, idx) => (
                                 <div className="flex space-x-2" key={idx}>
-                                    <img src={`/public/robots/${item.icon}.svg`} alt={item.label} className="w-[16px] h-[16px]" />
+                                    <img src={`/public/assets/robots/${item.icon}.svg`} alt={item.label} className="w-[16px] h-[16px]" />
                                     <div>
                                         <div className="text-md font-medium text-black tracking-wider">{item.label}</div>
                                         <div className="text-sm text-gray-400">{item.value}</div>
@@ -79,7 +79,7 @@ const RobotDetals = () => {
                     </div>
                     <div className="border border-gray-200 rounded-sm space-y-3 px-3 py-2">
                         <div className="flex font-medium space-x-2">
-                            <img src="/public/robots/robotsDetails/calander.svg" alt="calendar" />
+                            <img src="/public/assets/robots/robotsDetails/calander.svg" alt="calendar" />
                             <span>Timeline</span>
                         </div>
                         <div>
