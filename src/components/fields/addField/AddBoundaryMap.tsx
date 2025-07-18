@@ -15,9 +15,7 @@ import {
 } from "@react-google-maps/api";
 import { Trash2, Check, X, MoveLeft, Edit, Undo } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
 import { toast } from "sonner";
-
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",

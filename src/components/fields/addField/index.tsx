@@ -8,17 +8,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import AddBoundaryMAP from "./AddBoundaryMap";
 import FieldFormPage from "./MapForm";
-const TOAST_CONFIG = {
-    position: "top-right" as const,
-    autoClose: 2000,
-    style: {
-        fontSize: '12px',
-        color: '#065f46',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-};
-
 const addFieldPage = () => {
     const navigate = useNavigate();
     const [formCoordinates, setFormCoordinates] = useState<Coordinates[]>([]);
@@ -27,13 +16,11 @@ const addFieldPage = () => {
     const [mode, setMode] = useState<string>("idle");
     const [locationInfo, setLocationInfo] = useState<LocationInfo>(null);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
-
-
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isValid }
+        formState: { errors }
     } = useForm<FormData>({
         mode: 'onChange',
     });
@@ -89,12 +76,12 @@ const addFieldPage = () => {
 
     const handleAddAccessPoint = useCallback(() => {
         setMode("field_access_point");
-        toast.info("Click on the map to place Field Access Point", TOAST_CONFIG);
+        toast.info("Click on the map to place Field Access Point");
     }, []);
 
     const handleRobotHome = useCallback(() => {
         setMode("robot_home");
-        toast.info("Click on the map to place Robot Home Point", TOAST_CONFIG);
+        toast.info("Click on the map to place Robot Home Point");
     }, []);
 
     const handleCancel = useCallback(() => {
@@ -112,13 +99,13 @@ const addFieldPage = () => {
     const handleDeleteAccessPoint = useCallback(() => {
         setFieldAccessPoint(null);
         setMode("delete_access_point");
-        toast.success("Field Access Point removed", TOAST_CONFIG);
+        toast.success("Field Access Point removed");
     }, []);
 
     const handleDeleteRobotHome = useCallback(() => {
         setRobotHome(null);
         setMode("delete_robot_home");
-        toast.success("Robot Home Point removed", TOAST_CONFIG);
+        toast.success("Robot Home Point removed");
         setTimeout(() => setMode("idle"), 100);
     }, []);
 

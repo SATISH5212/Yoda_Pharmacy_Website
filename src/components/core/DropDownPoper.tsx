@@ -1,10 +1,10 @@
+
 import { useState } from "react";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
-
 interface IDropDownPoperProps {
     data: any[] | string[];
     onSelect?: (item: any | null) => void;
@@ -15,7 +15,6 @@ interface IDropDownPoperProps {
 
 const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
     const { data, onSelect, type, isLoading } = props;
-
     const [open, setOpen] = useState(false);
     const [selectedField, setSelectedField] = useState<any | null>(null);
 
@@ -98,7 +97,7 @@ const DropDownPoper: React.FC<IDropDownPoperProps> = (props) => {
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="relative w-full h-[35px] justify-between rounded-md border text-sm font-normal text-[#00000099] hover:bg-white"
+                        className="relative w-full h-[40px] justify-between rounded-md border text-sm font-normal text-[#00000099] hover:bg-white"
                     >
                         <span className="w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap text-left">
                             {selectedField ? getDisplayValue(selectedField) : config.placeholder}

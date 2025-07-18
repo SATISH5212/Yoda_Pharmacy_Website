@@ -77,40 +77,40 @@ const getAllFieldsColumns = () => {
             },
             width: "120px",
         },
-        {
-            header: () => (
-                <span className="text-sm font-semibold text-gray-800">Status</span>
-            ),
-            accessorKey: "field_status",
-            cell: (value: any) => {
-                const status = (value.getValue() || "").toLowerCase();
+        // {
+        //     header: () => (
+        //         <span className="text-sm font-semibold text-gray-800">Status</span>
+        //     ),
+        //     accessorKey: "field_status",
+        //     cell: (value: any) => {
+        //         const status = (value.getValue() || "").toLowerCase();
 
-                const statusStyles =
-                    status === "pending"
-                        ? {
-                            bg: "bg-orange-100",
-                            text: "text-orange-800",
-                            dot: "bg-orange-500",
-                        }
-                        : {
-                            bg: "bg-green-100",
-                            text: "text-green-800",
-                            dot: "bg-green-600",
-                        };
+        //         const statusStyles =
+        //             status === "pending"
+        //                 ? {
+        //                     bg: "bg-orange-100",
+        //                     text: "text-orange-800",
+        //                     dot: "bg-orange-500",
+        //                 }
+        //                 : {
+        //                     bg: "bg-green-100",
+        //                     text: "text-green-800",
+        //                     dot: "bg-green-600",
+        //                 };
 
-                return (
-                    <span
-                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${statusStyles.bg} ${statusStyles.text}`}
-                    >
-                        <span
-                            className={`w-1.5 h-1.5 rounded-full mr-1.5 ${statusStyles.dot}`}
-                        ></span>
-                        {capitalize(status)}
-                    </span>
-                );
-            },
-            width: "100px",
-        },
+        //         return (
+        //             <span
+        //                 className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${statusStyles.bg} ${statusStyles.text}`}
+        //             >
+        //                 <span
+        //                     className={`w-1.5 h-1.5 rounded-full mr-1.5 ${statusStyles.dot}`}
+        //                 ></span>
+        //                 {capitalize(status)}
+        //             </span>
+        //         );
+        //     },
+        //     width: "100px",
+        // },
         {
             id: "location",
             header: () => (

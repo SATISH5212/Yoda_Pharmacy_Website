@@ -1,7 +1,9 @@
+"use-clent"
 import { BeforeLoadContextOptions, redirect } from "@tanstack/react-router";
 import Cookies from "js-cookie";
 
 const getIsAuthenticated = () => {
+    console.log(Cookies.get("token"), "tttttooookkkkeeennn");
     return Cookies.get("token");
 };
 

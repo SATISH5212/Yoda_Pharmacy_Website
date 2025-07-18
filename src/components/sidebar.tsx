@@ -15,13 +15,13 @@ const Sidebar = () => {
                 <Link to="/all-robots" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
                     <img src="/src/components/svg/robots/all-robots.svg" alt="field" className="w-[24px] h-[20px]" />
                 </Link>
-                <Link to="/teleop" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
+                <Link to="/all-robots" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
                     <img src="/src/components/svg/teleoperation/teleoperation.svg" alt="field" className="w-[24px] h-[22px]" />
                 </Link>
                 <Link to="/add-robot" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
                     <img src="/src/components/svg/questionIcon.svg" alt="field" className="w-[24px] h-[24px]" />
                 </Link>
-            </div>      
+            </div>
         </div>
     );
 }
