@@ -53,7 +53,7 @@ export const Navbar = () => {
                         onMouseLeave={() => setIsProfileMenuOpen(false)}
                     >
                         <img
-                            src="/src/components/svg/userProfile.svg"
+                            src="/public/userProfile.svg"
                             alt="User"
                             className="w-6 h-6 rounded-full object-cover"
                         />
