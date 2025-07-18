@@ -61,7 +61,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             mission_name: missionName,
             Field: {
                 "CityID": 0,
-                "LocationID": 0,
+                "LocationID": 1,
                 "FieldID": 10,
                 "FieldName": field_name,
                 "RobotHome": robot_home,
@@ -201,7 +201,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             </div>
 
             <button
-                className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full"
+                className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full hover:bg-gray-600 disabled:bg-gray-400 disabled:cursor-not-allowed hover:cursor-pointer"
                 onClick={handleSubmit}
                 disabled={isPending}
             >

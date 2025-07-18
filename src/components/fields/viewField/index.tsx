@@ -1,6 +1,6 @@
 import AddRobotForm from "@/components/robots/configRobot";
 import { GOOGLE_MAP_API_KEY } from "@/config/appConfig";
-import { useViewField } from "@/lib/hooks/useViewFieldData";
+import { useViewField } from "@/lib/hooks/useViewField";
 import { IViewFieldPageProps } from "@/lib/interfaces/maps";
 import {
     GoogleMap,
