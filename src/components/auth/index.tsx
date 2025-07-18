@@ -88,7 +88,7 @@ export function LoginPage() {
                 </div>
                 <div className="w-4/12 flex flex-col items-center gap-10 h-dvh px-24 box-border justify-center">
                     <div>
-                        <img src="/src/components/svg/logo.svg" alt="Logo" className="mb-3" />
+                        <img src="/public/logo.svg" alt="Logo" className="mb-3" />
                     </div>
 
                     <div className="w-full space-y-5 text-35353d text-xs font-normal">

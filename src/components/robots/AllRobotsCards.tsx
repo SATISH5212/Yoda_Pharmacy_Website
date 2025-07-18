@@ -25,7 +25,7 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
     );
   }
 
-  
+
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -43,8 +43,8 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
               <span className='font-DM sans text-sm font-bold text- #4F4F4F-400 tracking-wider'>{robot.robot_name}</span>
             </div>
             <div className='flex items-center gap-x-2' >
-              <span className=''><img src="/src/components/svg/robots/robotNotifications.svg" alt="Robot" className="w-5 h-5" /></span>
-              <span className=''><img src="/src/components/svg/robots/robotNetwork.svg" alt="Robot" className="w-5 h-5" /></span>
+              <span className=''><img src="/public/robots/robotNotifications.svg" alt="Robot" className="w-5 h-5" /></span>
+              <span className=''><img src="/public/robots/robotNetwork.svg" alt="Robot" className="w-5 h-5" /></span>
             </div>
           </div>
           <div className="flex justify-between mt-1">
@@ -67,12 +67,12 @@ const AllRobotsCards: FC<IAllRobotsCardsProps> = (props) => {
           <li className="flex justify-between items-center">
             <span className='flex w-1/2 gap-3'>
               <span className="flex flex-row items-center justify-center font-normal">
-                <img src="/src/components/svg/robots/battery.svg" alt="Robot" className="w-5 h-5 mr-1" /> Battery</span>
+                <img src="/public/robots/battery.svg" alt="Robot" className="w-5 h-5 mr-1" /> Battery</span>
               <span className='flex items-center text-sm font-normal '>85%</span>
             </span>
 
             <span className='flex w-1/2 gap-3 justify-end items-center'>
-              <span className="flex flex-row font-semibold"><img src="/src/components/svg/robots/efficiency.svg" alt="Robot" className="w-5 h-5" />
+              <span className="flex flex-row font-semibold"><img src="/public/robots/efficiency.svg" alt="Robot" className="w-5 h-5" />
                 <span className='flex items-center gap-1 font-normal'>Efficiency</span>
               </span>
               <span>94%</span>
