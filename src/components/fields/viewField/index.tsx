@@ -14,6 +14,7 @@ import { useLocation } from "@tanstack/react-router";
 import { MapPin, Square } from "lucide-react";
 import { FC } from "react";
 import AddMissionForm from "../../missions/configMission";
+import FieldAllMissions from "@/components/missions/fieldAllMissions";
 const MAP_CONTAINER_STYLE = {
     width: "100%",
     height: "100vh",
@@ -154,6 +155,19 @@ const ViewFieldPage: FC<IViewFieldPageProps> = () => {
                     setRobotType={setRobotType}
                 />
             )}
+            {
+                location.pathname.includes('/viewField') && (
+                    <FieldAllMissions
+                        viewFieldData={viewFieldData}
+                        setFetchEstimationsData={setFetchEstimationsData}
+                        setPathGeneratored={setPathGeneratored}
+                        robotType={robotType}
+                        setRobotType={setRobotType}
+                    />
+                )
+            }
+
+
         </div>
     );
 };

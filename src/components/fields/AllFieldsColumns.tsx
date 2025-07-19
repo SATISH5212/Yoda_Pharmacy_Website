@@ -155,7 +155,7 @@ const getAllFieldsColumns = () => {
                 return (
                     <div className="flex justify-center items-center gap-3 flex-wrap">
                         <Link
-                            to="/fields/$field_id"
+                            to="/fields/$field_id/viewField"
                             params={{ field_id }}
                             className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors duration-200 group"
                             title="View Field"

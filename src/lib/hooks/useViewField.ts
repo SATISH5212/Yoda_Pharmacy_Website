@@ -141,7 +141,7 @@ export const useViewField = () => {
     };
 
     const robotPathToHomeOptions = {
-        strokeColor: '#667582ff',
+        strokeColor: '#0d5ca0ff',
         strokeOpacity: 1.0,
         strokeWeight: 3,
         geodesic: true,

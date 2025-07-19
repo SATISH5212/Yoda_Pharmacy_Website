@@ -1,10 +1,9 @@
 import DropDownPoper from "@/components/core/DropDownPoper";
-import { Input } from "@/components/ui/input";
 import { FieldRowsSettings, IAddMissionFormProps } from "@/lib/interfaces/missions";
 import { addFieldMissionAPI } from "@/lib/services/missions";
 import { useMutation } from "@tanstack/react-query";
-import { useParams } from "@tanstack/react-router";
-import { FC, useState } from "react";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { FC, useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 const ROW_PATTERN_OPTIONS = [
     "ParallelToLongstSide",
@@ -16,6 +15,7 @@ const ROW_PATTERN_OPTIONS = [
 
 const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
     const { field_id } = useParams({ strict: false });
+    const navigate = useNavigate();
     const [settings, setSettings] = useState<FieldRowsSettings>({ RowPattern: "" });
     const [angle, setAngle] = useState<number | null>(null);
     const [showAngleInput, setShowAngleInput] = useState(false);
@@ -26,7 +26,12 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
         mutationKey: ["add-field-mission"],
         mutationFn: (payload: any) => addFieldMissionAPI(field_id as string, payload),
         retry: false,
-        onSuccess: () => toast.success("Mission registered successfully!"),
+        onSuccess: () => {
+            toast.success("Mission registered successfully!"),
+                setTimeout(() => {
+                    navigate({ to: "/all-fields" })
+                }, 2000)
+        },
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
                 setErrors(error?.data?.errors || {});
@@ -95,19 +100,19 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
 
             <div className="flex justify-center items-center gap-9">
                 <label className="text-sm font-semibold text-gray-600 w-1/3">Field Name</label>
-                <Input
+                <input
                     value={viewFieldData?.data?.field_name}
                     disabled
-                    className="fle text-md font-bold text-black"
+                    className="flex text-md font-bold text-black bg-gray-100 rounded p-2 w-full"
                 />
             </div>
             <div className="flex flex-col gap-2">
                 <div className="flex items-center">
                     <label className="text-sm font-semibold text-gray-600 w-1/2">Mission Name</label>
-                    <Input
+                    <input
                         value={missionName}
-                        className="text-md font-bold text-black"
-                        onChange={(e) => {
+                        className="text-md font-bold text-black bg-gray-100 rounded p-2 w-full"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setMissionName(e.target.value)
                             clearFieldError("mission_name");
                         }}
@@ -125,11 +130,12 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             <div className="flex gap-2">
                 <div className="w-1/2">
                     <label className="text-sm font-semibold text-gray-600">Row Spacing</label>
-                    <Input
+                    <input
                         type="number"
                         placeholder="Row Spacing"
                         value={settings.RowSpacing ?? ""}
-                        onChange={(e) => {
+                        className="bg-gray-100 rounded p-2 w-full"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             handleInputChange("RowSpacing", parseFloat(e.target.value))
                             clearFieldError("RowSpacing");
                         }}
@@ -141,11 +147,12 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
 
                 <div className="w-1/2">
                     <label className="text-sm font-semibold text-gray-600">Head Land Width</label>
-                    <Input
+                    <input
                         type="number"
                         placeholder="Head Land Width"
                         value={settings.HeadLandWidth ?? ""}
-                        onChange={(e) => {
+                        className="bg-gray-100 rounded p-2 w-full"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             handleInputChange("HeadLandWidth", parseFloat(e.target.value))
                             clearFieldError("HeadLandWidth");
                         }}
@@ -159,11 +166,12 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
             <div className="flex gap-2">
                 <div className="w-1/2">
                     <label className="text-sm font-semibold text-gray-600">Step Size</label>
-                    <Input
+                    <input
                         type="number"
                         placeholder="Step Size"
                         value={settings.StepSize ?? ""}
-                        onChange={(e) => {
+                        className="bg-gray-100 rounded p-2 w-full"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             handleInputChange("StepSize", parseFloat(e.target.value))
                             clearFieldError("StepSize");
                         }}
@@ -188,10 +196,11 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
                     {showAngleInput && (
                         <div className="w-full mt-2">
                             <label className="text-sm font-semibold text-gray-600 ">Row Pattern Angle</label>
-                            <Input
+                            <input
                                 type="number"
                                 placeholder="Enter Angle in degrees"
-                                onChange={(e) => { setAngle(parseFloat(e.target.value)) }}
+                                className="bg-gray-100 rounded p-2 w-full"
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => { setAngle(parseFloat(e.target.value)) }}
                             />
                         </div>
                     )}

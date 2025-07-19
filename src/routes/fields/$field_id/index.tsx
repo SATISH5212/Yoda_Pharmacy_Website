@@ -1,3 +1,4 @@
+import addFieldPage from '@/components/fields/addField'
 import ViewFieldPage from '@/components/fields/viewField'
 import { createFileRoute } from '@tanstack/react-router'
 
