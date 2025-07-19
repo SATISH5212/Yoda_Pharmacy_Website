@@ -47,7 +47,9 @@ const ViewFieldPage: FC<IViewFieldPageProps> = () => {
         shouldShowPaths,
         setFetchEstimationsData,
         setPathGeneratored,
-        setRobotType
+        setRobotType,
+        showAddMissionPage,
+        setShowAddMissionPage,
     } = useViewField();
 
     return (
@@ -141,9 +143,10 @@ const ViewFieldPage: FC<IViewFieldPageProps> = () => {
                     )}
                 </GoogleMap>
             </LoadScript>
-            {location.pathname.includes('/config-mission') && (
+            {(location.pathname.includes('/config-mission') || showAddMissionPage) && (
                 <AddMissionForm
                     viewFieldData={viewFieldData}
+                    setShowAddMissionPage={setShowAddMissionPage}
                 />
             )}
             {location.pathname.includes('/config-robot') && (
@@ -163,6 +166,8 @@ const ViewFieldPage: FC<IViewFieldPageProps> = () => {
                         setPathGeneratored={setPathGeneratored}
                         robotType={robotType}
                         setRobotType={setRobotType}
+                        setShowAddMissionPage={setShowAddMissionPage}
+                        isLoading={isLoading}
                     />
                 )
             }

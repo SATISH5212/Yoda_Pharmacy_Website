@@ -16,6 +16,7 @@ export const useViewField = () => {
     const [fetchEstimationsData, setFetchEstimationsData] = useState<any | null>(null);
     const [pathGeneratored, setPathGeneratored] = useState(false);
     const [robotType, setRobotType] = useState<string>("");
+    const [showAddMissionPage, setShowAddMissionPage] = useState(false);
     const [mapCenter, setMapCenter] = useState<Coordinates>({
         lat: fetchEstimationsData?.mission?.RobotHome?.lat,
         lng: fetchEstimationsData?.mission?.RobotHome?.lng
@@ -169,6 +170,8 @@ export const useViewField = () => {
         shouldShowPaths,
         setFetchEstimationsData,
         setPathGeneratored,
-        setRobotType
+        setRobotType,
+        showAddMissionPage,
+        setShowAddMissionPage
     };
 };

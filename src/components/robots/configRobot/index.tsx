@@ -9,7 +9,6 @@ import { FC, useState } from "react";
 const ConfigRobotForm: FC<IAddRobotFormProps> = (props) => {
     const { viewFieldData, setFetchEstimationsData, setPathGeneratored, robotType, setRobotType } = props;
     const [fetchEstimationLoading, setFetchEstimationLoading] = useState(false);
-
     const robotTypes = ["DEMETER_MINI", "DEMETER_MAXI"];
     const [selectedMissionId, setSelectedMissionId] = useState<number>();
     const [fieldRowsSettings, setFieldRowsSettings] = useState<FieldRowsSettings>({

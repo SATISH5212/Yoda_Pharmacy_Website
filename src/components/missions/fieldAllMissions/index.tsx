@@ -1,35 +1,20 @@
 import DropDownPoper from "@/components/core/DropDownPoper";
-import { FieldRowsSettings, IAddMissionFormProps, IAddRobotFormProps } from "@/lib/interfaces/missions";
-import { addFieldMissionAPI } from "@/lib/services/missions";
+import { FieldRowsSettings, IFieldAllMissionsProps } from "@/lib/interfaces/missions";
 import { getFieldPathEstimationsAPI } from "@/lib/services/robots";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
-
 import { FC, useState } from "react";
 import { toast } from "sonner";
-
 const robotTypes = ["DEMETER_MINI", "DEMETER_MAXI"];
 
-const FieldAllMissions: FC<IAddRobotFormProps> = (props) => {
-    const { viewFieldData, setFetchEstimationsData, setPathGeneratored, robotType, setRobotType } = props;
+const FieldAllMissions: FC<IFieldAllMissionsProps> = (props) => {
+    const { viewFieldData, setFetchEstimationsData, setPathGeneratored, robotType, setRobotType, setShowAddMissionPage, isLoading } = props;
     const [loadingMissions, setLoadingMissions] = useState<Set<number>>(new Set());
-
     const [missionRobotTypes, setMissionRobotTypes] = useState<Record<number, string>>({});
-
-    const [selectedMissionId, setSelectedMissionId] = useState<number>();
-    const [fieldRowsSettings, setFieldRowsSettings] = useState<FieldRowsSettings>({
-        RowSpacing: undefined,
-        HeadLandWidth: undefined,
-        RowPattern: "",
-        StepSize: undefined,
-    });
 
     const { mutate: fetchEstimations } = useMutation({
         mutationFn: async (params: { missionId: number; robotType: string }) => {
             const { missionId, robotType } = params;
-
             setLoadingMissions(prev => new Set(prev).add(missionId));
-
             const payload = {
                 "mission_id": missionId,
                 "robot_type": robotType
@@ -60,25 +45,7 @@ const FieldAllMissions: FC<IAddRobotFormProps> = (props) => {
         }
     });
 
-    const handleMissionSelect = (selectedMission: any | null) => {
-        console.log(selectedMission, "wwww001");
-        setSelectedMissionId(selectedMission?.id);
-        if (selectedMission) {
-            setFieldRowsSettings({
-                RowSpacing: selectedMission.row_spacing,
-                HeadLandWidth: selectedMission.buffer_zone_width,
-                RowPattern: selectedMission.row_pattern,
-                StepSize: selectedMission.step_size,
-            });
-        } else {
-            setFieldRowsSettings({
-                RowSpacing: undefined,
-                HeadLandWidth: undefined,
-                RowPattern: "",
-                StepSize: undefined,
-            });
-        }
-    };
+
     const handleSelectRobot = (missionId: number, selectedRobot: string) => {
         setMissionRobotTypes(prev => ({
             ...prev,
@@ -93,18 +60,17 @@ const FieldAllMissions: FC<IAddRobotFormProps> = (props) => {
             toast.error("Please select a robot type first");
             return;
         }
-
-        console.log(mission.id, robotType, "wwww002");
         setFetchEstimationsData(null);
-        handleMissionSelect(mission);
         await fetchEstimations({ missionId: mission.id, robotType });
     };
-
-    console.log(viewFieldData?.data, "viewFieldData");
-
     return (
         <div className="absolute z-10 top-4  bg-white shadow-2xl rounded-2xl p-3 w-[400px] h-[85vh] overflow-y-auto space-y-2">
-            <h2 className="text-lg font-semibold mb-2">Active Missions</h2>
+
+            <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold mb-2">Active Missions</h2>
+                <h2 className="text-sm font-semibold mb-2 hover:text-blue-600 cursor-pointer bg-blue-100 rounded-md py-1 px-2" onClick={() => setShowAddMissionPage(true)}> + Add Mission</h2>
+
+            </div>
 
 
             {(!viewFieldData?.data?.missions || viewFieldData.data.missions.length === 0) ? (

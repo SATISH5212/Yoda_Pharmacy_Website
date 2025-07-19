@@ -1,8 +1,8 @@
 import DropDownPoper from "@/components/core/DropDownPoper";
 import { FieldRowsSettings, IAddMissionFormProps } from "@/lib/interfaces/missions";
 import { addFieldMissionAPI } from "@/lib/services/missions";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation, useNavigate, useParams } from "@tanstack/react-router";
 import { FC, useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 const ROW_PATTERN_OPTIONS = [
@@ -13,24 +13,35 @@ const ROW_PATTERN_OPTIONS = [
     "OptimizedForMinNumberOfTurns"
 ];
 
-const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
+const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
+    const { viewFieldData, setShowAddMissionPage } = props;
     const { field_id } = useParams({ strict: false });
     const navigate = useNavigate();
+    const location = useLocation();
     const [settings, setSettings] = useState<FieldRowsSettings>({ RowPattern: "" });
     const [angle, setAngle] = useState<number | null>(null);
     const [showAngleInput, setShowAngleInput] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [missionName, setMissionName] = useState<string>("");
+    const [missionData, setMissionData] = useState<any>(null);
+    const QueryClient = useQueryClient();
 
     const { mutateAsync: createMission, isPending } = useMutation({
         mutationKey: ["add-field-mission"],
         mutationFn: (payload: any) => addFieldMissionAPI(field_id as string, payload),
         retry: false,
+
         onSuccess: () => {
-            toast.success("Mission registered successfully!"),
+            QueryClient.invalidateQueries({ queryKey: ["view-fieldData"] });
+            toast.success("Mission registered successfully!");
+            if (location?.pathname?.includes("/config-mission")) {
                 setTimeout(() => {
                     navigate({ to: "/all-fields" })
-                }, 2000)
+                }, 1000)
+            } else {
+                setShowAddMissionPage(false);
+                setMissionData(null)
+            }
         },
         onError: (error: any) => {
             if (error?.status === 422 || error?.status === 409) {
@@ -61,7 +72,7 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
 
     const buildPayload = () => {
         const { field_access_point, robot_home, field_boundary, field_name, id: fieldId } = viewFieldData.data;
-        return {
+        const builtPayload = {
             mission_name: missionName,
             Field: {
                 "CityID": 0,
@@ -79,6 +90,9 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
                     : settings.RowPattern
             },
         };
+
+        setMissionData(builtPayload)
+        return builtPayload;
     };
 
 
@@ -96,7 +110,18 @@ const AddMissionForm: FC<IAddMissionFormProps> = ({ viewFieldData }) => {
 
     return (
         <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4">
-            <h2 className="text-lg font-semibold">Configure Mission</h2>
+            <div className="flex justify-between">
+
+                <h2 className="text-lg font-semibold">Configure Mission</h2>
+                <h2 className="text-lg font-semibold text-red-500 cursor-pointer" onClick={() => {
+                    if (location?.pathname?.includes("/config-mission")) {
+                        navigate({ to: "/all-fields" })
+                    } else {
+
+                        setShowAddMissionPage(false)
+                    }
+                }}>X</h2>
+            </div>
 
             <div className="flex justify-center items-center gap-9">
                 <label className="text-sm font-semibold text-gray-600 w-1/3">Field Name</label>
