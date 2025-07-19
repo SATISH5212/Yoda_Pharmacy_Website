@@ -88,12 +88,12 @@ export function LoginPage() {
                 </div>
                 <div className="w-4/12 flex flex-col items-center gap-10 h-dvh px-24 box-border justify-center">
                     <div>
-                        <img src="/public/assets/logo.svg" alt="Logo" className="mb-3" />
+                        <img src="/assets/logo.svg" alt="Logo" className="mb-3" />
                     </div>
 
                     <div className="w-full space-y-5 text-35353d text-xs font-normal">
                         <div className="text-center">
-                             <div className="text-xl 3xl:text-2xl text-title font-normal">Sign In</div>
+                            <div className="text-xl 3xl:text-2xl text-title font-normal">Sign In</div>
                         </div>
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

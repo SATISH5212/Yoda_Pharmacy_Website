@@ -69,7 +69,6 @@ const FieldAllMissions: FC<IFieldAllMissionsProps> = (props) => {
             <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold mb-2">Active Missions</h2>
                 <h2 className="text-sm font-semibold mb-2 hover:text-blue-600 cursor-pointer bg-blue-100 rounded-md py-1 px-2" onClick={() => setShowAddMissionPage(true)}> + Add Mission</h2>
-
             </div>
 
 
