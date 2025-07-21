@@ -1,8 +1,0 @@
-import RobotMissionInfoPage from "@/components/robots/RobotDetails/robotMissionInfoPage";
-import { createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute(
-  "/_layout/_robots/robots/$robot_id/_missions/missions/$mission_id/"
-)({
-  component: RobotMissionInfoPage,
-});
