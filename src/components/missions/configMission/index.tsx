@@ -109,104 +109,104 @@ const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
     };
 
     return (
-        <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-6 w-[400px] h-[85vh] space-y-4">
-            <div className="flex justify-between">
-
-                <h2 className="text-lg font-semibold">Configure Mission</h2>
-                <h2 className="text-lg font-semibold text-red-500 cursor-pointer" onClick={() => {
-                    if (location?.pathname?.includes("/config-mission")) {
-                        navigate({ to: "/all-fields" })
-                    } else {
-
-                        setShowAddMissionPage(false)
-                    }
-                }}>X</h2>
+        <div className="absolute z-10 top-4 right-4 bg-white shadow-2xl rounded-2xl p-5 w-[400px] h-[85vh] space-y-4 border border-green-200">
+            <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-bold text-green-700">Configure Robot Mission</h2>
+                <button
+                    onClick={() => {
+                        if (location?.pathname?.includes("/config-mission")) {
+                            navigate({ to: "/all-fields" });
+                        } else {
+                            setShowAddMissionPage(false);
+                        }
+                    }}
+                    className="text-red-500 font-bold text-lg hover:text-red-600"
+                >
+                    ×
+                </button>
             </div>
 
-            <div className="flex justify-center items-center gap-9">
-                <label className="text-sm font-semibold text-gray-600 w-1/3">Field Name</label>
+            <div className="flex items-center gap-2">
+                <label className="text-sm font-semibold text-gray-600 w-1/3">Field</label>
                 <input
                     value={viewFieldData?.data?.field_name}
                     disabled
-                    className="flex text-md font-bold text-black bg-gray-100 rounded p-2 w-full"
+                    className="text-sm font-semibold text-black bg-gray-100 rounded px-3 py-1 w-full"
                 />
             </div>
-            <div className="flex flex-col gap-2">
-                <div className="flex items-center">
-                    <label className="text-sm font-semibold text-gray-600 w-1/2">Mission Name</label>
-                    <input
-                        value={missionName}
-                        className="text-md font-bold text-black bg-gray-100 rounded p-2 w-full"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            setMissionName(e.target.value)
-                            clearFieldError("mission_name");
-                        }}
-                    />
+            <div className="flex flex-col gap-1">
+                <label className="text-sm font-semibold text-gray-600">Mission Name</label>
+                <input
+                    value={missionName}
+                    placeholder="Enter Mission Name"
+                    className="text-sm font-semibold text-black bg-gray-100 rounded px-3 py-1 w-full"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        setMissionName(e.target.value);
+                        clearFieldError("mission_name");
+                    }}
+                />
+                {errors.mission_name && (
+                    <p className="text-red-500 text-xs">{errors.mission_name}</p>
+                )}
+            </div>
+            <div className="border-t pt-3 ">
+                <div className="flex gap-2">
+                    <div className="w-1/2">
+                        <label className="text-xs font-semibold text-gray-600">Row Spacing</label>
+                        <input
+                            type="number"
+                            placeholder="Enter Row Spacing"
+                            value={settings.RowSpacing ?? ""}
+                            className="bg-gray-100 rounded px-3 py-1 w-full text-sm"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleInputChange("RowSpacing", parseFloat(e.target.value));
+                                clearFieldError("RowSpacing");
+                            }}
+                        />
+                        <p className="text-red-500 text-xs">{errors.RowSpacing}</p>
+                    </div>
+
+                    <div className="w-1/2">
+                        <label className="text-xs font-semibold text-gray-600">Headland Width</label>
+                        <input
+                            type="number"
+                            placeholder="Enter Headland Width"
+                            value={settings.HeadLandWidth ?? ""}
+                            className="bg-gray-100 rounded px-3 py-1 w-full text-sm"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleInputChange("HeadLandWidth", parseFloat(e.target.value));
+                                clearFieldError("HeadLandWidth");
+                            }}
+                        />
+                        <p className="text-red-500 text-xs">{errors.HeadLandWidth}</p>
+                    </div>
                 </div>
-                <div className="ml-29">
-                    {
-                        errors.mission_name && (
-                            <p className=" text-red-500 text-xs">{errors.mission_name}</p>
-                        )
-                    }
+            </div>
+            <div className="">
+                <div className="flex gap-2">
+                    <div className="w-1/2">
+                        <label className="text-xs font-semibold text-gray-600">Step Size</label>
+                        <input
+                            type="number"
+                            placeholder="Enter Step Size"
+                            value={settings.StepSize ?? ""}
+                            className="bg-gray-100 rounded px-3 py-1 w-full text-sm"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleInputChange("StepSize", parseFloat(e.target.value));
+                                clearFieldError("StepSize");
+                            }}
+                        />
+                        <p className="text-red-500 text-xs">{errors.StepSize}</p>
+                    </div>
+
+
                 </div>
             </div>
 
-            <div className="flex gap-2">
-                <div className="w-1/2">
-                    <label className="text-sm font-semibold text-gray-600">Row Spacing</label>
-                    <input
-                        type="number"
-                        placeholder="Row Spacing"
-                        value={settings.RowSpacing ?? ""}
-                        className="bg-gray-100 rounded p-2 w-full"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            handleInputChange("RowSpacing", parseFloat(e.target.value))
-                            clearFieldError("RowSpacing");
-                        }}
-                    />
-                    <span className="text-red-500 text-xs h-4">
-                        {errors.RowSpacing}
-                    </span>
-                </div>
 
-                <div className="w-1/2">
-                    <label className="text-sm font-semibold text-gray-600">Head Land Width</label>
-                    <input
-                        type="number"
-                        placeholder="Head Land Width"
-                        value={settings.HeadLandWidth ?? ""}
-                        className="bg-gray-100 rounded p-2 w-full"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            handleInputChange("HeadLandWidth", parseFloat(e.target.value))
-                            clearFieldError("HeadLandWidth");
-                        }}
-                    />
-                    <span className="text-red-500 text-xs h-2">
-                        {errors.HeadLandWidth}
-                    </span>
-                </div>
-            </div>
-
-            <div className="flex gap-2">
-                <div className="w-1/2">
-                    <label className="text-sm font-semibold text-gray-600">Step Size</label>
-                    <input
-                        type="number"
-                        placeholder="Step Size"
-                        value={settings.StepSize ?? ""}
-                        className="bg-gray-100 rounded p-2 w-full"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            handleInputChange("StepSize", parseFloat(e.target.value))
-                            clearFieldError("StepSize");
-                        }}
-                    />
-                    <span className="text-red-500 text-xs h-4">
-                        {errors.StepSize}
-                    </span>
-                </div>
-                <div className="w-1/2">
-                    <label className="text-sm font-semibold text-gray-600">Row Pattern</label>
+            <div className="flex justify-between space-x-4">
+                <div className="">
+                    <label className="text-xs font-semibold text-gray-600">Row Pattern</label>
                     <DropDownPoper
                         data={ROW_PATTERN_OPTIONS}
                         type="rowPattren"
@@ -214,34 +214,42 @@ const AddMissionForm: FC<IAddMissionFormProps> = (props) => {
                         onSelect={handleRowPatternChange}
                         isLoading={false}
                     />
-                    <span className="text-red-500 text-xs ">
-                        {errors.RowPattern}
-                    </span>
-
-                    {showAngleInput && (
-                        <div className="w-full mt-2">
-                            <label className="text-sm font-semibold text-gray-600 ">Row Pattern Angle</label>
-                            <input
-                                type="number"
-                                placeholder="Enter Angle in degrees"
-                                className="bg-gray-100 rounded p-2 w-full"
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => { setAngle(parseFloat(e.target.value)) }}
-                            />
-                        </div>
-                    )}
+                    <p className="text-red-500 text-xs">{errors.RowPattern}</p>
                 </div>
+                {showAngleInput && (
+                    <div className="">
+                        <label className="text-xs font-semibold text-gray-600">Row Pattern Angle (°)</label>
+                        <input
+                            type="number"
+                            placeholder="Enter angle"
+                            className="bg-gray-100 rounded px-3 py-1 w-full text-sm"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setAngle(parseFloat(e.target.value))
+                            }
+                        />
+                    </div>
+                )}
+
 
             </div>
 
             <button
-                className="bg-gray-700 text-white text-sm rounded px-4 py-2 w-full hover:bg-gray-600 disabled:bg-gray-400 disabled:cursor-not-allowed hover:cursor-pointer"
+                className="bg-green-600 text-white text-sm font-semibold rounded py-2 px-4 w-full mt-4 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={handleSubmit}
                 disabled={isPending}
             >
-                {isPending ? "Creating..." : "Create Mission"}
+                {isPending ? (
+                    <span className="flex justify-center items-center gap-2">
+                        <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                        Creating...
+                    </span>
+                ) : (
+                    "Create Mission"
+                )}
             </button>
         </div>
     );
+
 };
 
 export default AddMissionForm;
