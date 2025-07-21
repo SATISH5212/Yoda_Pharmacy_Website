@@ -1,13 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Settings } from 'lucide-react';
-import { Joystick } from 'lucide-react';
-import { Bot } from 'lucide-react';
-import { Sprout } from 'lucide-react';
+import CompanyLogo from "public/assets/logo";
 
 const Sidebar = () => {
     return (
         <div className="flex flex-col  items-center border-r-1 gap-80px mt-2">
-            <img src="/assets/logo.svg" alt="logo" className="w-12 h-12 mb-14" />
+            <CompanyLogo width={12} height={12} mb={14} />
             <div className="flex flex-col items-center gap-y-6">
                 <Link to="/all-fields" className="[&.active]:bg-[#05A155] hover:bg-gray-300 rounded-sm h-8 w-8 flex items-center justify-center">
                     <img src="/assets/fields/fields.svg" alt="field" className="w-[26px] h-[20px] " />
