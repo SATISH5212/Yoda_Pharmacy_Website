@@ -16,15 +16,17 @@ const ChatScreen = () => {
         retry: false,
         mutationFn: async () => {
             const payload = {
-                prompt: messageToSend.trim(),
+                query: messageToSend.trim(),
             };
-            // const response = await generateChatAPI(payload);
+            // const response = await generateChatAPI();
+            // return response;
             const botReply = "Sorry, no reply.";
             setChatHistory(prev => [
                 ...prev,
                 { message: messageToSend.trim(), response: botReply },
             ]);
             setMessageToSend("");
+
         },
         // onSuccess: (response: any) => {
         //     const botReply = response?.message || "Sorry, no reply.";
@@ -80,10 +82,13 @@ const ChatScreen = () => {
 
     const showChat = chatHistory.length > 0;
 
+
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white flex flex-col">
+        <div className="h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
+
             {showChat && (
-                <header className="px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md sticky top-0 z-10">
+                <header className="px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
                     <div className="flex items-center space-x-3">
                         <MessageSquare className="text-teal-400" />
                         <h1 className="text-xl font-semibold tracking-wide">NyayaTech.AI</h1>
@@ -91,9 +96,9 @@ const ChatScreen = () => {
                     <div className="text-sm text-slate-400">v1.0 Beta</div>
                 </header>
             )}
-
             {showChat ? (
-                <main className="flex-1 overflow-y-auto px-6 mx-70 py-4 space-y-4  custom-scrollbar">
+                <div className="flex-1 mx-60 overflow-y-auto px-6 py-4 space-y-4 custom-scrollbar">
+                    <h2 className='flex text-2xl justify-center items-center font-semibold text-teal-400'>Hello User</h2>
                     <div className="flex flex-col gap-3">
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
@@ -107,15 +112,15 @@ const ChatScreen = () => {
                         ))}
                         <div ref={chatEndRef} />
                     </div>
-                </main>
+                </div>
             ) : (
                 <div className="flex-1 flex flex-col justify-center items-center px-6 text-center space-y-8">
                     <div>
                         <h1 className="text-2xl font-semibold text-teal-400">Welcome to NyayaTech.AI</h1>
                         <p className="text-slate-400 text-sm">Start chatting with your AI assistant...</p>
                     </div>
-                    <div className=" ml-22   w-full max-w-2xl px-4">
-                        <div className=" items-center flex items-end gap-4">
+                    <div className="w-full max-w-2xl px-4">
+                        <div className="flex items-end gap-4">
                             <textarea
                                 ref={textareaRef}
                                 placeholder="Type your message..."
@@ -123,8 +128,10 @@ const ChatScreen = () => {
                                 onChange={(e) => setMessageToSend(e.target.value)}
                                 onKeyDown={handleKeyPress}
                                 rows={3}
-                                className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
+                                className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-md resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
+                                style={{ scrollbarWidth: 'thin' }}
                             />
+
                             <button
                                 disabled={!messageToSend.trim() || isPending}
                                 onClick={handleGenerate}
@@ -139,10 +146,9 @@ const ChatScreen = () => {
                     </div>
                 </div>
             )}
-
             {showChat && (
-                <footer className="sticky bottom-0 px-6 py-4   mx-70 mb-10">
-                    <div className="flex items-end gap-4 h-[80px]">
+                <footer className="px-6 py-4 mx-60">
+                    <div className="flex items-end gap-4 h-[150px]">
                         <textarea
                             ref={textareaRef}
                             placeholder="Type your message..."
@@ -150,7 +156,7 @@ const ChatScreen = () => {
                             onChange={(e) => setMessageToSend(e.target.value)}
                             onKeyDown={handleKeyPress}
                             rows={3}
-                            className="w-full h-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[80px] custom-scrollbar-textarea"
+                            className="w-full h-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
                         />
                         <button
                             disabled={!messageToSend.trim() || isPending}
@@ -167,6 +173,8 @@ const ChatScreen = () => {
             )}
         </div>
     );
+
+
 };
 
 export default ChatScreen;

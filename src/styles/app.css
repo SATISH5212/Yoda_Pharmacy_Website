@@ -130,7 +130,7 @@ body,
 
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 2px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -149,11 +149,14 @@ body,
 
 .custom-scrollbar-textarea::-webkit-scrollbar {
   width: 6px;
+  display: none;
 }
 
 .custom-scrollbar-textarea::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #dcdee3;
   border-radius: 10px;
+
+
 }
 
 .custom-scrollbar-textarea::-webkit-scrollbar-thumb {
