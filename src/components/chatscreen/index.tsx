@@ -24,7 +24,6 @@ const ChatScreen = () => {
             };
             const response = await generateChatAPI(payload);
             return response;
-
         },
         onSuccess: (response: any) => {
             console.log(response, "gggg001")
@@ -85,18 +84,20 @@ const ChatScreen = () => {
 
     const showChat = chatHistory.length > 0 || isPending;
 
-    const copyToClipboard = async (text: string, index: number) => {
+    const [copying, setCopying] = useState<{ index: number; type: 'message' | 'response' } | null>(null);
+    const copyToClipboard = async (text: string, index: number, type: 'message' | 'response') => {
         try {
-            setCopyingIndex(index);
+            setCopying({ index, type });
             await navigator.clipboard.writeText(text);
         } catch (err) {
             console.error("Failed to copy: ", err);
         } finally {
             setTimeout(() => {
-                setCopyingIndex(null);
+                setCopying(null);
             }, 1000);
         }
     };
+
     return (
         <div className={`h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white `}>
 
@@ -116,28 +117,39 @@ const ChatScreen = () => {
                     <div className={`flex flex-col gap-3 ${isTextareaExpanded ? "pb-30" : ""}`}>
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
-                                <div className="self-end max-w-[70%] bg-teal-600 px-4 py-3 rounded-xl rounded-tr-none shadow-md">
+                                <div className="self-end max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.message}</p>
-                                        <button onClick={() => copyToClipboard(chat.message, index)} title="Copy">
-                                            <Copy size={14} color={copyingIndex === index ? "green" : "white"} className="hover:text-gray-300 ml-2 mt-2" />
+                                        <button onClick={() => copyToClipboard(chat.message, index, 'message')} title="Copy">
+                                            <Copy
+                                                size={14}
+                                                color={copying?.index === index && copying?.type === 'message' ? "green" : "white"}
+                                                className="hover:text-gray-300 ml-2 mt-2"
+                                            />
                                         </button>
+
                                     </div>
                                 </div>
 
                                 <div className="self-start max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.response}</p>
-                                        <button onClick={() => copyToClipboard(chat.response, index)} title="Copy">
-                                            <Copy size={14} color={copyingIndex === index ? "green" : "white"} className="hover:text-gray-300 ml-2 mt-2" />
+
+                                        <button onClick={() => copyToClipboard(chat.response, index, 'response')} title="Copy">
+                                            <Copy
+                                                size={14}
+                                                color={copying?.index === index && copying?.type === 'response' ? "green" : "white"}
+                                                className="hover:text-gray-300 ml-2 mt-2"
+                                            />
                                         </button>
+
                                     </div>
                                 </div>
                             </React.Fragment>
                         ))}
                         {isPending && pendingMessage && (
                             <React.Fragment>
-                                <div className="self-end max-w-[70%] bg-teal-600 px-4 py-3 rounded-xl rounded-tr-none shadow-md">
+                                <div className="self-end max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{pendingMessage}</p>
                                     </div>
