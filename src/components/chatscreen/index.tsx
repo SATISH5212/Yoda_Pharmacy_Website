@@ -6,7 +6,6 @@ import LoadingDots from '../loadings/loadingDots';
 
 const ChatScreen = () => {
     const [messageToSend, setMessageToSend] = useState("");
-    const [copyingIndex, setCopyingIndex] = useState<number | null>(null);
     const [pendingMessage, setPendingMessage] = useState<string>("");
     const [chatHistory, setChatHistory] = useState<
         { message: string; response: string }[]>([]);
@@ -98,11 +97,11 @@ const ChatScreen = () => {
         }
     };
 
-    return (
-        <div className={`h-screen  flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white `}>
 
+    return (
+        <div className="h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
             {showChat && (
-                <header className="px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
+                <header className="px-4 sm:px-6 lg:mx-60 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
                     <div className="flex items-center space-x-3">
                         <MessageSquare className="text-teal-400" />
                         <h1 className="text-xl font-semibold tracking-wide">NyayaTech.AI</h1>
@@ -110,14 +109,15 @@ const ChatScreen = () => {
                     <div className="text-sm text-slate-400">v1.0 Beta</div>
                 </header>
             )}
-            {showChat ? (
-                <div className="flex-1 mx-60 overflow-y-auto px-6 py-4 space-y-4  custom-scrollbar" >
 
-                    <h2 className='flex text-2xl justify-center items-center font-semibold text-teal-400'>Hello User</h2>
+            {showChat ? (
+                <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:mx-60 py-4 space-y-4 custom-scrollbar">
+                    <h2 className='flex justify-center items-center text-2xl font-semibold text-teal-400'>Hello User</h2>
+
                     <div className={`flex flex-col gap-3 ${isTextareaExpanded ? "pb-30" : ""}`}>
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
-                                <div className="self-end max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
+                                <div className="self-end w-fit max-w-[85%] sm:max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.message}</p>
                                         <button onClick={() => copyToClipboard(chat.message, index, 'message')} title="Copy">
@@ -127,14 +127,12 @@ const ChatScreen = () => {
                                                 className="hover:text-gray-300 ml-2 mt-2"
                                             />
                                         </button>
-
                                     </div>
                                 </div>
 
-                                <div className="self-start max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
+                                <div className="self-start w-fit max-w-[85%] sm:max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.response}</p>
-
                                         <button onClick={() => copyToClipboard(chat.response, index, 'response')} title="Copy">
                                             <Copy
                                                 size={14}
@@ -142,20 +140,20 @@ const ChatScreen = () => {
                                                 className="hover:text-gray-300 ml-2 mt-2"
                                             />
                                         </button>
-
                                     </div>
                                 </div>
                             </React.Fragment>
                         ))}
+
                         {isPending && pendingMessage && (
                             <React.Fragment>
-                                <div className="self-end max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
+                                <div className="self-end w-fit max-w-[85%] sm:max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
                                         <p className="text-md whitespace-pre-wrap break-words flex-1">{pendingMessage}</p>
                                     </div>
                                 </div>
 
-                                <div className="self-start max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
+                                <div className="self-start w-fit max-w-[85%] sm:max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
                                     <div className="flex items-center gap-3">
                                         <LoadingDots />
                                         <span className="text-sm text-slate-400">Generating...</span>
@@ -163,12 +161,11 @@ const ChatScreen = () => {
                                 </div>
                             </React.Fragment>
                         )}
-
                         <div ref={chatEndRef} />
                     </div>
                 </div>
             ) : (
-                <div className="flex-1 flex flex-col justify-center items-center px-6 text-center space-y-8">
+                <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:mx-60 text-center space-y-8">
                     <div>
                         <h1 className="text-2xl font-semibold text-teal-400">Welcome to NyayaTech.AI</h1>
                         <p className="text-slate-400 text-sm">Start chatting with your AI assistant...</p>
@@ -183,9 +180,7 @@ const ChatScreen = () => {
                                 onKeyDown={handleKeyPress}
                                 rows={3}
                                 className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-md resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
-                                style={{ scrollbarWidth: 'thin' }}
                             />
-
                             <button
                                 disabled={!messageToSend.trim() || isPending}
                                 onClick={handleGenerate}
@@ -200,8 +195,9 @@ const ChatScreen = () => {
                     </div>
                 </div>
             )}
+
             {showChat && (
-                <footer className="px-6 py-4 mx-60">
+                <footer className="px-4 sm:px-6 lg:mx-60 py-4">
                     <div className="flex items-end gap-4 h-[50px] max-h-[150px]">
                         <textarea
                             ref={textareaRef}
@@ -227,6 +223,14 @@ const ChatScreen = () => {
             )}
         </div>
     );
+
+
+
+
+
+
+
+
 };
 
 export default ChatScreen;
