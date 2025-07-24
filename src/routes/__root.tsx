@@ -8,7 +8,6 @@ import {
 } from '@tanstack/react-router'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import appCss from "../styles/app.css?url"
-import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();
 
@@ -42,7 +41,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <RootDocument>
         <Outlet />
-        <Toaster richColors closeButton position="top-center" />
       </RootDocument>
     </QueryClientProvider>
   )
