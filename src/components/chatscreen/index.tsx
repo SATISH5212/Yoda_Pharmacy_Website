@@ -21,6 +21,7 @@ const ChatScreen = () => {
             const payload = {
                 prompt: messageToSend.trim(),
             };
+            setMessageToSend("");
             const response = await generateChatAPI(payload);
             return response;
         },
