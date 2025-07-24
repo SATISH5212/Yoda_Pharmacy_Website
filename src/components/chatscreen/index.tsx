@@ -1,69 +1,63 @@
 import { generateChatAPI } from '@/lib/services/chatbot';
 import { useMutation } from '@tanstack/react-query';
-import { MessageSquare, SendHorizonal, Copy, } from 'lucide-react';
+import { MessageSquare, SendHorizonal, Copy } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 import LoadingDots from '../loadings/loadingDots';
 
 const ChatScreen = () => {
-    const [messageToSend, setMessageToSend] = useState("");
-    const [pendingMessage, setPendingMessage] = useState<string>("");
-    const [userMessage, setUserMessage] = useState<string>("");
+    const [messageToSend, setMessageToSend] = useState('');
+    const [pendingMessage, setPendingMessage] = useState('');
+    const [userMessage, setUserMessage] = useState('');
     const [chatHistory, setChatHistory] = useState<
-        { message: string; response: string }[]>([]);
+        { message: string; response: string }[]
+    >([]);
 
     const chatEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isTextareaExpanded, setIsTextareaExpanded] = useState(false);
 
     const { mutateAsync: generateChat, isPending } = useMutation({
-        mutationKey: ["generate-chat"],
+        mutationKey: ['generate-chat'],
         retry: false,
         mutationFn: async () => {
             const payload = {
                 prompt: userMessage.trim(),
             };
-            setMessageToSend("");
             const response = await generateChatAPI(payload);
             return response;
         },
         onSuccess: (response: any) => {
-            const botReply = response?.data?.data?.response || "Sorry, no reply.";
-            setChatHistory(prev => [
+            const botReply = response?.data?.data?.response || 'Sorry, no reply.';
+            setChatHistory((prev) => [
                 ...prev,
                 { message: userMessage.trim(), response: botReply },
             ]);
-            setMessageToSend("");
         },
         onError: () => {
-            setChatHistory(prev => [
+            setChatHistory((prev) => [
                 ...prev,
                 {
                     message: userMessage.trim(),
-                    response: "Oops! Something went wrong. Try again later.",
+                    response: 'Oops! Something went wrong. Try again later.',
                 },
             ]);
-            setMessageToSend("");
         },
     });
 
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [chatHistory, isTextareaExpanded, isPending]);
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [chatHistory, isPending]);
 
     useEffect(() => {
         if (textareaRef.current) {
-            textareaRef.current.style.height = "auto";
+            textareaRef.current.style.height = 'auto';
             const scrollHeight = textareaRef.current.scrollHeight;
-            const maxHeight = 200;
+            const maxHeight = 150;
 
             textareaRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
-            if (scrollHeight > maxHeight) {
-                textareaRef.current.style.overflowY = "auto";
-                setIsTextareaExpanded(true);
-            } else {
-                textareaRef.current.style.overflowY = "hidden";
-                setIsTextareaExpanded(false);
-            }
+            textareaRef.current.style.overflowY =
+                scrollHeight > maxHeight ? 'auto' : 'hidden';
+            setIsTextareaExpanded(scrollHeight > maxHeight);
         }
     }, [messageToSend]);
 
@@ -71,14 +65,14 @@ const ChatScreen = () => {
         if (messageToSend.trim()) {
             setPendingMessage(messageToSend.trim());
             setUserMessage(messageToSend.trim());
-
+            setMessageToSend('');
             await generateChat();
-            setPendingMessage("");
+            setPendingMessage('');
         }
     };
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             await handleGenerate();
         }
@@ -86,23 +80,30 @@ const ChatScreen = () => {
 
     const showChat = chatHistory.length > 0 || isPending;
 
-    const [copying, setCopying] = useState<{ index: number; type: 'message' | 'response' } | null>(null);
-    const copyToClipboard = async (text: string, index: number, type: 'message' | 'response') => {
+    const [copying, setCopying] = useState<{
+        index: number;
+        type: 'message' | 'response';
+    } | null>(null);
+
+    const copyToClipboard = async (
+        text: string,
+        index: number,
+        type: 'message' | 'response',
+    ) => {
         try {
             setCopying({ index, type });
             await navigator.clipboard.writeText(text);
         } catch (err) {
-            console.error("Failed to copy: ", err);
+            console.error('Failed to copy: ', err);
         } finally {
-            setTimeout(() => {
-                setCopying(null);
-            }, 1000);
+            setTimeout(() => setCopying(null), 1000);
         }
     };
+
     return (
         <div className="h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
             {showChat && (
-                <header className="px-4 sm:px-6  py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
+                <header className="px-4 sm:px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
                     <div className="flex items-center space-x-3">
                         <MessageSquare className="text-teal-400" />
                         <h1 className="text-xl font-semibold tracking-wide">NyayaTech.AI</h1>
@@ -113,18 +114,30 @@ const ChatScreen = () => {
 
             {showChat ? (
                 <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:mx-60 py-4 space-y-4 custom-scrollbar">
-                    <h2 className='flex justify-center items-center text-2xl font-semibold text-teal-400'>Hello User</h2>
+                    <h2 className="flex justify-center items-center text-2xl font-semibold text-teal-400">
+                        Hello User
+                    </h2>
 
-                    <div className={`flex flex-col gap-3 ${isTextareaExpanded ? "pb-30" : ""}`}>
+                    <div className="flex flex-col gap-3">
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
                                 <div className="self-end w-fit max-w-[85%] sm:max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
-                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.message}</p>
-                                        <button onClick={() => copyToClipboard(chat.message, index, 'message')} title="Copy">
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">
+                                            {chat.message}
+                                        </p>
+                                        <button
+                                            onClick={() => copyToClipboard(chat.message, index, 'message')}
+                                            title="Copy user message"
+                                            aria-label="Copy user message"
+                                        >
                                             <Copy
                                                 size={14}
-                                                color={copying?.index === index && copying?.type === 'message' ? "green" : "white"}
+                                                color={
+                                                    copying?.index === index && copying?.type === 'message'
+                                                        ? 'green'
+                                                        : 'white'
+                                                }
                                                 className="hover:text-gray-300 ml-2 mt-2"
                                             />
                                         </button>
@@ -133,11 +146,21 @@ const ChatScreen = () => {
 
                                 <div className="self-start w-fit max-w-[85%] sm:max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
                                     <div className="flex justify-between items-start gap-2">
-                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.response}</p>
-                                        <button onClick={() => copyToClipboard(chat.response, index, 'response')} title="Copy">
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">
+                                            {chat.response}
+                                        </p>
+                                        <button
+                                            onClick={() => copyToClipboard(chat.response, index, 'response')}
+                                            title="Copy bot response"
+                                            aria-label="Copy bot response"
+                                        >
                                             <Copy
                                                 size={14}
-                                                color={copying?.index === index && copying?.type === 'response' ? "green" : "white"}
+                                                color={
+                                                    copying?.index === index && copying?.type === 'response'
+                                                        ? 'green'
+                                                        : 'white'
+                                                }
                                                 className="hover:text-gray-300 ml-2 mt-2"
                                             />
                                         </button>
@@ -150,7 +173,9 @@ const ChatScreen = () => {
                             <React.Fragment>
                                 <div className="self-end w-fit max-w-[85%] sm:max-w-[70%] bg-[#1e293b] px-4 py-3 rounded-xl rounded-tr-none shadow-md">
                                     <div className="flex justify-between items-start gap-2">
-                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{pendingMessage}</p>
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">
+                                            {pendingMessage}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -168,8 +193,12 @@ const ChatScreen = () => {
             ) : (
                 <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:mx-60 text-center space-y-8">
                     <div>
-                        <h1 className="text-2xl font-semibold text-teal-400">Welcome to NyayaTech.AI</h1>
-                        <p className="text-slate-400 text-sm">Start chatting with your AI assistant...</p>
+                        <h1 className="text-2xl font-semibold text-teal-400">
+                            Welcome to NyayaTech.AI
+                        </h1>
+                        <p className="text-slate-400 text-sm">
+                            Start chatting with your AI assistant...
+                        </p>
                     </div>
                     <div className="w-full max-w-2xl px-4">
                         <div className="flex items-end gap-4">
@@ -185,15 +214,17 @@ const ChatScreen = () => {
                                 onKeyDown={handleKeyPress}
                                 rows={3}
                                 className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-md resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
+                                aria-label="Type your message"
                             />
 
                             <button
                                 disabled={!messageToSend.trim() || isPending}
                                 onClick={handleGenerate}
                                 className={`p-3 rounded-full transition mb-1 ${!messageToSend.trim() || isPending
-                                    ? "bg-teal-800 cursor-not-allowed opacity-50"
-                                    : "bg-teal-600 hover:bg-teal-500"
+                                    ? 'bg-teal-800 cursor-not-allowed opacity-50'
+                                    : 'bg-teal-600 hover:bg-teal-500'
                                     }`}
+                                aria-label="Send message"
                             >
                                 <SendHorizonal size={22} className="text-white" />
                             </button>
@@ -204,7 +235,7 @@ const ChatScreen = () => {
 
             {showChat && (
                 <footer className="px-4 sm:px-6 lg:mx-60 py-4">
-                    <div className="flex items-end gap-4 h-[50px] max-h-[150px]">
+                    <div className="flex items-end gap-4">
                         <textarea
                             ref={textareaRef}
                             placeholder="Type your message..."
@@ -216,16 +247,18 @@ const ChatScreen = () => {
                             }}
                             onKeyDown={handleKeyPress}
                             rows={3}
-                            className="w-full h-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
+                            className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
+                            aria-label="Type your message"
                         />
 
                         <button
                             disabled={!messageToSend.trim() || isPending}
                             onClick={handleGenerate}
                             className={`p-3 rounded-full transition ${!messageToSend.trim() || isPending
-                                ? "bg-teal-800 cursor-not-allowed opacity-50"
-                                : "bg-teal-600 hover:bg-teal-500"
+                                ? 'bg-teal-800 cursor-not-allowed opacity-50'
+                                : 'bg-teal-600 hover:bg-teal-500'
                                 }`}
+                            aria-label="Send message"
                         >
                             <SendHorizonal size={22} className="text-white" />
                         </button>
@@ -234,14 +267,6 @@ const ChatScreen = () => {
             )}
         </div>
     );
-
-
-
-
-
-
-
-
 };
 
 export default ChatScreen;
