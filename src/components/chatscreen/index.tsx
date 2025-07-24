@@ -7,6 +7,7 @@ import LoadingDots from '../loadings/loadingDots';
 const ChatScreen = () => {
     const [messageToSend, setMessageToSend] = useState("");
     const [pendingMessage, setPendingMessage] = useState<string>("");
+    const [userMessage, setUserMessage] = useState<string>("");
     const [chatHistory, setChatHistory] = useState<
         { message: string; response: string }[]>([]);
 
@@ -19,18 +20,17 @@ const ChatScreen = () => {
         retry: false,
         mutationFn: async () => {
             const payload = {
-                prompt: messageToSend.trim(),
+                prompt: userMessage.trim(),
             };
             setMessageToSend("");
             const response = await generateChatAPI(payload);
             return response;
         },
         onSuccess: (response: any) => {
-            console.log(response, "gggg001")
             const botReply = response?.data?.data?.response || "Sorry, no reply.";
             setChatHistory(prev => [
                 ...prev,
-                { message: messageToSend.trim(), response: botReply },
+                { message: userMessage.trim(), response: botReply },
             ]);
             setMessageToSend("");
         },
@@ -38,7 +38,7 @@ const ChatScreen = () => {
             setChatHistory(prev => [
                 ...prev,
                 {
-                    message: messageToSend.trim(),
+                    message: userMessage.trim(),
                     response: "Oops! Something went wrong. Try again later.",
                 },
             ]);
@@ -70,6 +70,8 @@ const ChatScreen = () => {
     const handleGenerate = async () => {
         if (messageToSend.trim()) {
             setPendingMessage(messageToSend.trim());
+            setUserMessage(messageToSend.trim());
+
             await generateChat();
             setPendingMessage("");
         }
@@ -97,12 +99,10 @@ const ChatScreen = () => {
             }, 1000);
         }
     };
-
-
     return (
         <div className="h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
             {showChat && (
-                <header className="px-4 sm:px-6 lg:mx-60 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
+                <header className="px-4 sm:px-6  py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
                     <div className="flex items-center space-x-3">
                         <MessageSquare className="text-teal-400" />
                         <h1 className="text-xl font-semibold tracking-wide">NyayaTech.AI</h1>
@@ -176,8 +176,12 @@ const ChatScreen = () => {
                             <textarea
                                 ref={textareaRef}
                                 placeholder="Type your message..."
-                                value={messageToSend}
-                                onChange={(e) => setMessageToSend(e.target.value)}
+                                // value={userMessage}
+                                onChange={(e) => {
+                                    const input = e.target.value;
+                                    const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
+                                    setMessageToSend(capitalized);
+                                }}
                                 onKeyDown={handleKeyPress}
                                 rows={3}
                                 className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-md resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
