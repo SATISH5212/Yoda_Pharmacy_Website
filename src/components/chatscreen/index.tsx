@@ -18,6 +18,7 @@ const ChatScreen = () => {
             const payload = {
                 prompt: messageToSend.trim(),
             };
+            // const response = await generateChatAPI(payload);
             const botReply = "Sorry, no reply.";
             setChatHistory(prev => [
                 ...prev,
@@ -92,7 +93,7 @@ const ChatScreen = () => {
             )}
 
             {showChat ? (
-                <main className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+                <main className="flex-1 overflow-y-auto px-6 mx-70 py-4 space-y-4  custom-scrollbar">
                     <div className="flex flex-col gap-3">
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
@@ -113,16 +114,16 @@ const ChatScreen = () => {
                         <h1 className="text-2xl font-semibold text-teal-400">Welcome to NyayaTech.AI</h1>
                         <p className="text-slate-400 text-sm">Start chatting with your AI assistant...</p>
                     </div>
-                    <div className="w-full max-w-2xl px-4">
-                        <div className="flex items-end gap-4">
+                    <div className=" ml-22   w-full max-w-2xl px-4">
+                        <div className=" items-center flex items-end gap-4">
                             <textarea
                                 ref={textareaRef}
                                 placeholder="Type your message..."
                                 value={messageToSend}
                                 onChange={(e) => setMessageToSend(e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                rows={1}
-                                className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] overflow-y-auto"
+                                rows={3}
+                                className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
                             />
                             <button
                                 disabled={!messageToSend.trim() || isPending}
@@ -140,21 +141,21 @@ const ChatScreen = () => {
             )}
 
             {showChat && (
-                <footer className="sticky bottom-0 px-6 py-4 border-t border-slate-700 bg-[#1e293b]">
-                    <div className="flex items-end gap-4">
+                <footer className="sticky bottom-0 px-6 py-4   mx-70 mb-10">
+                    <div className="flex items-end gap-4 h-[80px]">
                         <textarea
                             ref={textareaRef}
                             placeholder="Type your message..."
                             value={messageToSend}
                             onChange={(e) => setMessageToSend(e.target.value)}
                             onKeyDown={handleKeyPress}
-                            rows={1}
-                            className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] overflow-y-auto"
+                            rows={3}
+                            className="w-full h-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[80px] custom-scrollbar-textarea"
                         />
                         <button
                             disabled={!messageToSend.trim() || isPending}
                             onClick={handleGenerate}
-                            className={`p-3 rounded-full transition mb-1 ${!messageToSend.trim() || isPending
+                            className={`p-3 rounded-full transition ${!messageToSend.trim() || isPending
                                 ? "bg-teal-800 cursor-not-allowed opacity-50"
                                 : "bg-teal-600 hover:bg-teal-500"
                                 }`}
