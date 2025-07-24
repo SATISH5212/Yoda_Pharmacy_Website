@@ -99,7 +99,7 @@ const ChatScreen = () => {
     };
 
     return (
-        <div className={`h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white `}>
+        <div className={`h-screen  flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white `}>
 
             {showChat && (
                 <header className="px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
