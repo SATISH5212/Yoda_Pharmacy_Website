@@ -129,24 +129,38 @@ body,
 }
 
 
-
-.gmnoprint {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 5px;
-  margin-left: 10px !important;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* Increase size of drawing tool icons */
-.gmnoprint>div {
-  transform: scale(1.5);
-  transform-origin: center;
-  /* background-color: #e0f2fe !important; */
-  /* border-radius: 50% !important; */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 10px;
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
 
+.custom-scrollbar-textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar-textarea::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 10px;
+}
+
+.custom-scrollbar-textarea::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+}
+
+.custom-scrollbar-textarea::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
