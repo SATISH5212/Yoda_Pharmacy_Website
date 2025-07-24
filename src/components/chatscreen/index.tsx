@@ -175,8 +175,8 @@ const ChatScreen = () => {
                         <div className="flex items-end gap-4">
                             <textarea
                                 ref={textareaRef}
+                                value={messageToSend}
                                 placeholder="Type your message..."
-                                // value={userMessage}
                                 onChange={(e) => {
                                     const input = e.target.value;
                                     const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
@@ -186,6 +186,7 @@ const ChatScreen = () => {
                                 rows={3}
                                 className="w-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-md resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
                             />
+
                             <button
                                 disabled={!messageToSend.trim() || isPending}
                                 onClick={handleGenerate}
@@ -208,11 +209,16 @@ const ChatScreen = () => {
                             ref={textareaRef}
                             placeholder="Type your message..."
                             value={messageToSend}
-                            onChange={(e) => setMessageToSend(e.target.value)}
+                            onChange={(e) => {
+                                const input = e.target.value;
+                                const capitalized = input.charAt(0).toUpperCase() + input.slice(1);
+                                setMessageToSend(capitalized);
+                            }}
                             onKeyDown={handleKeyPress}
                             rows={3}
                             className="w-full h-full bg-[#0f172a] border border-slate-600 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 max-h-[150px] custom-scrollbar-textarea"
                         />
+
                         <button
                             disabled={!messageToSend.trim() || isPending}
                             onClick={handleGenerate}
