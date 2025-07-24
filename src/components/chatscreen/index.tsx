@@ -1,57 +1,56 @@
 import { generateChatAPI } from '@/lib/services/chatbot';
 import { useMutation } from '@tanstack/react-query';
-import { MessageSquare, SendHorizonal } from 'lucide-react';
+import { MessageSquare, SendHorizonal, Copy, } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
+import LoadingDots from '../loadings/loadingDots';
 
 const ChatScreen = () => {
     const [messageToSend, setMessageToSend] = useState("");
+    const [copyingIndex, setCopyingIndex] = useState<number | null>(null);
+    const [pendingMessage, setPendingMessage] = useState<string>("");
     const [chatHistory, setChatHistory] = useState<
         { message: string; response: string }[]>([]);
 
     const chatEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const [isTextareaExpanded, setIsTextareaExpanded] = useState(false);
 
     const { mutateAsync: generateChat, isPending } = useMutation({
         mutationKey: ["generate-chat"],
         retry: false,
         mutationFn: async () => {
             const payload = {
-                query: messageToSend.trim(),
+                prompt: messageToSend.trim(),
             };
-            // const response = await generateChatAPI();
-            // return response;
-            const botReply = "Sorry, no reply.";
+            const response = await generateChatAPI(payload);
+            return response;
+
+        },
+        onSuccess: (response: any) => {
+            console.log(response, "gggg001")
+            const botReply = response?.data?.data?.response || "Sorry, no reply.";
             setChatHistory(prev => [
                 ...prev,
                 { message: messageToSend.trim(), response: botReply },
             ]);
             setMessageToSend("");
-
         },
-        // onSuccess: (response: any) => {
-        //     const botReply = response?.message || "Sorry, no reply.";
-        //     setChatHistory(prev => [
-        //         ...prev,
-        //         { message: messageToSend.trim(), response: botReply },
-        //     ]);
-        //     setMessageToSend("");
-        // },
-        // onError: () => {
-        //     setChatHistory(prev => [
-        //         ...prev,
-        //         {
-        //             message: messageToSend.trim(),
-        //             response: "Oops! Something went wrong. Try again later.",
-        //         },
-        //     ]);
-        //     setMessageToSend("");
-        // },
+        onError: () => {
+            setChatHistory(prev => [
+                ...prev,
+                {
+                    message: messageToSend.trim(),
+                    response: "Oops! Something went wrong. Try again later.",
+                },
+            ]);
+            setMessageToSend("");
+        },
     });
-
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [chatHistory]);
+    }, [chatHistory, isTextareaExpanded, isPending]);
+
     useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = "auto";
@@ -61,15 +60,19 @@ const ChatScreen = () => {
             textareaRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
             if (scrollHeight > maxHeight) {
                 textareaRef.current.style.overflowY = "auto";
+                setIsTextareaExpanded(true);
             } else {
                 textareaRef.current.style.overflowY = "hidden";
+                setIsTextareaExpanded(false);
             }
         }
     }, [messageToSend]);
 
     const handleGenerate = async () => {
         if (messageToSend.trim()) {
+            setPendingMessage(messageToSend.trim());
             await generateChat();
+            setPendingMessage("");
         }
     };
 
@@ -80,12 +83,22 @@ const ChatScreen = () => {
         }
     };
 
-    const showChat = chatHistory.length > 0;
+    const showChat = chatHistory.length > 0 || isPending;
 
-
-
+    const copyToClipboard = async (text: string, index: number) => {
+        try {
+            setCopyingIndex(index);
+            await navigator.clipboard.writeText(text);
+        } catch (err) {
+            console.error("Failed to copy: ", err);
+        } finally {
+            setTimeout(() => {
+                setCopyingIndex(null);
+            }, 1000);
+        }
+    };
     return (
-        <div className="h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
+        <div className={`h-screen flex flex-col bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white `}>
 
             {showChat && (
                 <header className="px-6 py-4 bg-[#1e293b] border-b border-slate-700 flex items-center justify-between shadow-md">
@@ -97,19 +110,48 @@ const ChatScreen = () => {
                 </header>
             )}
             {showChat ? (
-                <div className="flex-1 mx-60 overflow-y-auto px-6 py-4 space-y-4 custom-scrollbar">
+                <div className="flex-1 mx-60 overflow-y-auto px-6 py-4 space-y-4  custom-scrollbar" >
+
                     <h2 className='flex text-2xl justify-center items-center font-semibold text-teal-400'>Hello User</h2>
-                    <div className="flex flex-col gap-3">
+                    <div className={`flex flex-col gap-3 ${isTextareaExpanded ? "pb-30" : ""}`}>
                         {chatHistory.map((chat, index) => (
                             <React.Fragment key={index}>
                                 <div className="self-end max-w-[70%] bg-teal-600 px-4 py-3 rounded-xl rounded-tr-none shadow-md">
-                                    <p className="text-sm whitespace-pre-wrap">{chat.message}</p>
+                                    <div className="flex justify-between items-start gap-2">
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.message}</p>
+                                        <button onClick={() => copyToClipboard(chat.message, index)} title="Copy">
+                                            <Copy size={14} color={copyingIndex === index ? "green" : "white"} className="hover:text-gray-300 ml-2 mt-2" />
+                                        </button>
+                                    </div>
                                 </div>
+
                                 <div className="self-start max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
-                                    <p className="text-sm whitespace-pre-wrap">{chat.response}</p>
+                                    <div className="flex justify-between items-start gap-2">
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{chat.response}</p>
+                                        <button onClick={() => copyToClipboard(chat.response, index)} title="Copy">
+                                            <Copy size={14} color={copyingIndex === index ? "green" : "white"} className="hover:text-gray-300 ml-2 mt-2" />
+                                        </button>
+                                    </div>
                                 </div>
                             </React.Fragment>
                         ))}
+                        {isPending && pendingMessage && (
+                            <React.Fragment>
+                                <div className="self-end max-w-[70%] bg-teal-600 px-4 py-3 rounded-xl rounded-tr-none shadow-md">
+                                    <div className="flex justify-between items-start gap-2">
+                                        <p className="text-md whitespace-pre-wrap break-words flex-1">{pendingMessage}</p>
+                                    </div>
+                                </div>
+
+                                <div className="self-start max-w-[70%] bg-[#334155] px-4 py-3 rounded-xl rounded-tl-none shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <LoadingDots />
+                                        <span className="text-sm text-slate-400">Generating...</span>
+                                    </div>
+                                </div>
+                            </React.Fragment>
+                        )}
+
                         <div ref={chatEndRef} />
                     </div>
                 </div>
@@ -148,7 +190,7 @@ const ChatScreen = () => {
             )}
             {showChat && (
                 <footer className="px-6 py-4 mx-60">
-                    <div className="flex items-end gap-4 h-[150px]">
+                    <div className="flex items-end gap-4 h-[50px] max-h-[150px]">
                         <textarea
                             ref={textareaRef}
                             placeholder="Type your message..."
@@ -173,8 +215,6 @@ const ChatScreen = () => {
             )}
         </div>
     );
-
-
 };
 
 export default ChatScreen;
