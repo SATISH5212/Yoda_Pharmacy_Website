@@ -17,7 +17,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -30,7 +30,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -40,7 +40,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -50,7 +50,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -60,7 +60,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -70,7 +70,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -80,7 +80,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -90,7 +90,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/public/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_1.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -100,15 +100,15 @@ const MainScreen = () => {
                     </span>
                 </div>
                 <div className="flex mx-40 mt-12  pl-3.5 h-[197px]  justify-between ">
-                    <img src="/public/assets/services/Free-Delivery.svg" alt="Medicine" className="h-full w-1/3" />
-                    <img src="/public/assets/services/Banner-2.svg" alt="Medicine" className="h-full w-1/3" />
-                    <img src="/public/assets/services/Banner-3_1.svg" alt="Medicine" className="h-full w-1/3" />
+                    <img src="/assets/services/Free-Delivery.svg" alt="Medicine" className="h-full w-1/3" />
+                    <img src="/assets/services/Banner-2.svg" alt="Medicine" className="h-full w-1/3" />
+                    <img src="/assets/services/Banner-3_1.svg" alt="Medicine" className="h-full w-1/3" />
 
                 </div>
                 <div className="flex mx-42 mt-14.5  pl-7 h-[235px]  ">
                     <div className="flex w-full  rounded-md  ">
                         <span className="flex w-4/10 bg-[#00435D] items-center rounded-l-md ">
-                            <div className="flex items-center w-5/12 h-full justify-center  "><img src="/public/assets/services/_icons_prescription-icon.png" alt="Medicine" className="w-[130px] h-[153px]  pl-4 " /></div>
+                            <div className="flex items-center w-5/12 h-full justify-center  "><img src="/assets/services/_icons_prescription-icon.png" alt="Medicine" className="w-[130px] h-[153px]  pl-4 " /></div>
                             <div className="flex  flex-col h-full w-8/12   justify-center ">
                                 <div className="h-full my-13" >
                                     <div className="text-2xl font-bold text-white">Order with Prescription</div>
@@ -190,7 +190,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="rounded-xl bg-[#FFEFDD]">
                                 <img
-                                    src="/public/assets/health/image_1.svg"
+                                    src="/assets/health/image_1.svg"
                                     alt="Medicine"
                                     className="h-[167px] w-[195px] px-8 py-10"
                                 />
@@ -204,7 +204,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="rounded-xl bg-[#FFEFDD]">
                                 <img
-                                    src="/public/assets/health/image_2.svg"
+                                    src="/assets/health/image_2.svg"
                                     alt="Medicine"
                                     className="h-[167px] w-[195px] px-8 py-10"
                                 />
@@ -217,7 +217,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="rounded-xl bg-[#FFEFDD]">
                                 <img
-                                    src="/public/assets/health/image_3.svg"
+                                    src="/assets/health/image_3.svg"
                                     alt="Medicine"
                                     className="h-[167px] w-[195px] px-8 py-10"
                                 />
@@ -230,7 +230,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="rounded-xl bg-[#FFEFDD]">
                                 <img
-                                    src="/public/assets/health/image_4.svg"
+                                    src="/assets/health/image_4.svg"
                                     alt="Medicine"
                                     className="h-[167px] w-[195px] px-8 py-10"
                                 />
@@ -243,7 +243,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center ">
                             <div className="rounded-xl bg-[#FFEFDD]">
                                 <img
-                                    src="/public/assets/health/image_5.svg"
+                                    src="/assets/health/image_5.svg"
                                     alt="Medicine"
                                     className="h-[167px] w-[195px] px-8 py-10"
                                 />
@@ -268,7 +268,7 @@ const MainScreen = () => {
                             <div className="rounded-xl bg-[#FFD1D0] h-[160px] w-[290px] flex items-center justify-center">
 
                                 <img
-                                    src="/public/assets/brands/_feature-brands_product_1.png"
+                                    src="/assets/brands/_feature-brands_product_1.png"
                                     alt="Dettol"
                                     className="h-[130px] w-[131px] mt-8"
                                 />
@@ -283,7 +283,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="rounded-xl bg-[#D8E7FF] h-[160px] w-[290px] flex items-center justify-center">
                                 <img
-                                    src="/public/assets/brands/_feature-brands_product_2.png"
+                                    src="/assets/brands/_feature-brands_product_2.png"
                                     alt="Dettol"
                                     className="h-[130px] w-[131px] mt-8"
                                 />
@@ -296,7 +296,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="rounded-xl bg-[#FDB9A5] h-[160px] w-[290px] flex items-center justify-center">
                                 <img
-                                    src="/public/assets/brands/_feature-brands_product_5.png"
+                                    src="/assets/brands/_feature-brands_product_5.png"
                                     alt="Dettol"
                                     className="h-[134px] w-[131px] mt-8"
                                 />
@@ -309,7 +309,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="rounded-xl bg-[#FFE7B3] h-[160px] w-[290px] flex items-center justify-center">
                                 <img
-                                    src="/public/assets/brands/_feature-brands_product_6.png"
+                                    src="/assets/brands/_feature-brands_product_6.png"
                                     alt="Dettol"
                                     className="h-[130px] w-[131px] mt-8 "
                                 />
@@ -337,21 +337,21 @@ const MainScreen = () => {
                 </div>
                 <div className="flex justify-between  items-center mx-43 mt-8.5 bg-[#064B65] pl-5 h-[197px] rounded-xl space-x-3 ">
                     <span className="flex w-1/3 border-r-1 border-white h-[116.5px] items-center ">
-                        <span className="flex  w-2/5  justify-center"><img src="/public/assets/choose/icon_1.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
+                        <span className="flex  w-2/5  justify-center"><img src="/assets/choose/icon_1.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
                         <span className=" w-3/5 flex flex-col pl-5 text-white font-semibold tracking-wide">
                             <div className="text-3xl">9,500+</div>
                             <div className="text-xl  mr-10">Unique items sold last 3 months</div>
                         </span>
                     </span>
                     <span className="flex w-1/3 border-r-1 border-white h-[116.5px] items-center ">
-                        <span className="flex  w-2/5  justify-center"><img src="/public/assets/choose/icon_2.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
+                        <span className="flex  w-2/5  justify-center"><img src="/assets/choose/icon_2.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
                         <span className=" w-3/5 flex flex-col pl-5 text-white font-semibold tracking-wide">
                             <div className="text-3xl">200+</div>
                             <div className="text-xl  mr-10">Pin codes serviced last 3 months</div>
                         </span>
                     </span>
                     <span className="flex w-1/3 border-r-1 border-white h-[116.5px] items-center ">
-                        <span className="flex  w-2/5  justify-center"><img src="/public/assets/choose/icon_3.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
+                        <span className="flex  w-2/5  justify-center"><img src="/assets/choose/icon_3.svg" alt="Dettol" className="h-[112px] w-[110px] " /></span>
                         <span className=" w-3/5 flex flex-col pl-5 text-white font-semibold tracking-wide">
                             <div className="text-3xl">10,000+</div>
                             <div className="text-xl  mr-10">Orders on Yoda Pharmacy till date</div>
@@ -378,17 +378,17 @@ const MainScreen = () => {
                 <div className="flex">
 
                     <div className="flex flex-col max-w-xs">
-                        <img src="/public/assets/footer/company-logo-white.svg" alt="Logo" className="w-[255px] h-[80px]" />
+                        <img src="/assets/footer/company-logo-white.svg" alt="Logo" className="w-[255px] h-[80px]" />
                         <span className="-mt-2 text-lg pr-5 text-[16px] leading-6.5 tracking-wide">
                             A unique enterprise that functions with the sole objective of prescription honoring,
                             where availability of medicines takes precedence.
                         </span>
                         <div className="flex space-x-3 mt-5.5">
-                            <img src="/public/assets/footer/instagram.svg" alt="Logo" className="w-[24px] h-[24px]" />
-                            <img src="/public/assets/footer/facebook.svg" alt="Logo" className="w-[24px] h-[24px]" />
-                            <img src="/public/assets/footer/linkedin.svg" alt="Logo" className="w-[24px] h-[24px]" />
-                            <img src="/public/assets/footer/twitter.svg" alt="Logo" className="w-[24px] h-[24px]" />
-                            <img src="/public/assets/footer/youtube.svg" alt="Logo" className="w-[24px] h-[24px]" />
+                            <img src="/assets/footer/instagram.svg" alt="Logo" className="w-[24px] h-[24px]" />
+                            <img src="/assets/footer/facebook.svg" alt="Logo" className="w-[24px] h-[24px]" />
+                            <img src="/assets/footer/linkedin.svg" alt="Logo" className="w-[24px] h-[24px]" />
+                            <img src="/assets/footer/twitter.svg" alt="Logo" className="w-[24px] h-[24px]" />
+                            <img src="/assets/footer/youtube.svg" alt="Logo" className="w-[24px] h-[24px]" />
                         </div>
                     </div>
                     <div className="flex flex-col  ml-10 mt-7 items-start">

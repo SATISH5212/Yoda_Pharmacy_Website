@@ -12,7 +12,7 @@ const SearchBar = () => {
                 </span>
                 <span className="flex space-x-3">
                     <span className="flex items-center font-medium text-[16px] leading-[25px] text-[#535353] pb-1">
-                        <img src="/public/assets/searchBar/file.svg" alt="Logo" className="w-4 h-4 mr-1 " />Order with prescription.</span>
+                        <img src="/assets/searchBar/file.svg" alt="Logo" className="w-4 h-4 mr-1 " />Order with prescription.</span>
                     <span className="flex items-center font-medium text-[15px]  ">
                         <span className="flex items-center  text-[#ED8818] font-semibold">UPLOAD NOW</span>  <span className=" flex text-[#ED8818] text-2xl items-center pb-1 pl-1">&gt;</span>
                     </span>
