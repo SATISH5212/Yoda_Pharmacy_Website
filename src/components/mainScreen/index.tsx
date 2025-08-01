@@ -30,7 +30,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_2.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -40,7 +40,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_3.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -50,7 +50,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_4.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -60,7 +60,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_5.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -70,7 +70,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_6.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -80,7 +80,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_7.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
@@ -90,7 +90,7 @@ const MainScreen = () => {
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
                                 <img
-                                    src="/assets/categories/_categories_category_1.png"
+                                    src="/assets/categories/_categories_category_8.png"
                                     alt="Medicine"
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
