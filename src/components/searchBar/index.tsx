@@ -4,7 +4,7 @@ const SearchBar = () => {
     return (
         <div className="">
 
-            <div className="flex  items-center  justify-between mt-48.5  px-46">
+            <div className="flex  items-center  justify-between mt-[64px]  px-46">
                 <span>
                     <h3 className="text-[20px] font-inter text-[#535353] font-semibold">
                         What are you looking for?
