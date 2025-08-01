@@ -75,7 +75,7 @@ const MainScreen = () => {
                                     className="h-[130px] w-[131px] transform transition-transform duration-300 ease-in-out hover:scale-110"
                                 />
                             </div>
-                            <span className="font-medium text-[15px] text-[#4D4D4D] mt-2  ">Ayurveda</span>
+                            <span className="font-medium text-[15px] text-[#4D4D4D] mt-2 ">Ayurveda</span>
                         </div>
                         <div className="flex flex-col items-center">
                             <div className="overflow-hidden rounded-xl">
